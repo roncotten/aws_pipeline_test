@@ -13,6 +13,8 @@ class CdkPipeline(cdk.Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
+        sns_topic = { 'sns_topic_name': 'my-topic' }
+
         pipeline = CodePipeline(self, "cdk-pipeline",
                         pipeline_name="cdk-pipeline",
                         synth=ShellStep("Synth",
@@ -30,7 +32,7 @@ class CdkPipeline(cdk.Stack):
                  account=f"{AWS_ACCOUNT}",
                  region=f"{AWS_REGION}" 
               ),
-              sns_topic_name='my-topic'
+              **sns_topic 
           )
         )
 
