@@ -9,13 +9,13 @@ from aws_cdk import (
 
 class CdkApplication(cdk.Stage):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
-        super().__init__(scope, construct_id, **kwargs)
+        super().__init__(scope, construct_id, sns_topic, **kwargs)
 
-        app_stack = CdkApplicationStack(self, "CdkApplicationStack",  **kwargs)
+        app_stack = CdkApplicationStack(self, "CdkApplicationStack",  sns_topic, **kwargs)
 
 class CdkApplicationStack(Stack):
-    def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
-        super().__init__(scope, construct_id, **kwargs)
+    def __init__(self, scope: Construct, construct_id: str, sns_topic, **kwargs) -> None:
+        super().__init__(scope, construct_id, sns_topic, **kwargs)
        
-        sns_topic = kwargs.get('sns_topic')
+        #sns_topic = kwargs.get('sns_topic')
         topic = sns.Topic(self, sns_topic)
