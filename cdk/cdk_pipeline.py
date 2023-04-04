@@ -1,6 +1,6 @@
 import aws_cdk as cdk
 from constructs import Construct
-from aws_cdk.pipelines import CodePipeline, CodePipelineSource, ShellStep
+from aws_cdk.pipelines import CodePipeline, CodePipelineSource, ShellStep, CodeBuildStep
 from aws_cdk.codepipeline_actions import CodeBuildAction
 from aws_cdk import aws_codebuild as codebuild
 import aws_cdk.aws_ecr as ecr
@@ -18,27 +18,35 @@ class CdkPipeline(cdk.Stack):
 
         ecr_repo = ecr.Repository(self, "cdk-repo")
 
+        #pipeline = CodePipeline(self, "cdk-pipeline",
+        #                pipeline_name="cdk-pipeline",
+        #                synth=ShellStep("Synth",
+        #                    input=CodePipelineSource.connection("roncotten/aws_pipeline_test", "main", connection_arn=f"{source_arn}"),
+        #                    commands=[ "npm install -g aws-cdk && pip install -r requirements.txt", "cdk synth" ]
+        #                )
+        #            )
+
         pipeline = CodePipeline(self, "cdk-pipeline",
                         pipeline_name="cdk-pipeline",
-                        synth=ShellStep("Synth",
+                        synth=CodeBuildStep("Synth",
                             input=CodePipelineSource.connection("roncotten/aws_pipeline_test", "main", connection_arn=f"{source_arn}"),
                             commands=[ "npm install -g aws-cdk && pip install -r requirements.txt", "cdk synth" ]
                         )
                     )
 
-        build_project = codebuild.PipelineProject(self, "Build", build_spec=codebuild.BuildSpec.from_source_filename("buildspec.yml"))
+        #build_project = codebuild.PipelineProject(self, "Build", build_spec=codebuild.BuildSpec.from_source_filename("buildspec.yml"))
 
-        pipeline.add_stage(
-          stage_name="Build",
-          actions=[
-              codepipeline_actions.CodeBuildAction(
-                  action_name="Build",
-                  project=build_project,
-                  input=source_output,
-                  outputs=[build_output],
-              )
-          ],
-        )
+        #pipeline.add_stage(
+        #  stage_name="Build",
+        #  actions=[
+        #      codepipeline_actions.CodeBuildAction(
+        #          action_name="Build",
+        #          project=build_project,
+        #          input=source_output,
+        #          outputs=[build_output],
+        #      )
+        #  ],
+        #)
 
         pipeline.add_stage(
           CdkApplication(
