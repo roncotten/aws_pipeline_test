@@ -421,7 +421,7 @@
                             ]
                           },
                           {
-                            "name": "cdk-deploy",
+                            "name": "DeployApplication",
                             "actions": [
                               {
                                 "name": "Prepare",
@@ -437,7 +437,7 @@
                                   "provider": "CloudFormation"
                                 },
                                 "configuration": {
-                                  "StackName": "cdk-deploy-CdkApplicationStack",
+                                  "StackName": "DeployApplication-CdkApplicationStack",
                                   "Capabilities": "CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND",
                                   "RoleArn": {
                                     "Fn::Join": [
@@ -453,7 +453,7 @@
                                   },
                                   "ActionMode": "CHANGE_SET_REPLACE",
                                   "ChangeSetName": "PipelineChange",
-                                  "TemplatePath": "Synth_Output::assembly-cdk-pipeline-cdk-deploy/cdkpipelinecdkdeployCdkApplicationStackEAEF1E05.template.json"
+                                  "TemplatePath": "Synth_Output::assembly-cdk-pipeline-DeployApplication/cdkpipelineDeployApplicationCdkApplicationStackC1253C11.template.json"
                                 },
                                 "runOrder": 1,
                                 "roleArn": {
@@ -478,7 +478,7 @@
                                   "provider": "CloudFormation"
                                 },
                                 "configuration": {
-                                  "StackName": "cdk-deploy-CdkApplicationStack",
+                                  "StackName": "DeployApplication-CdkApplicationStack",
                                   "ActionMode": "CHANGE_SET_EXECUTE",
                                   "ChangeSetName": "PipelineChange"
                                 },
@@ -929,13 +929,13 @@
                       "version": "10.1.300"
                     }
                   },
-                  "cdk-deploy": {
-                    "id": "cdk-deploy",
-                    "path": "cdk-pipeline/cdk-pipeline/Pipeline/cdk-deploy",
+                  "DeployApplication": {
+                    "id": "DeployApplication",
+                    "path": "cdk-pipeline/cdk-pipeline/Pipeline/DeployApplication",
                     "children": {
                       "Prepare": {
                         "id": "Prepare",
-                        "path": "cdk-pipeline/cdk-pipeline/Pipeline/cdk-deploy/Prepare",
+                        "path": "cdk-pipeline/cdk-pipeline/Pipeline/DeployApplication/Prepare",
                         "constructInfo": {
                           "fqn": "constructs.Construct",
                           "version": "10.1.300"
@@ -943,7 +943,7 @@
                       },
                       "Deploy": {
                         "id": "Deploy",
-                        "path": "cdk-pipeline/cdk-pipeline/Pipeline/cdk-deploy/Deploy",
+                        "path": "cdk-pipeline/cdk-pipeline/Pipeline/DeployApplication/Deploy",
                         "constructInfo": {
                           "fqn": "constructs.Construct",
                           "version": "10.1.300"
@@ -1356,21 +1356,21 @@
               "version": "2.72.1"
             }
           },
-          "cdk-deploy": {
-            "id": "cdk-deploy",
-            "path": "cdk-pipeline/cdk-deploy",
+          "DeployApplication": {
+            "id": "DeployApplication",
+            "path": "cdk-pipeline/DeployApplication",
             "children": {
               "CdkApplicationStack": {
                 "id": "CdkApplicationStack",
-                "path": "cdk-pipeline/cdk-deploy/CdkApplicationStack",
+                "path": "cdk-pipeline/DeployApplication/CdkApplicationStack",
                 "children": {
                   "sns-topic": {
                     "id": "sns-topic",
-                    "path": "cdk-pipeline/cdk-deploy/CdkApplicationStack/sns-topic",
+                    "path": "cdk-pipeline/DeployApplication/CdkApplicationStack/sns-topic",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "cdk-pipeline/cdk-deploy/CdkApplicationStack/sns-topic/Resource",
+                        "path": "cdk-pipeline/DeployApplication/CdkApplicationStack/sns-topic/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
                           "aws:cdk:cloudformation:props": {}
@@ -1388,11 +1388,11 @@
                   },
                   "CDKMetadata": {
                     "id": "CDKMetadata",
-                    "path": "cdk-pipeline/cdk-deploy/CdkApplicationStack/CDKMetadata",
+                    "path": "cdk-pipeline/DeployApplication/CdkApplicationStack/CDKMetadata",
                     "children": {
                       "Default": {
                         "id": "Default",
-                        "path": "cdk-pipeline/cdk-deploy/CdkApplicationStack/CDKMetadata/Default",
+                        "path": "cdk-pipeline/DeployApplication/CdkApplicationStack/CDKMetadata/Default",
                         "constructInfo": {
                           "fqn": "aws-cdk-lib.CfnResource",
                           "version": "2.72.1"
@@ -1406,7 +1406,7 @@
                   },
                   "BootstrapVersion": {
                     "id": "BootstrapVersion",
-                    "path": "cdk-pipeline/cdk-deploy/CdkApplicationStack/BootstrapVersion",
+                    "path": "cdk-pipeline/DeployApplication/CdkApplicationStack/BootstrapVersion",
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.CfnParameter",
                       "version": "2.72.1"
@@ -1414,7 +1414,7 @@
                   },
                   "CheckBootstrapVersion": {
                     "id": "CheckBootstrapVersion",
-                    "path": "cdk-pipeline/cdk-deploy/CdkApplicationStack/CheckBootstrapVersion",
+                    "path": "cdk-pipeline/DeployApplication/CdkApplicationStack/CheckBootstrapVersion",
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.CfnRule",
                       "version": "2.72.1"
