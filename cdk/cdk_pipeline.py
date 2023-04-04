@@ -18,11 +18,10 @@ class CdkPipeline(cdk.Stack):
 
         pipeline = CodePipeline(self, "cdk-pipeline",
                         pipeline_name="cdk-pipeline",
-                        #synth=ShellStep("Synth",
-                        #    input=CodePipelineSource.connection("roncotten/aws_pipeline_test", "main", connection_arn=f"{source_arn}"),
-                        #    shell_commands = "./build.sh " + ecr_repo.repository_uri
-                        #    commands=[ shell_commands ]
-                        #)
+                        synth=ShellStep("Synth",
+                            input=CodePipelineSource.connection("roncotten/aws_pipeline_test", "main", connection_arn=f"{source_arn}"),
+                            commands=[ "npm install -g aws-cdk && pip install -r requirements.txt", "cdk synth" ]
+                        )
                     )
 
         build_project = codebuild.PipelineProject(self, "Build", build_spec=codebuild.BuildSpec.from_source_filename("buildspec.yml"))
