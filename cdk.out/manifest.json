@@ -17,7 +17,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::694795848632:role/cdk-hnb659fds-deploy-role-694795848632-us-east-1",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::694795848632:role/cdk-hnb659fds-cfn-exec-role-694795848632-us-east-1",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-694795848632-us-east-1/81b984eda330bb7231fbccf90af1b5596fa652bb6c0477ca24513d8d547faa82.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-694795848632-us-east-1/50a94ede2dd9ffe1465cf922d252067732026f4a06358c8ba9126711f335d476.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -63,10 +63,16 @@
             "data": "cdkpipelinePipeline19F1581C"
           }
         ],
-        "/cdk-pipeline/cdk-pipeline/Pipeline/Source/roncotten_aws_pipeline_test/WebhookResource": [
+        "/cdk-pipeline/cdk-pipeline/Pipeline/Source/roncotten_aws_pipeline_test/CodePipelineActionRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "cdkpipelinePipelineSourceroncottenawspipelinetestWebhookResource9ECCCDBA"
+            "data": "cdkpipelinePipelineSourceroncottenawspipelinetestCodePipelineActionRoleD42A368D"
+          }
+        ],
+        "/cdk-pipeline/cdk-pipeline/Pipeline/Source/roncotten_aws_pipeline_test/CodePipelineActionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "cdkpipelinePipelineSourceroncottenawspipelinetestCodePipelineActionRoleDefaultPolicyD2392DBF"
           }
         ],
         "/cdk-pipeline/cdk-pipeline/Pipeline/Build/Synth/CdkBuildProject/Role/Resource": [

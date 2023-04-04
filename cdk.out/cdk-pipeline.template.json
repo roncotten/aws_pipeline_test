@@ -140,12 +140,20 @@
       {
        "Action": "sts:AssumeRole",
        "Effect": "Allow",
-       "Resource": {
-        "Fn::GetAtt": [
-         "cdkpipelineCodeBuildActionRoleDCAE50F5",
-         "Arn"
-        ]
-       }
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "cdkpipelineCodeBuildActionRoleDCAE50F5",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::GetAtt": [
+          "cdkpipelinePipelineSourceroncottenawspipelinetestCodePipelineActionRoleD42A368D",
+          "Arn"
+         ]
+        }
+       ]
       }
      ],
      "Version": "2012-10-17"
@@ -176,16 +184,14 @@
        {
         "ActionTypeId": {
          "Category": "Source",
-         "Owner": "ThirdParty",
-         "Provider": "GitHub",
+         "Owner": "AWS",
+         "Provider": "CodeStarSourceConnection",
          "Version": "1"
         },
         "Configuration": {
-         "Owner": "roncotten",
-         "Repo": "aws_pipeline_test",
-         "Branch": "main",
-         "OAuthToken": "{{resolve:secretsmanager:github-token:SecretString:::}}",
-         "PollForSourceChanges": false
+         "ConnectionArn": "arn:aws:codestar-connections:us-east-1:694795848632:connection/81ecfe62-c1d4-49f4-bd33-9ee83d1568c9",
+         "FullRepositoryId": "roncotten/aws_pipeline_test",
+         "BranchName": "main"
         },
         "Name": "roncotten_aws_pipeline_test",
         "OutputArtifacts": [
@@ -193,6 +199,12 @@
           "Name": "roncotten_aws_pipeline_test_Source"
          }
         ],
+        "RoleArn": {
+         "Fn::GetAtt": [
+          "cdkpipelinePipelineSourceroncottenawspipelinetestCodePipelineActionRoleD42A368D",
+          "Arn"
+         ]
+        },
         "RunOrder": 1
        }
       ],
@@ -285,28 +297,106 @@
     "aws:cdk:path": "cdk-pipeline/cdk-pipeline/Pipeline/Resource"
    }
   },
-  "cdkpipelinePipelineSourceroncottenawspipelinetestWebhookResource9ECCCDBA": {
-   "Type": "AWS::CodePipeline::Webhook",
+  "cdkpipelinePipelineSourceroncottenawspipelinetestCodePipelineActionRoleD42A368D": {
+   "Type": "AWS::IAM::Role",
    "Properties": {
-    "Authentication": "GITHUB_HMAC",
-    "AuthenticationConfiguration": {
-     "SecretToken": "{{resolve:secretsmanager:github-token:SecretString:::}}"
-    },
-    "Filters": [
-     {
-      "JsonPath": "$.ref",
-      "MatchEquals": "refs/heads/{Branch}"
-     }
-    ],
-    "TargetAction": "roncotten_aws_pipeline_test",
-    "TargetPipeline": {
-     "Ref": "cdkpipelinePipeline19F1581C"
-    },
-    "TargetPipelineVersion": 1,
-    "RegisterWithThirdParty": true
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": "arn:aws:iam::694795848632:root"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
    },
    "Metadata": {
-    "aws:cdk:path": "cdk-pipeline/cdk-pipeline/Pipeline/Source/roncotten_aws_pipeline_test/WebhookResource"
+    "aws:cdk:path": "cdk-pipeline/cdk-pipeline/Pipeline/Source/roncotten_aws_pipeline_test/CodePipelineActionRole/Resource"
+   }
+  },
+  "cdkpipelinePipelineSourceroncottenawspipelinetestCodePipelineActionRoleDefaultPolicyD2392DBF": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "codestar-connections:UseConnection",
+       "Effect": "Allow",
+       "Resource": "arn:aws:codestar-connections:us-east-1:694795848632:connection/81ecfe62-c1d4-49f4-bd33-9ee83d1568c9"
+      },
+      {
+       "Action": [
+        "s3:Abort*",
+        "s3:DeleteObject*",
+        "s3:GetBucket*",
+        "s3:GetObject*",
+        "s3:List*",
+        "s3:PutObject",
+        "s3:PutObjectLegalHold",
+        "s3:PutObjectRetention",
+        "s3:PutObjectTagging",
+        "s3:PutObjectVersionTagging"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "cdkpipelinePipelineArtifactsBucket98F6BADE",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "cdkpipelinePipelineArtifactsBucket98F6BADE",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "s3:PutObjectAcl",
+        "s3:PutObjectVersionAcl"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Fn::GetAtt": [
+            "cdkpipelinePipelineArtifactsBucket98F6BADE",
+            "Arn"
+           ]
+          },
+          "/*"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "cdkpipelinePipelineSourceroncottenawspipelinetestCodePipelineActionRoleDefaultPolicyD2392DBF",
+    "Roles": [
+     {
+      "Ref": "cdkpipelinePipelineSourceroncottenawspipelinetestCodePipelineActionRoleD42A368D"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "cdk-pipeline/cdk-pipeline/Pipeline/Source/roncotten_aws_pipeline_test/CodePipelineActionRole/DefaultPolicy/Resource"
    }
   },
   "cdkpipelinePipelineBuildSynthCdkBuildProjectRoleB35A8519": {
@@ -722,7 +812,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/01OQQ6DIBB8i3fcpnpoz/UDxB56bBRpXKFgBNIYwt+rgrWnmZ2ZzE4BlwLOWfMxOetELrEFf7cNE2TEkUtU3EClO07TRZbk07NF2X3wP696qX/+4G2vtQjElOBvjgluVzmxCFRLZPMhxzsQbN7gay23og2P5J5ZV7QOZXdMoJMeONveJBoCqbnRbmKxKvFA6Gx7rU4lXKHIBoOYT05ZfHOoI34BBIrlExsBAAA="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/0VNSw6DIBQ8i3t8TXXRrusFiD1Ao/iaPkUwAmkM4e5Vwbqab2YKuBVwzZqvyUU35JJa8E/biIFNNKEkhQYq3SFPiq3Nlxerc+Tg/1n1VgcPzJTgH04MaDc/sQhcSxLLaUcdGDUj+FrLfWnHs3l0tuvWkezOXz7rHsV+k2gIrEaj3SziVOKB8cV+tLqUcIci6w1RPjtlaUSoI/4ANEC3rhABAAA="
    },
    "Metadata": {
     "aws:cdk:path": "cdk-pipeline/CDKMetadata/Default"

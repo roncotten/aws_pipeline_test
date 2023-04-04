@@ -208,12 +208,20 @@
                                     {
                                       "Action": "sts:AssumeRole",
                                       "Effect": "Allow",
-                                      "Resource": {
-                                        "Fn::GetAtt": [
-                                          "cdkpipelineCodeBuildActionRoleDCAE50F5",
-                                          "Arn"
-                                        ]
-                                      }
+                                      "Resource": [
+                                        {
+                                          "Fn::GetAtt": [
+                                            "cdkpipelineCodeBuildActionRoleDCAE50F5",
+                                            "Arn"
+                                          ]
+                                        },
+                                        {
+                                          "Fn::GetAtt": [
+                                            "cdkpipelinePipelineSourceroncottenawspipelinetestCodePipelineActionRoleD42A368D",
+                                            "Arn"
+                                          ]
+                                        }
+                                      ]
                                     }
                                   ],
                                   "Version": "2012-10-17"
@@ -269,17 +277,21 @@
                                 "actionTypeId": {
                                   "category": "Source",
                                   "version": "1",
-                                  "owner": "ThirdParty",
-                                  "provider": "GitHub"
+                                  "owner": "AWS",
+                                  "provider": "CodeStarSourceConnection"
                                 },
                                 "configuration": {
-                                  "Owner": "roncotten",
-                                  "Repo": "aws_pipeline_test",
-                                  "Branch": "main",
-                                  "OAuthToken": "{{resolve:secretsmanager:github-token:SecretString:::}}",
-                                  "PollForSourceChanges": false
+                                  "ConnectionArn": "arn:aws:codestar-connections:us-east-1:694795848632:connection/81ecfe62-c1d4-49f4-bd33-9ee83d1568c9",
+                                  "FullRepositoryId": "roncotten/aws_pipeline_test",
+                                  "BranchName": "main"
                                 },
-                                "runOrder": 1
+                                "runOrder": 1,
+                                "roleArn": {
+                                  "Fn::GetAtt": [
+                                    "cdkpipelinePipelineSourceroncottenawspipelinetestCodePipelineActionRoleD42A368D",
+                                    "Arn"
+                                  ]
+                                }
                               }
                             ]
                           },
@@ -376,32 +388,143 @@
                         "id": "roncotten_aws_pipeline_test",
                         "path": "cdk-pipeline/cdk-pipeline/Pipeline/Source/roncotten_aws_pipeline_test",
                         "children": {
-                          "WebhookResource": {
-                            "id": "WebhookResource",
-                            "path": "cdk-pipeline/cdk-pipeline/Pipeline/Source/roncotten_aws_pipeline_test/WebhookResource",
-                            "attributes": {
-                              "aws:cdk:cloudformation:type": "AWS::CodePipeline::Webhook",
-                              "aws:cdk:cloudformation:props": {
-                                "authentication": "GITHUB_HMAC",
-                                "authenticationConfiguration": {
-                                  "secretToken": "{{resolve:secretsmanager:github-token:SecretString:::}}"
-                                },
-                                "filters": [
-                                  {
-                                    "jsonPath": "$.ref",
-                                    "matchEquals": "refs/heads/{Branch}"
+                          "CodePipelineActionRole": {
+                            "id": "CodePipelineActionRole",
+                            "path": "cdk-pipeline/cdk-pipeline/Pipeline/Source/roncotten_aws_pipeline_test/CodePipelineActionRole",
+                            "children": {
+                              "ImportCodePipelineActionRole": {
+                                "id": "ImportCodePipelineActionRole",
+                                "path": "cdk-pipeline/cdk-pipeline/Pipeline/Source/roncotten_aws_pipeline_test/CodePipelineActionRole/ImportCodePipelineActionRole",
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.Resource",
+                                  "version": "2.72.1"
+                                }
+                              },
+                              "Resource": {
+                                "id": "Resource",
+                                "path": "cdk-pipeline/cdk-pipeline/Pipeline/Source/roncotten_aws_pipeline_test/CodePipelineActionRole/Resource",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                                  "aws:cdk:cloudformation:props": {
+                                    "assumeRolePolicyDocument": {
+                                      "Statement": [
+                                        {
+                                          "Action": "sts:AssumeRole",
+                                          "Effect": "Allow",
+                                          "Principal": {
+                                            "AWS": "arn:aws:iam::694795848632:root"
+                                          }
+                                        }
+                                      ],
+                                      "Version": "2012-10-17"
+                                    }
                                   }
-                                ],
-                                "targetAction": "roncotten_aws_pipeline_test",
-                                "targetPipeline": {
-                                  "Ref": "cdkpipelinePipeline19F1581C"
                                 },
-                                "targetPipelineVersion": 1,
-                                "registerWithThirdParty": true
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                                  "version": "2.72.1"
+                                }
+                              },
+                              "DefaultPolicy": {
+                                "id": "DefaultPolicy",
+                                "path": "cdk-pipeline/cdk-pipeline/Pipeline/Source/roncotten_aws_pipeline_test/CodePipelineActionRole/DefaultPolicy",
+                                "children": {
+                                  "Resource": {
+                                    "id": "Resource",
+                                    "path": "cdk-pipeline/cdk-pipeline/Pipeline/Source/roncotten_aws_pipeline_test/CodePipelineActionRole/DefaultPolicy/Resource",
+                                    "attributes": {
+                                      "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                                      "aws:cdk:cloudformation:props": {
+                                        "policyDocument": {
+                                          "Statement": [
+                                            {
+                                              "Action": "codestar-connections:UseConnection",
+                                              "Effect": "Allow",
+                                              "Resource": "arn:aws:codestar-connections:us-east-1:694795848632:connection/81ecfe62-c1d4-49f4-bd33-9ee83d1568c9"
+                                            },
+                                            {
+                                              "Action": [
+                                                "s3:Abort*",
+                                                "s3:DeleteObject*",
+                                                "s3:GetBucket*",
+                                                "s3:GetObject*",
+                                                "s3:List*",
+                                                "s3:PutObject",
+                                                "s3:PutObjectLegalHold",
+                                                "s3:PutObjectRetention",
+                                                "s3:PutObjectTagging",
+                                                "s3:PutObjectVersionTagging"
+                                              ],
+                                              "Effect": "Allow",
+                                              "Resource": [
+                                                {
+                                                  "Fn::GetAtt": [
+                                                    "cdkpipelinePipelineArtifactsBucket98F6BADE",
+                                                    "Arn"
+                                                  ]
+                                                },
+                                                {
+                                                  "Fn::Join": [
+                                                    "",
+                                                    [
+                                                      {
+                                                        "Fn::GetAtt": [
+                                                          "cdkpipelinePipelineArtifactsBucket98F6BADE",
+                                                          "Arn"
+                                                        ]
+                                                      },
+                                                      "/*"
+                                                    ]
+                                                  ]
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "Action": [
+                                                "s3:PutObjectAcl",
+                                                "s3:PutObjectVersionAcl"
+                                              ],
+                                              "Effect": "Allow",
+                                              "Resource": {
+                                                "Fn::Join": [
+                                                  "",
+                                                  [
+                                                    {
+                                                      "Fn::GetAtt": [
+                                                        "cdkpipelinePipelineArtifactsBucket98F6BADE",
+                                                        "Arn"
+                                                      ]
+                                                    },
+                                                    "/*"
+                                                  ]
+                                                ]
+                                              }
+                                            }
+                                          ],
+                                          "Version": "2012-10-17"
+                                        },
+                                        "policyName": "cdkpipelinePipelineSourceroncottenawspipelinetestCodePipelineActionRoleDefaultPolicyD2392DBF",
+                                        "roles": [
+                                          {
+                                            "Ref": "cdkpipelinePipelineSourceroncottenawspipelinetestCodePipelineActionRoleD42A368D"
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    "constructInfo": {
+                                      "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                                      "version": "2.72.1"
+                                    }
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_iam.Policy",
+                                  "version": "2.72.1"
+                                }
                               }
                             },
                             "constructInfo": {
-                              "fqn": "aws-cdk-lib.aws_codepipeline.CfnWebhook",
+                              "fqn": "aws-cdk-lib.aws_iam.Role",
                               "version": "2.72.1"
                             }
                           }
