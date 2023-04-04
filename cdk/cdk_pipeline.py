@@ -30,7 +30,7 @@ class CdkPipeline(cdk.Stack):
                  account=f"{AWS_ACCOUNT}",
                  region=f"{AWS_REGION}" 
               ),
-              {'sns_topic_name': 'my-topic'}
+              sns_topic_name='my-topic'
           )
         )
 
