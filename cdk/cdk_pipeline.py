@@ -1,7 +1,6 @@
 import aws_cdk as cdk
 from constructs import Construct
 from aws_cdk.pipelines import CodePipeline, CodePipelineSource, ShellStep, CodeBuildStep
-from aws_cdk.codepipeline_actions import CodeBuildAction
 from aws_cdk import aws_codebuild as codebuild
 import aws_cdk.aws_ecr as ecr
 from .cdk_application import CdkApplication
