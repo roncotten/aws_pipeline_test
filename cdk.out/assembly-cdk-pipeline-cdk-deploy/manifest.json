@@ -1,0 +1,65 @@
+{
+  "version": "31.0.0",
+  "artifacts": {
+    "cdkpipelinecdkdeployCdkApplicationStackEAEF1E05.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "cdkpipelinecdkdeployCdkApplicationStackEAEF1E05.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "cdkpipelinecdkdeployCdkApplicationStackEAEF1E05": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://694795848632/us-east-1",
+      "properties": {
+        "templateFile": "cdkpipelinecdkdeployCdkApplicationStackEAEF1E05.template.json",
+        "validateOnSynth": true,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::694795848632:role/cdk-hnb659fds-deploy-role-694795848632-us-east-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::694795848632:role/cdk-hnb659fds-cfn-exec-role-694795848632-us-east-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-694795848632-us-east-1/df86d7fad814a393e1af1fbd191743d698479b38dc0c5780eeb65d2d76328035.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "cdkpipelinecdkdeployCdkApplicationStackEAEF1E05.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::694795848632:role/cdk-hnb659fds-lookup-role-694795848632-us-east-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        },
+        "stackName": "cdk-deploy-CdkApplicationStack"
+      },
+      "dependencies": [
+        "cdkpipelinecdkdeployCdkApplicationStackEAEF1E05.assets"
+      ],
+      "metadata": {
+        "/cdk-pipeline/cdk-deploy/CdkApplicationStack/sns-topic/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "snstopic2C4AE3C1"
+          }
+        ],
+        "/cdk-pipeline/cdk-deploy/CdkApplicationStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/cdk-pipeline/cdk-deploy/CdkApplicationStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/cdk-pipeline/cdk-deploy/CdkApplicationStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "cdk-pipeline/cdk-deploy/CdkApplicationStack"
+    }
+  }
+}

@@ -1,11 +1,11 @@
 {
   "version": "31.0.0",
   "artifacts": {
-    "assembly-cdk-pipeline-CdkApplication": {
+    "assembly-cdk-pipeline-cdk-deploy": {
       "type": "cdk:cloud-assembly",
       "properties": {
-        "directoryName": "assembly-cdk-pipeline-CdkApplication",
-        "displayName": "cdk-pipeline/CdkApplication"
+        "directoryName": "assembly-cdk-pipeline-cdk-deploy",
+        "displayName": "cdk-pipeline/cdk-deploy"
       }
     },
     "cdk-pipeline.assets": {
@@ -24,7 +24,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::694795848632:role/cdk-hnb659fds-deploy-role-694795848632-us-east-1",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::694795848632:role/cdk-hnb659fds-cfn-exec-role-694795848632-us-east-1",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-694795848632-us-east-1/b1994e217b80ee47ab30b113c56a285e3ec1196ca9efd74ae949acccc016271f.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-694795848632-us-east-1/0e9f8c638f68476e87d1af7c132c27e197e93a76d477d3f7e14905f14484611a.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [

@@ -345,7 +345,7 @@
          "Version": "1"
         },
         "Configuration": {
-         "StackName": "CdkApplication-DeployApplication",
+         "StackName": "cdk-deploy-CdkApplicationStack",
          "Capabilities": "CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND",
          "RoleArn": {
           "Fn::Join": [
@@ -361,7 +361,7 @@
          },
          "ActionMode": "CHANGE_SET_REPLACE",
          "ChangeSetName": "PipelineChange",
-         "TemplatePath": "Synth_Output::assembly-cdk-pipeline-CdkApplication/cdkpipelineCdkApplicationDeployApplicationCF54009A.template.json"
+         "TemplatePath": "Synth_Output::assembly-cdk-pipeline-cdk-deploy/cdkpipelinecdkdeployCdkApplicationStackEAEF1E05.template.json"
         },
         "InputArtifacts": [
          {
@@ -391,7 +391,7 @@
          "Version": "1"
         },
         "Configuration": {
-         "StackName": "CdkApplication-DeployApplication",
+         "StackName": "cdk-deploy-CdkApplicationStack",
          "ActionMode": "CHANGE_SET_EXECUTE",
          "ChangeSetName": "PipelineChange"
         },
@@ -411,7 +411,7 @@
         "RunOrder": 2
        }
       ],
-      "Name": "CdkApplication"
+      "Name": "cdk-deploy"
      }
     ],
     "ArtifactStore": {
