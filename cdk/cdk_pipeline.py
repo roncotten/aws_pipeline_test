@@ -28,9 +28,9 @@ class CdkPipeline(cdk.Stack):
               self,"DeployApplication",
               env=cdk.Environment(
                  account=f"{AWS_ACCOUNT}",
-                 region=f"{AWS_REGION}" 
+                 region=f"{AWS_REGION}",
+                 sns_topic='my_topic'
               ),
-              sns_topic='my_topic'
           )
         )
 
