@@ -1,7 +1,7 @@
 import aws_cdk as cdk
 from constructs import Construct
 from aws_cdk.pipelines import CodePipeline, CodePipelineSource, ShellStep
-from ./cdk_application import CdkApplication
+from .cdk_application import CdkApplication
 
 source_arn = "arn:aws:codestar-connections:us-east-1:694795848632:connection/81ecfe62-c1d4-49f4-bd33-9ee83d1568c9"
 
@@ -23,13 +23,13 @@ class CdkPipeline(cdk.Stack):
                         )
                     )
 
-          pipelin.add_stage(
-            CdkApplication(
-                self,"CdkApplication",
-                env=cdk.Environment(
-                   account=f"{AWS_ACCOUNT}",
-                   region=f"{AWS_REGION}" 
-                ),
-                # vpc_id=self._vpc_id,
-            )
+        pipeline.add_stage(
+          CdkApplication(
+              self,"CdkApplication",
+              env=cdk.Environment(
+                 account=f"{AWS_ACCOUNT}",
+                 region=f"{AWS_REGION}" 
+              ),
+              # vpc_id=self._vpc_id,
           )
+        )

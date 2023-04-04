@@ -96,6 +96,50 @@
                                           ]
                                         }
                                       ]
+                                    },
+                                    {
+                                      "Action": [
+                                        "s3:GetBucket*",
+                                        "s3:GetObject*",
+                                        "s3:List*"
+                                      ],
+                                      "Effect": "Allow",
+                                      "Principal": {
+                                        "AWS": {
+                                          "Fn::Join": [
+                                            "",
+                                            [
+                                              "arn:",
+                                              {
+                                                "Ref": "AWS::Partition"
+                                              },
+                                              ":iam::694795848632:role/cdk-hnb659fds-deploy-role-694795848632-us-east-1"
+                                            ]
+                                          ]
+                                        }
+                                      },
+                                      "Resource": [
+                                        {
+                                          "Fn::GetAtt": [
+                                            "cdkpipelinePipelineArtifactsBucket98F6BADE",
+                                            "Arn"
+                                          ]
+                                        },
+                                        {
+                                          "Fn::Join": [
+                                            "",
+                                            [
+                                              {
+                                                "Fn::GetAtt": [
+                                                  "cdkpipelinePipelineArtifactsBucket98F6BADE",
+                                                  "Arn"
+                                                ]
+                                              },
+                                              "/*"
+                                            ]
+                                          ]
+                                        }
+                                      ]
                                     }
                                   ],
                                   "Version": "2012-10-17"
@@ -219,6 +263,18 @@
                                           "Fn::GetAtt": [
                                             "cdkpipelinePipelineSourceroncottenawspipelinetestCodePipelineActionRoleD42A368D",
                                             "Arn"
+                                          ]
+                                        },
+                                        {
+                                          "Fn::Join": [
+                                            "",
+                                            [
+                                              "arn:",
+                                              {
+                                                "Ref": "AWS::Partition"
+                                              },
+                                              ":iam::694795848632:role/cdk-hnb659fds-deploy-role-694795848632-us-east-1"
+                                            ]
                                           ]
                                         }
                                       ]
@@ -359,6 +415,84 @@
                                   "Fn::GetAtt": [
                                     "cdkpipelineCodeBuildActionRoleDCAE50F5",
                                     "Arn"
+                                  ]
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "name": "CdkApplication",
+                            "actions": [
+                              {
+                                "name": "Prepare",
+                                "inputArtifacts": [
+                                  {
+                                    "name": "Synth_Output"
+                                  }
+                                ],
+                                "actionTypeId": {
+                                  "category": "Deploy",
+                                  "version": "1",
+                                  "owner": "AWS",
+                                  "provider": "CloudFormation"
+                                },
+                                "configuration": {
+                                  "StackName": "CdkApplication-DeployApplication",
+                                  "Capabilities": "CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND",
+                                  "RoleArn": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":iam::694795848632:role/cdk-hnb659fds-cfn-exec-role-694795848632-us-east-1"
+                                      ]
+                                    ]
+                                  },
+                                  "ActionMode": "CHANGE_SET_REPLACE",
+                                  "ChangeSetName": "PipelineChange",
+                                  "TemplatePath": "Synth_Output::assembly-cdk-pipeline-CdkApplication/cdkpipelineCdkApplicationDeployApplicationCF54009A.template.json"
+                                },
+                                "runOrder": 1,
+                                "roleArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":iam::694795848632:role/cdk-hnb659fds-deploy-role-694795848632-us-east-1"
+                                    ]
+                                  ]
+                                }
+                              },
+                              {
+                                "name": "Deploy",
+                                "actionTypeId": {
+                                  "category": "Deploy",
+                                  "version": "1",
+                                  "owner": "AWS",
+                                  "provider": "CloudFormation"
+                                },
+                                "configuration": {
+                                  "StackName": "CdkApplication-DeployApplication",
+                                  "ActionMode": "CHANGE_SET_EXECUTE",
+                                  "ChangeSetName": "PipelineChange"
+                                },
+                                "runOrder": 2,
+                                "roleArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":iam::694795848632:role/cdk-hnb659fds-deploy-role-694795848632-us-east-1"
+                                    ]
                                   ]
                                 }
                               }
@@ -794,6 +928,74 @@
                       "fqn": "constructs.Construct",
                       "version": "10.1.300"
                     }
+                  },
+                  "CdkApplication": {
+                    "id": "CdkApplication",
+                    "path": "cdk-pipeline/cdk-pipeline/Pipeline/CdkApplication",
+                    "children": {
+                      "Prepare": {
+                        "id": "Prepare",
+                        "path": "cdk-pipeline/cdk-pipeline/Pipeline/CdkApplication/Prepare",
+                        "constructInfo": {
+                          "fqn": "constructs.Construct",
+                          "version": "10.1.300"
+                        }
+                      },
+                      "Deploy": {
+                        "id": "Deploy",
+                        "path": "cdk-pipeline/cdk-pipeline/Pipeline/CdkApplication/Deploy",
+                        "constructInfo": {
+                          "fqn": "constructs.Construct",
+                          "version": "10.1.300"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.1.300"
+                    }
+                  },
+                  "MutableRolearn:${AWS::Partition}:iam::694795848632:role--cdk-hnb659fds-deploy-role-694795848632-us-east-1": {
+                    "id": "MutableRolearn:${AWS::Partition}:iam::694795848632:role--cdk-hnb659fds-deploy-role-694795848632-us-east-1",
+                    "path": "cdk-pipeline/cdk-pipeline/Pipeline/MutableRolearn:${AWS::Partition}:iam::694795848632:role--cdk-hnb659fds-deploy-role-694795848632-us-east-1",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.72.1"
+                    }
+                  },
+                  "arn:${AWS::Partition}:iam::694795848632:role--cdk-hnb659fds-deploy-role-694795848632-us-east-1": {
+                    "id": "arn:${AWS::Partition}:iam::694795848632:role--cdk-hnb659fds-deploy-role-694795848632-us-east-1",
+                    "path": "cdk-pipeline/cdk-pipeline/Pipeline/arn:${AWS::Partition}:iam::694795848632:role--cdk-hnb659fds-deploy-role-694795848632-us-east-1",
+                    "children": {
+                      "8389e75f-0810-4838-bf64-d6f85a95cf83": {
+                        "id": "8389e75f-0810-4838-bf64-d6f85a95cf83",
+                        "path": "cdk-pipeline/cdk-pipeline/Pipeline/arn:${AWS::Partition}:iam::694795848632:role--cdk-hnb659fds-deploy-role-694795848632-us-east-1/8389e75f-0810-4838-bf64-d6f85a95cf83",
+                        "constructInfo": {
+                          "fqn": "constructs.Construct",
+                          "version": "10.1.300"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.72.1"
+                    }
+                  },
+                  "MutableRolearn:${AWS::Partition}:iam::694795848632:role--cdk-hnb659fds-cfn-exec-role-694795848632-us-east-1": {
+                    "id": "MutableRolearn:${AWS::Partition}:iam::694795848632:role--cdk-hnb659fds-cfn-exec-role-694795848632-us-east-1",
+                    "path": "cdk-pipeline/cdk-pipeline/Pipeline/MutableRolearn:${AWS::Partition}:iam::694795848632:role--cdk-hnb659fds-cfn-exec-role-694795848632-us-east-1",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.72.1"
+                    }
+                  },
+                  "arn:${AWS::Partition}:iam::694795848632:role--cdk-hnb659fds-cfn-exec-role-694795848632-us-east-1": {
+                    "id": "arn:${AWS::Partition}:iam::694795848632:role--cdk-hnb659fds-cfn-exec-role-694795848632-us-east-1",
+                    "path": "cdk-pipeline/cdk-pipeline/Pipeline/arn:${AWS::Partition}:iam::694795848632:role--cdk-hnb659fds-cfn-exec-role-694795848632-us-east-1",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.72.1"
+                    }
                   }
                 },
                 "constructInfo": {
@@ -1151,6 +1353,82 @@
             },
             "constructInfo": {
               "fqn": "aws-cdk-lib.pipelines.CodePipeline",
+              "version": "2.72.1"
+            }
+          },
+          "CdkApplication": {
+            "id": "CdkApplication",
+            "path": "cdk-pipeline/CdkApplication",
+            "children": {
+              "DeployApplication": {
+                "id": "DeployApplication",
+                "path": "cdk-pipeline/CdkApplication/DeployApplication",
+                "children": {
+                  "cdk-topic": {
+                    "id": "cdk-topic",
+                    "path": "cdk-pipeline/CdkApplication/DeployApplication/cdk-topic",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "cdk-pipeline/CdkApplication/DeployApplication/cdk-topic/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::SNS::Topic",
+                          "aws:cdk:cloudformation:props": {}
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_sns.CfnTopic",
+                          "version": "2.72.1"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_sns.Topic",
+                      "version": "2.72.1"
+                    }
+                  },
+                  "CDKMetadata": {
+                    "id": "CDKMetadata",
+                    "path": "cdk-pipeline/CdkApplication/DeployApplication/CDKMetadata",
+                    "children": {
+                      "Default": {
+                        "id": "Default",
+                        "path": "cdk-pipeline/CdkApplication/DeployApplication/CDKMetadata/Default",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.CfnResource",
+                          "version": "2.72.1"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.1.300"
+                    }
+                  },
+                  "BootstrapVersion": {
+                    "id": "BootstrapVersion",
+                    "path": "cdk-pipeline/CdkApplication/DeployApplication/BootstrapVersion",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.CfnParameter",
+                      "version": "2.72.1"
+                    }
+                  },
+                  "CheckBootstrapVersion": {
+                    "id": "CheckBootstrapVersion",
+                    "path": "cdk-pipeline/CdkApplication/DeployApplication/CheckBootstrapVersion",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.CfnRule",
+                      "version": "2.72.1"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Stack",
+                  "version": "2.72.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.Stage",
               "version": "2.72.1"
             }
           },
