@@ -29,8 +29,7 @@ class CdkPipeline(cdk.Stack):
               env=cdk.Environment(
                  account=f"{AWS_ACCOUNT}",
                  region=f"{AWS_REGION}"
-              ),
-              topic="my-topic"
+              )
           )
         )
 

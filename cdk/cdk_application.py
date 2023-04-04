@@ -10,12 +10,12 @@ from aws_cdk import (
 
 class CdkApplication(cdk.Stage):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
-        super().__init__(scope, construct_id, topic=kwargs.get("topic", **kwargs))
+        super().__init__(scope, construct_id, **kwargs))
 
         app_stack = CdkApplicationStack(self, "CdkApplicationStack", topic)
 
 class CdkApplicationStack(Stack):
-    def __init__(self, scope: Construct, construct_id: str, topic=kwargs.get("topic"), **kwargs) -> None:
+    def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
        
-        topic = sns.Topic(self, topic)
+        topic = sns.Topic(self, 'my-topic')
