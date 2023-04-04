@@ -19,4 +19,3 @@ class CdkApplicationStack(Stack):
         super().__init__(scope, construct_id, **kwargs)
        
         topic = sns.Topic(self, 'my-topic')
-        topic = sns.Topic(self, 'another-topic')
