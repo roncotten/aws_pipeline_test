@@ -1,9 +1,10 @@
 import aws_cdk as cdk
 from constructs import Construct
 from aws_cdk.pipelines import CodePipeline, CodePipelineSource, ShellStep
-from .cdk_application import CdkApplication
+from aws_cdk.aws_codepipeline_actions import CodeBuildAction 
 from aws_cdk import aws_codebuild as codebuild
 import aws_cdk.aws_ecr as ecr
+from .cdk_application import CdkApplication
 
 source_arn = "arn:aws:codestar-connections:us-east-1:694795848632:connection/81ecfe62-c1d4-49f4-bd33-9ee83d1568c9"
 
