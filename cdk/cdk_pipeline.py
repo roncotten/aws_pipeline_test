@@ -25,7 +25,7 @@ class CdkPipeline(cdk.Stack):
 
         pipeline.add_stage(
           CdkApplication(
-              self,"CdkApplication",
+              self,"cdk-deploy",
               env=cdk.Environment(
                  account=f"{AWS_ACCOUNT}",
                  region=f"{AWS_REGION}" 
