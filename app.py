@@ -2,8 +2,8 @@
 
 import aws_cdk as cdk
 
-from cdk.cdk_stack_1 import CdkStack1
-from cdk.cdk_stack_2 import CdkStack2
+from cdk.cdk_stack_1 import CdkPipeline
+#from cdk.cdk_stack_2 import CdkStack2
 
 AWS_ACCOUNT = "694795848632"
 AWS_REGION = "us-east-1"
@@ -11,7 +11,7 @@ AWS_REGION = "us-east-1"
 app = cdk.App()
 
 CdkPipeline(
-  app, "cdk-stack-1",
+  app, "cdk-pipeline",
   env=cdk.Environment(
       account=f"{AWS_ACCOUNT}",
       region=f"{AWS_REGION}"          
