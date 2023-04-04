@@ -30,6 +30,8 @@ class CdkPipeline(cdk.Stack):
                  account=f"{AWS_ACCOUNT}",
                  region=f"{AWS_REGION}" 
               ),
-              # vpc_id=self._vpc_id,
+              sns_topic_name='cdk-topic-name'
           )
         )
+
+
