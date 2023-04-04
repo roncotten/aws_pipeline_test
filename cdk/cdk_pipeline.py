@@ -14,15 +14,16 @@ class CdkPipeline(cdk.Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
+        ecr_repo = ecr.Repository(self, "cdk-repo")
+
         pipeline = CodePipeline(self, "cdk-pipeline",
                         pipeline_name="cdk-pipeline",
                         synth=ShellStep("Synth",
                             input=CodePipelineSource.connection("roncotten/aws_pipeline_test", "main", connection_arn=f"{source_arn}"),
-                            commands=["./build.sh"]
+                            shell_commands = "./build.sh " + repo.repository_uri_for_digest()
+                            commands=[ shell_commands ]
                         )
                     )
-
-        repository=ecr.Repository(self, "cdk-repo")
 
         pipeline.add_stage(
           CdkApplication(

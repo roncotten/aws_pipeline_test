@@ -1,4 +1,4 @@
 #!/bin/sh
 
-echo 'building now...'
+echo "ecr_repo == $1" 
 
