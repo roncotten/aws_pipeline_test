@@ -10,7 +10,7 @@ AWS_REGION = "us-east-1"
 
 app = cdk.App()
 
-CdkStack1(
+CdkPipeline(
   app, "cdk-stack-1",
   env=cdk.Environment(
       account=f"{AWS_ACCOUNT}",
