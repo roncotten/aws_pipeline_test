@@ -21,7 +21,6 @@ class CdkPipeline(cdk.Stack):
             "version": "0.2",
             "env": {
                 "exported-variables": [
-                  "ECR_REPO=ecr_repo" 
                  ]
             },
             "phases": {
@@ -38,10 +37,10 @@ class CdkPipeline(cdk.Stack):
                         pipeline_name="cdk-pipeline",
                         synth=CodeBuildStep("Synth",
                             input=CodePipelineSource.connection("roncotten/aws_pipeline_test", "main", connection_arn=f"{source_arn}"),
-                            #build_environment=codebuild.BuildEnvironment(
-                            #  build_image=codebuild.LinuxBuildImage.STANDARD_5_0
-                            #),
-                            #partial_build_spec=build_spec,
+                            build_environment=codebuild.BuildEnvironment(
+                              build_image=codebuild.LinuxBuildImage.STANDARD_5_0
+                            ),
+                            partial_build_spec=build_spec,
                             commands=[]
                         )
                     )
