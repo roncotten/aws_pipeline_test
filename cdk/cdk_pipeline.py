@@ -27,10 +27,27 @@ class CdkPipeline(cdk.Stack):
                     )
         '''
 
+        build_spec=codebuild.BuildSpec.from_object({
+            "version": "0.2",
+            "env": {
+                "exported-variables": ["MY_VAR"]
+            },
+            "phases": {
+                "build": {
+                    "commands": [
+                      "echo HERE!",
+                      "pwd",
+                      "ls -lsF"
+                    ]
+                }
+            }
+        })
+
         pipeline = CodePipeline(self, "cdk-pipeline",
                         pipeline_name="cdk-pipeline",
                         synth=CodeBuildStep("Synth",
                             input=CodePipelineSource.connection("roncotten/aws_pipeline_test", "main", connection_arn=f"{source_arn}"),
+                            partial_build_spec=build_spec,
                             commands=[]
                         )
                     )
