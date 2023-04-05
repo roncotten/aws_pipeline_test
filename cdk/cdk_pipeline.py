@@ -35,7 +35,7 @@ class CdkPipeline(cdk.Stack):
             "phases": {
                 "build": {
                     "commands": [
-                      "echo HERE!",
+                      "echo "HERE!"",
                       "pwd",
                       "ls -lsF"
                     ]
