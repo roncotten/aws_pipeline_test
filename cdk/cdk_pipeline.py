@@ -27,7 +27,6 @@ class CdkPipeline(cdk.Stack):
             "phases": {
                 "build": {
                     "commands": [
-                      "echo \"HERE!\"",
                       "pwd",
                       "ls -lsF"
                     ]
@@ -39,15 +38,9 @@ class CdkPipeline(cdk.Stack):
                         pipeline_name="cdk-pipeline",
                         synth=CodeBuildStep("Synth",
                             input=CodePipelineSource.connection("roncotten/aws_pipeline_test", "main", connection_arn=f"{source_arn}"),
-                            build_environment=codebuild.BuildEnvironment(
-                              build_image=codebuild.LinuxBuildImage.STANDARD_5_0
-                            ),
-                            #environment_variables={
-                            #  "KMS_KEY_ALIAS": codebuild.BuildEnvironmentVariable(
-                			#    value="KMS_KEY_ALIAS_VALUE",
-                			#    type=codebuild.BuildEnvironmentVariableType.PLAINTEXT
-                            #  ) 
-                            #},
+                            #build_environment=codebuild.BuildEnvironment(
+                            #  build_image=codebuild.LinuxBuildImage.STANDARD_5_0
+                            #),
                             partial_build_spec=build_spec,
                             commands=[]
                         )
@@ -62,5 +55,4 @@ class CdkPipeline(cdk.Stack):
               )
           )
         )
-
 
