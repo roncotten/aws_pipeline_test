@@ -48,7 +48,7 @@ class CdkPipeline(cdk.Stack):
                 			    value="KMS_KEY_ALIAS_VALUE",
                 			    type=codebuild.BuildEnvironmentVariableType.PLAINTEXT
                               ) 
-                            }
+                            },
                             partial_build_spec=build_spec,
                             commands=[]
                         )
