@@ -41,7 +41,7 @@ class CdkPipeline(cdk.Stack):
                             #build_environment=codebuild.BuildEnvironment(
                             #  build_image=codebuild.LinuxBuildImage.STANDARD_5_0
                             #),
-                            partial_build_spec=build_spec,
+                            #partial_build_spec=build_spec,
                             commands=[]
                         )
                     )
