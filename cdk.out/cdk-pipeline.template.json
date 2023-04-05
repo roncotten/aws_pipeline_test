@@ -287,7 +287,7 @@
          "ProjectName": {
           "Ref": "cdkpipelinePipelineBuildSynthCdkBuildProject6947D39A"
          },
-         "EnvironmentVariables": "[{\"name\":\"_PROJECT_CONFIG_HASH\",\"type\":\"PLAINTEXT\",\"value\":\"9fb94d0741e7deaa47da7e3f9370c9c8d365f6fb6b50b533ee5f4b21506dcb16\"}]"
+         "EnvironmentVariables": "[{\"name\":\"_PROJECT_CONFIG_HASH\",\"type\":\"PLAINTEXT\",\"value\":\"28c373ac63d519471fb90995f4837329a1d3be834e339aaa11785b2c701a266c\"}]"
         },
         "InputArtifacts": [
          {
@@ -680,7 +680,7 @@
     },
     "Environment": {
      "ComputeType": "BUILD_GENERAL1_SMALL",
-     "Image": "aws/codebuild/standard:6.0",
+     "Image": "aws/codebuild/standard:5.0",
      "ImagePullCredentialsType": "CODEBUILD",
      "PrivilegedMode": false,
      "Type": "LINUX_CONTAINER"
@@ -692,7 +692,7 @@
      ]
     },
     "Source": {
-     "BuildSpec": "{\n  \"version\": \"0.2\",\n  \"env\": {\n    \"exported-variables\": [\n      \"ECR_REPO=ecr_repo\"\n    ]\n  },\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"pwd\",\n        \"ls -lsF\"\n      ]\n    }\n  },\n  \"artifacts\": {\n    \"base-directory\": \"cdk.out\",\n    \"files\": [\n      \"**/*\"\n    ]\n  }\n}",
+     "BuildSpec": "{\n  \"version\": \"0.2\",\n  \"env\": {\n    \"exported-variables\": []\n  },\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"pwd\",\n        \"ls -lsF\"\n      ]\n    }\n  },\n  \"artifacts\": {\n    \"base-directory\": \"cdk.out\",\n    \"files\": [\n      \"**/*\"\n    ]\n  }\n}",
      "Type": "CODEPIPELINE"
     },
     "Cache": {

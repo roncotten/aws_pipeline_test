@@ -15,7 +15,8 @@ class CdkPipeline(cdk.Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-        #ecr_repo = ecr.Repository(self, "cdk-repo")
+        ecr_repo = ecr.Repository(self, "cdk-repo")
+        ecr_repo_uri = ecr_repo.repository_uri_for_digest()
 
         build_spec=codebuild.BuildSpec.from_object({
             "version": "0.2",
