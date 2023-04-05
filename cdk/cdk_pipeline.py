@@ -28,6 +28,7 @@ class CdkPipeline(cdk.Stack):
                 "build": {
                     "commands": [
                       "echo \"HERE!\"",
+                      "echo ${ECR_REPO}",
                       "echo ${AWS_REGION}",
                       "pwd",
                       "ls -lsF"
