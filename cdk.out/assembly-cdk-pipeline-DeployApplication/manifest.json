@@ -17,7 +17,7 @@
         "validateOnSynth": true,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::694795848632:role/cdk-hnb659fds-deploy-role-694795848632-us-east-1",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::694795848632:role/cdk-hnb659fds-cfn-exec-role-694795848632-us-east-1",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-694795848632-us-east-1/6d2ee67ea64a0f4fe0454f870e056716b679c1edd8a72397265be8b25ae35e4e.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-694795848632-us-east-1/9a268aa0fbc685924346a7edda5c7134cc0b11c989aa83077b767f44ee280f8a.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -34,10 +34,10 @@
         "cdkpipelineDeployApplicationCdkApplicationStackC1253C11.assets"
       ],
       "metadata": {
-        "/cdk-pipeline/DeployApplication/CdkApplicationStack/sns-topic/Resource": [
+        "/cdk-pipeline/DeployApplication/CdkApplicationStack/my-topic/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "snstopic2C4AE3C1"
+            "data": "mytopicA51922FD"
           }
         ],
         "/cdk-pipeline/DeployApplication/CdkApplicationStack/CDKMetadata/Default": [

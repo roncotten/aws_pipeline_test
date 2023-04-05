@@ -24,7 +24,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::694795848632:role/cdk-hnb659fds-deploy-role-694795848632-us-east-1",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::694795848632:role/cdk-hnb659fds-cfn-exec-role-694795848632-us-east-1",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-694795848632-us-east-1/68f9782155dcbc8cc543af1829cfb10a6d9bb596ba9747278da6348e8877a585.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-694795848632-us-east-1/68d16cbebc5aae5d074866e9e99d4ab9d48177bd197f35ebe5f1f70b511a81dc.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -40,6 +40,12 @@
         "cdk-pipeline.assets"
       ],
       "metadata": {
+        "/cdk-pipeline/cdk-repo/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "cdkrepo0CE6723A"
+          }
+        ],
         "/cdk-pipeline/cdk-pipeline/Pipeline/ArtifactsBucket/Resource": [
           {
             "type": "aws:cdk:logicalId",

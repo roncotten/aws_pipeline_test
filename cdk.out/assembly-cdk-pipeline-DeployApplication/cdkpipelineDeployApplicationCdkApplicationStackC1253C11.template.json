@@ -1,9 +1,9 @@
 {
  "Resources": {
-  "snstopic2C4AE3C1": {
+  "mytopicA51922FD": {
    "Type": "AWS::SNS::Topic",
    "Metadata": {
-    "aws:cdk:path": "cdk-pipeline/DeployApplication/CdkApplicationStack/sns-topic/Resource"
+    "aws:cdk:path": "cdk-pipeline/DeployApplication/CdkApplicationStack/my-topic/Resource"
    }
   },
   "CDKMetadata": {
