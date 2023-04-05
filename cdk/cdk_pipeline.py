@@ -17,25 +17,18 @@ class CdkPipeline(cdk.Stack):
 
         ecr_repo = ecr.Repository(self, "cdk-repo")
 
-        '''
-        pipeline = CodePipeline(self, "cdk-pipeline",
-                        pipeline_name="cdk-pipeline",
-                        synth=ShellStep("Synth",
-                            input=CodePipelineSource.connection("roncotten/aws_pipeline_test", "main", connection_arn=f"{source_arn}"),
-                            commands=[ "npm install -g aws-cdk && pip install -r requirements.txt", "cdk synth" ]
-                        )
-                    )
-        '''
-
         build_spec=codebuild.BuildSpec.from_object({
             "version": "0.2",
             "env": {
-                "exported-variables": ["MY_VAR"]
+                "exported-variables": [
+                  "ECR_REPO=ecr_repo" 
+                 ]
             },
             "phases": {
                 "build": {
                     "commands": [
                       "echo \"HERE!\"",
+                      "echo \"${ECR_REPO}\"",
                       "pwd",
                       "ls -lsF"
                     ]
