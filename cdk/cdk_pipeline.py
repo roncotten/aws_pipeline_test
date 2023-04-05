@@ -28,7 +28,6 @@ class CdkPipeline(cdk.Stack):
                 "build": {
                     "commands": [
                       "echo \"HERE!\"",
-                      "echo ${ECR_REPO}",
                       "pwd",
                       "ls -lsF"
                     ]
@@ -40,6 +39,17 @@ class CdkPipeline(cdk.Stack):
                         pipeline_name="cdk-pipeline",
                         synth=CodeBuildStep("Synth",
                             input=CodePipelineSource.connection("roncotten/aws_pipeline_test", "main", connection_arn=f"{source_arn}"),
+                            buildEnvironment: {
+                              computeType: CodeBuild.ComputeType.SMALL,
+                              buildImage: CodeBuild.LinuxBuildImage.STANDARD_5_0,
+                              priviledged=True
+                            },
+                            environment_variables={
+                              "KMS_KEY_ALIAS": codebuild.BuildEnvironmentVariable(
+                			    value="KMS_KEY_ALIAS_VALUE",
+                			    type=codebuild.BuildEnvironmentVariableType.PLAINTEXT
+                              ) 
+                            }
                             partial_build_spec=build_spec,
                             commands=[]
                         )
