@@ -398,7 +398,7 @@
                                   "ProjectName": {
                                     "Ref": "cdkpipelinePipelineBuildSynthCdkBuildProject6947D39A"
                                   },
-                                  "EnvironmentVariables": "[{\"name\":\"_PROJECT_CONFIG_HASH\",\"type\":\"PLAINTEXT\",\"value\":\"d1f4993474bd59c09e99d62bf9898a3130aa69faf3aa74e3d608b363d40ff9a2\"}]"
+                                  "EnvironmentVariables": "[{\"name\":\"_PROJECT_CONFIG_HASH\",\"type\":\"PLAINTEXT\",\"value\":\"b45b4d2f10c4c35f45cf45c0a3af9417a9da9f00f4bf5c9db9d15877a4925b85\"}]"
                                 },
                                 "runOrder": 1,
                                 "roleArn": {
@@ -901,7 +901,7 @@
                                     },
                                     "source": {
                                       "type": "CODEPIPELINE",
-                                      "buildSpec": "{\n  \"version\": \"0.2\",\n  \"env\": {\n    \"exported-variables\": [\n      \"MY_VAR\"\n    ]\n  },\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"echo HERE!\",\n        \"pwd\",\n        \"ls -lsF\"\n      ]\n    }\n  },\n  \"artifacts\": {\n    \"base-directory\": \"cdk.out\",\n    \"files\": [\n      \"**/*\"\n    ]\n  }\n}"
+                                      "buildSpec": "{\n  \"version\": \"0.2\",\n  \"env\": {\n    \"exported-variables\": [\n      \"MY_VAR\"\n    ]\n  },\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"echo \\\"HERE!\\\"\",\n        \"pwd\",\n        \"ls -lsF\"\n      ]\n    }\n  },\n  \"artifacts\": {\n    \"base-directory\": \"cdk.out\",\n    \"files\": [\n      \"**/*\"\n    ]\n  }\n}"
                                     },
                                     "cache": {
                                       "type": "NO_CACHE"
