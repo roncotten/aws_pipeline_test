@@ -47,15 +47,6 @@ class CdkPipeline(cdk.Stack):
                 },
                 "env": {
                      "exported-variables": ["imageTag"]
-                },
-                "artifacts": {
-                    "files": "imagedefinitions.json",
-                    "secondary-artifacts": {
-                        "imagedefinitions": {
-                            "files": "imagedefinitions.json",
-                            "name": "imagedefinitions"
-                        }
-                    }
                 }
             }),
             environment_variables={

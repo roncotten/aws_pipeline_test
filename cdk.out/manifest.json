@@ -17,7 +17,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::694795848632:role/cdk-hnb659fds-deploy-role-694795848632-us-east-1",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::694795848632:role/cdk-hnb659fds-cfn-exec-role-694795848632-us-east-1",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-694795848632-us-east-1/bae2ff67dfc2faf17f2d431d2d749e5e622473704ba1aaedc7d8409dcf3ce6b4.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-694795848632-us-east-1/8751423cc239af42b83ebec3d28c538b71c2273bb3f95c9548385c8b83b74724.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -99,28 +99,28 @@
             "data": "codepipelineB8EF071E"
           }
         ],
-        "/cdk-pipeline/codepipeline/source/clone/CodePipelineActionRole/Resource": [
+        "/cdk-pipeline/codepipeline/source/Clone/CodePipelineActionRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "codepipelinesourcecloneCodePipelineActionRole85DBCA58"
+            "data": "codepipelinesourceCloneCodePipelineActionRole511F82E5"
           }
         ],
-        "/cdk-pipeline/codepipeline/source/clone/CodePipelineActionRole/DefaultPolicy/Resource": [
+        "/cdk-pipeline/codepipeline/source/Clone/CodePipelineActionRole/DefaultPolicy/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "codepipelinesourcecloneCodePipelineActionRoleDefaultPolicy9AFD37D6"
+            "data": "codepipelinesourceCloneCodePipelineActionRoleDefaultPolicyF1753B61"
           }
         ],
-        "/cdk-pipeline/codepipeline/build/codebuild/CodePipelineActionRole/Resource": [
+        "/cdk-pipeline/codepipeline/build/Build/CodePipelineActionRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "codepipelinebuildcodebuildCodePipelineActionRole3195360E"
+            "data": "codepipelinebuildBuildCodePipelineActionRole0BCA2C07"
           }
         ],
-        "/cdk-pipeline/codepipeline/build/codebuild/CodePipelineActionRole/DefaultPolicy/Resource": [
+        "/cdk-pipeline/codepipeline/build/Build/CodePipelineActionRole/DefaultPolicy/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "codepipelinebuildcodebuildCodePipelineActionRoleDefaultPolicy154BB360"
+            "data": "codepipelinebuildBuildCodePipelineActionRoleDefaultPolicy80611BD1"
           }
         ],
         "/cdk-pipeline/CDKMetadata/Default": [

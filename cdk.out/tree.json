@@ -302,7 +302,7 @@
                     },
                     "source": {
                       "type": "CODEPIPELINE",
-                      "buildSpec": "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"pwd\",\n        \"ls -lsF\",\n        \"docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION\"\n      ]\n    },\n    \"post_build\": {\n      \"commands\": []\n    }\n  },\n  \"env\": {\n    \"exported-variables\": [\n      \"imageTag\"\n    ]\n  },\n  \"artifacts\": {\n    \"files\": \"imagedefinitions.json\",\n    \"secondary-artifacts\": {\n      \"imagedefinitions\": {\n        \"files\": \"imagedefinitions.json\",\n        \"name\": \"imagedefinitions\"\n      }\n    }\n  }\n}"
+                      "buildSpec": "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"pwd\",\n        \"ls -lsF\"\n      ]\n    },\n    \"post_build\": {\n      \"commands\": []\n    }\n  },\n  \"env\": {\n    \"exported-variables\": [\n      \"imageTag\"\n    ]\n  },\n  \"artifacts\": {\n    \"files\": \"imagedefinitions.json\",\n    \"secondary-artifacts\": {\n      \"imagedefinitions\": {\n        \"files\": \"imagedefinitions.json\",\n        \"name\": \"imagedefinitions\"\n      }\n    }\n  }\n}"
                     },
                     "cache": {
                       "type": "NO_CACHE"
@@ -614,13 +614,13 @@
                                   "Resource": [
                                     {
                                       "Fn::GetAtt": [
-                                        "codepipelinebuildcodebuildCodePipelineActionRole3195360E",
+                                        "codepipelinebuildBuildCodePipelineActionRole0BCA2C07",
                                         "Arn"
                                       ]
                                     },
                                     {
                                       "Fn::GetAtt": [
-                                        "codepipelinesourcecloneCodePipelineActionRole85DBCA58",
+                                        "codepipelinesourceCloneCodePipelineActionRole511F82E5",
                                         "Arn"
                                       ]
                                     }
@@ -671,10 +671,10 @@
                         "name": "source",
                         "actions": [
                           {
-                            "name": "clone",
+                            "name": "Clone",
                             "outputArtifacts": [
                               {
-                                "name": "Artifact_source_clone"
+                                "name": "Artifact_source_Clone"
                               }
                             ],
                             "actionTypeId": {
@@ -692,7 +692,7 @@
                             "runOrder": 1,
                             "roleArn": {
                               "Fn::GetAtt": [
-                                "codepipelinesourcecloneCodePipelineActionRole85DBCA58",
+                                "codepipelinesourceCloneCodePipelineActionRole511F82E5",
                                 "Arn"
                               ]
                             }
@@ -703,10 +703,10 @@
                         "name": "build",
                         "actions": [
                           {
-                            "name": "codebuild",
+                            "name": "Build",
                             "inputArtifacts": [
                               {
-                                "name": "Artifact_source_clone"
+                                "name": "Artifact_source_Clone"
                               }
                             ],
                             "outputArtifacts": [
@@ -728,7 +728,7 @@
                             "runOrder": 1,
                             "roleArn": {
                               "Fn::GetAtt": [
-                                "codepipelinebuildcodebuildCodePipelineActionRole3195360E",
+                                "codepipelinebuildBuildCodePipelineActionRole0BCA2C07",
                                 "Arn"
                               ]
                             }
@@ -763,17 +763,17 @@
                 "id": "source",
                 "path": "cdk-pipeline/codepipeline/source",
                 "children": {
-                  "clone": {
-                    "id": "clone",
-                    "path": "cdk-pipeline/codepipeline/source/clone",
+                  "Clone": {
+                    "id": "Clone",
+                    "path": "cdk-pipeline/codepipeline/source/Clone",
                     "children": {
                       "CodePipelineActionRole": {
                         "id": "CodePipelineActionRole",
-                        "path": "cdk-pipeline/codepipeline/source/clone/CodePipelineActionRole",
+                        "path": "cdk-pipeline/codepipeline/source/Clone/CodePipelineActionRole",
                         "children": {
                           "ImportCodePipelineActionRole": {
                             "id": "ImportCodePipelineActionRole",
-                            "path": "cdk-pipeline/codepipeline/source/clone/CodePipelineActionRole/ImportCodePipelineActionRole",
+                            "path": "cdk-pipeline/codepipeline/source/Clone/CodePipelineActionRole/ImportCodePipelineActionRole",
                             "constructInfo": {
                               "fqn": "aws-cdk-lib.Resource",
                               "version": "2.72.1"
@@ -781,7 +781,7 @@
                           },
                           "Resource": {
                             "id": "Resource",
-                            "path": "cdk-pipeline/codepipeline/source/clone/CodePipelineActionRole/Resource",
+                            "path": "cdk-pipeline/codepipeline/source/Clone/CodePipelineActionRole/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                               "aws:cdk:cloudformation:props": {
@@ -806,11 +806,11 @@
                           },
                           "DefaultPolicy": {
                             "id": "DefaultPolicy",
-                            "path": "cdk-pipeline/codepipeline/source/clone/CodePipelineActionRole/DefaultPolicy",
+                            "path": "cdk-pipeline/codepipeline/source/Clone/CodePipelineActionRole/DefaultPolicy",
                             "children": {
                               "Resource": {
                                 "id": "Resource",
-                                "path": "cdk-pipeline/codepipeline/source/clone/CodePipelineActionRole/DefaultPolicy/Resource",
+                                "path": "cdk-pipeline/codepipeline/source/Clone/CodePipelineActionRole/DefaultPolicy/Resource",
                                 "attributes": {
                                   "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                                   "aws:cdk:cloudformation:props": {
@@ -898,10 +898,10 @@
                                       ],
                                       "Version": "2012-10-17"
                                     },
-                                    "policyName": "codepipelinesourcecloneCodePipelineActionRoleDefaultPolicy9AFD37D6",
+                                    "policyName": "codepipelinesourceCloneCodePipelineActionRoleDefaultPolicyF1753B61",
                                     "roles": [
                                       {
-                                        "Ref": "codepipelinesourcecloneCodePipelineActionRole85DBCA58"
+                                        "Ref": "codepipelinesourceCloneCodePipelineActionRole511F82E5"
                                       }
                                     ]
                                   }
@@ -939,17 +939,17 @@
                 "id": "build",
                 "path": "cdk-pipeline/codepipeline/build",
                 "children": {
-                  "codebuild": {
-                    "id": "codebuild",
-                    "path": "cdk-pipeline/codepipeline/build/codebuild",
+                  "Build": {
+                    "id": "Build",
+                    "path": "cdk-pipeline/codepipeline/build/Build",
                     "children": {
                       "CodePipelineActionRole": {
                         "id": "CodePipelineActionRole",
-                        "path": "cdk-pipeline/codepipeline/build/codebuild/CodePipelineActionRole",
+                        "path": "cdk-pipeline/codepipeline/build/Build/CodePipelineActionRole",
                         "children": {
                           "ImportCodePipelineActionRole": {
                             "id": "ImportCodePipelineActionRole",
-                            "path": "cdk-pipeline/codepipeline/build/codebuild/CodePipelineActionRole/ImportCodePipelineActionRole",
+                            "path": "cdk-pipeline/codepipeline/build/Build/CodePipelineActionRole/ImportCodePipelineActionRole",
                             "constructInfo": {
                               "fqn": "aws-cdk-lib.Resource",
                               "version": "2.72.1"
@@ -957,7 +957,7 @@
                           },
                           "Resource": {
                             "id": "Resource",
-                            "path": "cdk-pipeline/codepipeline/build/codebuild/CodePipelineActionRole/Resource",
+                            "path": "cdk-pipeline/codepipeline/build/Build/CodePipelineActionRole/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                               "aws:cdk:cloudformation:props": {
@@ -982,11 +982,11 @@
                           },
                           "DefaultPolicy": {
                             "id": "DefaultPolicy",
-                            "path": "cdk-pipeline/codepipeline/build/codebuild/CodePipelineActionRole/DefaultPolicy",
+                            "path": "cdk-pipeline/codepipeline/build/Build/CodePipelineActionRole/DefaultPolicy",
                             "children": {
                               "Resource": {
                                 "id": "Resource",
-                                "path": "cdk-pipeline/codepipeline/build/codebuild/CodePipelineActionRole/DefaultPolicy/Resource",
+                                "path": "cdk-pipeline/codepipeline/build/Build/CodePipelineActionRole/DefaultPolicy/Resource",
                                 "attributes": {
                                   "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                                   "aws:cdk:cloudformation:props": {
@@ -1009,10 +1009,10 @@
                                       ],
                                       "Version": "2012-10-17"
                                     },
-                                    "policyName": "codepipelinebuildcodebuildCodePipelineActionRoleDefaultPolicy154BB360",
+                                    "policyName": "codepipelinebuildBuildCodePipelineActionRoleDefaultPolicy80611BD1",
                                     "roles": [
                                       {
-                                        "Ref": "codepipelinebuildcodebuildCodePipelineActionRole3195360E"
+                                        "Ref": "codepipelinebuildBuildCodePipelineActionRole0BCA2C07"
                                       }
                                     ]
                                   }

@@ -234,7 +234,7 @@
      ]
     },
     "Source": {
-     "BuildSpec": "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"pwd\",\n        \"ls -lsF\",\n        \"docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION\"\n      ]\n    },\n    \"post_build\": {\n      \"commands\": []\n    }\n  },\n  \"env\": {\n    \"exported-variables\": [\n      \"imageTag\"\n    ]\n  },\n  \"artifacts\": {\n    \"files\": \"imagedefinitions.json\",\n    \"secondary-artifacts\": {\n      \"imagedefinitions\": {\n        \"files\": \"imagedefinitions.json\",\n        \"name\": \"imagedefinitions\"\n      }\n    }\n  }\n}",
+     "BuildSpec": "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"pwd\",\n        \"ls -lsF\"\n      ]\n    },\n    \"post_build\": {\n      \"commands\": []\n    }\n  },\n  \"env\": {\n    \"exported-variables\": [\n      \"imageTag\"\n    ]\n  },\n  \"artifacts\": {\n    \"files\": \"imagedefinitions.json\",\n    \"secondary-artifacts\": {\n      \"imagedefinitions\": {\n        \"files\": \"imagedefinitions.json\",\n        \"name\": \"imagedefinitions\"\n      }\n    }\n  }\n}",
      "Type": "CODEPIPELINE"
     },
     "Cache": {
@@ -457,13 +457,13 @@
        "Resource": [
         {
          "Fn::GetAtt": [
-          "codepipelinebuildcodebuildCodePipelineActionRole3195360E",
+          "codepipelinebuildBuildCodePipelineActionRole0BCA2C07",
           "Arn"
          ]
         },
         {
          "Fn::GetAtt": [
-          "codepipelinesourcecloneCodePipelineActionRole85DBCA58",
+          "codepipelinesourceCloneCodePipelineActionRole511F82E5",
           "Arn"
          ]
         }
@@ -508,15 +508,15 @@
          "BranchName": "main",
          "OutputArtifactFormat": "CODEBUILD_CLONE_REF"
         },
-        "Name": "clone",
+        "Name": "Clone",
         "OutputArtifacts": [
          {
-          "Name": "Artifact_source_clone"
+          "Name": "Artifact_source_Clone"
          }
         ],
         "RoleArn": {
          "Fn::GetAtt": [
-          "codepipelinesourcecloneCodePipelineActionRole85DBCA58",
+          "codepipelinesourceCloneCodePipelineActionRole511F82E5",
           "Arn"
          ]
         },
@@ -541,10 +541,10 @@
         },
         "InputArtifacts": [
          {
-          "Name": "Artifact_source_clone"
+          "Name": "Artifact_source_Clone"
          }
         ],
-        "Name": "codebuild",
+        "Name": "Build",
         "OutputArtifacts": [
          {
           "Name": "imagedefinitions"
@@ -552,7 +552,7 @@
         ],
         "RoleArn": {
          "Fn::GetAtt": [
-          "codepipelinebuildcodebuildCodePipelineActionRole3195360E",
+          "codepipelinebuildBuildCodePipelineActionRole0BCA2C07",
           "Arn"
          ]
         },
@@ -587,7 +587,7 @@
     "aws:cdk:path": "cdk-pipeline/codepipeline/Resource"
    }
   },
-  "codepipelinesourcecloneCodePipelineActionRole85DBCA58": {
+  "codepipelinesourceCloneCodePipelineActionRole511F82E5": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -604,10 +604,10 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "cdk-pipeline/codepipeline/source/clone/CodePipelineActionRole/Resource"
+    "aws:cdk:path": "cdk-pipeline/codepipeline/source/Clone/CodePipelineActionRole/Resource"
    }
   },
-  "codepipelinesourcecloneCodePipelineActionRoleDefaultPolicy9AFD37D6": {
+  "codepipelinesourceCloneCodePipelineActionRoleDefaultPolicyF1753B61": {
    "Type": "AWS::IAM::Policy",
    "Properties": {
     "PolicyDocument": {
@@ -694,18 +694,18 @@
      ],
      "Version": "2012-10-17"
     },
-    "PolicyName": "codepipelinesourcecloneCodePipelineActionRoleDefaultPolicy9AFD37D6",
+    "PolicyName": "codepipelinesourceCloneCodePipelineActionRoleDefaultPolicyF1753B61",
     "Roles": [
      {
-      "Ref": "codepipelinesourcecloneCodePipelineActionRole85DBCA58"
+      "Ref": "codepipelinesourceCloneCodePipelineActionRole511F82E5"
      }
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "cdk-pipeline/codepipeline/source/clone/CodePipelineActionRole/DefaultPolicy/Resource"
+    "aws:cdk:path": "cdk-pipeline/codepipeline/source/Clone/CodePipelineActionRole/DefaultPolicy/Resource"
    }
   },
-  "codepipelinebuildcodebuildCodePipelineActionRole3195360E": {
+  "codepipelinebuildBuildCodePipelineActionRole0BCA2C07": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -722,10 +722,10 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "cdk-pipeline/codepipeline/build/codebuild/CodePipelineActionRole/Resource"
+    "aws:cdk:path": "cdk-pipeline/codepipeline/build/Build/CodePipelineActionRole/Resource"
    }
   },
-  "codepipelinebuildcodebuildCodePipelineActionRoleDefaultPolicy154BB360": {
+  "codepipelinebuildBuildCodePipelineActionRoleDefaultPolicy80611BD1": {
    "Type": "AWS::IAM::Policy",
    "Properties": {
     "PolicyDocument": {
@@ -747,15 +747,15 @@
      ],
      "Version": "2012-10-17"
     },
-    "PolicyName": "codepipelinebuildcodebuildCodePipelineActionRoleDefaultPolicy154BB360",
+    "PolicyName": "codepipelinebuildBuildCodePipelineActionRoleDefaultPolicy80611BD1",
     "Roles": [
      {
-      "Ref": "codepipelinebuildcodebuildCodePipelineActionRole3195360E"
+      "Ref": "codepipelinebuildBuildCodePipelineActionRole0BCA2C07"
      }
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "cdk-pipeline/codepipeline/build/codebuild/CodePipelineActionRole/DefaultPolicy/Resource"
+    "aws:cdk:path": "cdk-pipeline/codepipeline/build/Build/CodePipelineActionRole/DefaultPolicy/Resource"
    }
   },
   "CDKMetadata": {
