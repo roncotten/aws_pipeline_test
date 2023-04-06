@@ -37,8 +37,7 @@ class CdkPipeline(cdk.Stack):
                     "build": {
                         "commands": [
                             "pwd",
-                            "ls -lsF",
-                            "docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION"
+                            "ls -lsF"
                         ]
                     },
                     "post_build": {
@@ -69,10 +68,10 @@ class CdkPipeline(cdk.Stack):
         # source action 
         source_output = codepipeline.Artifact()
         source_action = codepipeline_actions.CodeStarConnectionsSourceAction(
-          action_name="clone",
+          action_name="Clone",
           connection_arn=source_arn,
           owner='roncotten',
-          repo=' aws_pipeline_test',
+          repo='aws_pipeline_test',
           branch='main',
           output=source_output,
           code_build_clone_output=True
@@ -80,7 +79,7 @@ class CdkPipeline(cdk.Stack):
 
         # build action
         build_action = codepipeline_actions.CodeBuildAction(
-            action_name="codebuild",
+            action_name="Build",
             project=codebuild_project,
             input=source_output,
             outputs=[codepipeline.Artifact("imagedefinitions")],

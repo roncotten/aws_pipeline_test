@@ -504,8 +504,8 @@
         },
         "Configuration": {
          "ConnectionArn": "arn:aws:codestar-connections:us-east-1:694795848632:connection/81ecfe62-c1d4-49f4-bd33-9ee83d1568c9",
-         "FullRepositoryId": "roncotten/ aws_pipeline_test",
-         "BranchName": "master",
+         "FullRepositoryId": "roncotten/aws_pipeline_test",
+         "BranchName": "main",
          "OutputArtifactFormat": "CODEBUILD_CLONE_REF"
         },
         "Name": "clone",
