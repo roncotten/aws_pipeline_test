@@ -73,6 +73,7 @@ class CdkPipeline(cdk.Stack):
           connection_arn=source_arn,
           owner='roncotten',
           repo=' aws_pipeline_test',
+          branch='main',
           output=source_output,
           code_build_clone_output=True
         )
