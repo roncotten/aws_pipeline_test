@@ -1,65 +1,107 @@
 import aws_cdk as cdk
 from constructs import Construct
-from aws_cdk.pipelines import CodePipeline, CodePipelineSource, ShellStep, CodeBuildStep
-import aws_cdk.aws_codebuild as codebuild 
-import aws_cdk.aws_ecr as ecr
+from aws_cdk import (
+    aws_codecommit as codecommit,
+    aws_codebuild as codebuild,
+    aws_codepipeline as codepipeline,
+    aws_codepipeline_actions as codepipeline_actions,
+    aws_ecs as ecs,
+    aws_ecs_patterns as ecs_patterns,
+    aws_ecr as ecr,
+    aws_iam as iam,
+    aws_ec2 as ec2 
+)
 from .cdk_application import CdkApplication
 
-source_arn = "arn:aws:codestar-connections:us-east-1:694795848632:connection/81ecfe62-c1d4-49f4-bd33-9ee83d1568c9"
 
 AWS_ACCOUNT = "694795848632"
 AWS_REGION = "us-east-1"
+source_arn = "arn:aws:codestar-connections:us-east-1:694795848632:connection/81ecfe62-c1d4-49f4-bd33-9ee83d1568c9"
 
 class CdkPipeline(cdk.Stack):
 
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
+        # ecr repo
         ecr_repo = ecr.Repository(self, "cdk-repo")
-        ecr_repo_uri = ecr_repo.repository_uri_for_digest()
 
-        build_spec=codebuild.BuildSpec.from_object({
-            "version": "0.2",
-            "env": {
-                "exported-variables": [
-                 ]
-            },
-            "phases": {
-                "build": {
-                    "commands": [
-                      "pwd",
-                      "ls -lsF"
-                    ]
+        # codebuild project
+        codebuild_project = codebuild.PipelineProject(self, "codebuild" ,project_name="codebuild",
+            environment=codebuild.BuildEnvironment(
+                privileged=True
+            ),
+            build_spec=codebuild.BuildSpec.from_object({
+                "version": "0.2",
+                "phases": {
+                    "build": {
+                        "commands": [
+                            "pwd",
+                            "ls -lsF",
+                            "docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION"
+                        ]
+                    },
+                    "post_build": {
+                        "commands": [
+                        ]
+                    }
+                },
+                "env": {
+                     "exported-variables": ["imageTag"]
+                },
+                "artifacts": {
+                    "files": "imagedefinitions.json",
+                    "secondary-artifacts": {
+                        "imagedefinitions": {
+                            "files": "imagedefinitions.json",
+                            "name": "imagedefinitions"
+                        }
+                    }
                 }
+            }),
+            environment_variables={
+                "REPOSITORY_URI": codebuild.BuildEnvironmentVariable(
+                    value=ecr_repo.repository_uri
+                )
             }
-        })
+        )
 
-        pipeline = CodePipeline(self, "cdk-pipeline",
-                        pipeline_name="cdk-pipeline",
-                        synth=ShellStep("Synth",
-                            input=CodePipelineSource.connection("roncotten/aws_pipeline_test", "main", connection_arn=f"{source_arn}"),
-                            commands=["npm install -g aws-cdk", "python -m pip install -r requirements.txt", "cdk synth"]
-                        )
-                    )
-        #pipeline = CodePipeline(self, "cdk-pipeline",
-        #                pipeline_name="cdk-pipeline",
-        #                synth=CodeBuildStep("Synth",
-        #                    input=CodePipelineSource.connection("roncotten/aws_pipeline_test", "main", connection_arn=f"{source_arn}"),
-        #                    build_environment=codebuild.BuildEnvironment(
-        #                      build_image=codebuild.LinuxBuildImage.STANDARD_5_0
-        #                    ),
-        #                    partial_build_spec=build_spec,
-        #                    commands=["npm install -g aws-cdk", "python -m pip install -r requirements.txt", "cdk synth"]
-        #                )
-        #            )
+        # source action 
+        source_output = codepipeline.Artifact()
+        source_action = codepipeline_actions.CodeStarConnectionsSourceAction(
+          action_name="clone",
+          connection_arn=source_arn,
+          owner='roncotten',
+          repo=' aws_pipeline_test',
+          output=source_output,
+          code_build_clone_output=True
+        )
 
-        pipeline.add_stage(
-          CdkApplication(
-              self,"DeployApplication",
-              env=cdk.Environment(
-                 account=f"{AWS_ACCOUNT}",
-                 region=f"{AWS_REGION}"
-              )
-          )
+        # build action
+        build_action = codepipeline_actions.CodeBuildAction(
+            action_name="codebuild",
+            project=codebuild_project,
+            input=source_output,
+            outputs=[codepipeline.Artifact("imagedefinitions")],
+            execute_batch_build=False
+        )
+
+
+        # create pipeline 
+        codepipeline.Pipeline(self, "codepipeline", pipeline_name="codepipeline",
+            stages=[
+              {
+                "stageName": "source",
+                "actions": [source_action]
+              }, 
+              {
+                "stageName": "build",
+                "actions": [build_action]
+              }, 
+              #{
+              #  "stageName": "deploy",
+              #  "actions": [deploy_action]
+              #}
+            ]
         )
 
