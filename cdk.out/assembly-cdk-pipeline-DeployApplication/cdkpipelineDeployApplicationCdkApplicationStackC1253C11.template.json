@@ -1,9 +1,21 @@
 {
  "Resources": {
-  "mytopicA51922FD": {
+  "mytopic1BC0A537D": {
    "Type": "AWS::SNS::Topic",
    "Metadata": {
-    "aws:cdk:path": "cdk-pipeline/DeployApplication/CdkApplicationStack/my-topic/Resource"
+    "aws:cdk:path": "cdk-pipeline/DeployApplication/CdkApplicationStack/my-topic-1/Resource"
+   }
+  },
+  "mytopic2577CCE85": {
+   "Type": "AWS::SNS::Topic",
+   "Metadata": {
+    "aws:cdk:path": "cdk-pipeline/DeployApplication/CdkApplicationStack/my-topic-2/Resource"
+   }
+  },
+  "mytopic32889ADEC": {
+   "Type": "AWS::SNS::Topic",
+   "Metadata": {
+    "aws:cdk:path": "cdk-pipeline/DeployApplication/CdkApplicationStack/my-topic-3/Resource"
    }
   },
   "CDKMetadata": {

@@ -36,15 +36,22 @@ class CdkPipeline(cdk.Stack):
 
         pipeline = CodePipeline(self, "cdk-pipeline",
                         pipeline_name="cdk-pipeline",
-                        synth=CodeBuildStep("Synth",
+                        synth=ShellStep("Synth",
                             input=CodePipelineSource.connection("roncotten/aws_pipeline_test", "main", connection_arn=f"{source_arn}"),
-                            build_environment=codebuild.BuildEnvironment(
-                              build_image=codebuild.LinuxBuildImage.STANDARD_5_0
-                            ),
-                            partial_build_spec=build_spec,
                             commands=["npm install -g aws-cdk", "python -m pip install -r requirements.txt", "cdk synth"]
                         )
                     )
+        #pipeline = CodePipeline(self, "cdk-pipeline",
+        #                pipeline_name="cdk-pipeline",
+        #                synth=CodeBuildStep("Synth",
+        #                    input=CodePipelineSource.connection("roncotten/aws_pipeline_test", "main", connection_arn=f"{source_arn}"),
+        #                    build_environment=codebuild.BuildEnvironment(
+        #                      build_image=codebuild.LinuxBuildImage.STANDARD_5_0
+        #                    ),
+        #                    partial_build_spec=build_spec,
+        #                    commands=["npm install -g aws-cdk", "python -m pip install -r requirements.txt", "cdk synth"]
+        #                )
+        #            )
 
         pipeline.add_stage(
           CdkApplication(
