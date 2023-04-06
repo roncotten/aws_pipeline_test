@@ -20,3 +20,4 @@ class CdkApplicationStack(Stack):
        
         topic = sns.Topic(self, 'my-topic-1')
         topic = sns.Topic(self, 'my-topic-2')
+        topic = sns.Topic(self, 'my-topic-3')
