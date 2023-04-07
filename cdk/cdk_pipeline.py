@@ -55,6 +55,8 @@ class CdkPipeline(cdk.Stack):
                     "build": {
                         "commands": [
                             "$(aws ecr get-login --region $AWS_REGION --no-include-email)",
+                            "pwd",
+                            "ls -lsR *",
                             "docker build -t $REPOSITORY_URI:latest .",
                             "docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION"
                         ]

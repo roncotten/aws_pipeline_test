@@ -1,16 +1,7 @@
-FROM centos:centos7
-MAINTAINER The CentOS Project <cloud-ops@centos.org>
-
-RUN yum -y update; yum clean all
-RUN yum -y install epel-release; yum clean all
-RUN yum -y install python-pip; yum clean all
-
-ADD . /src
-
-RUN cd /src; pip install -r requirements.txt
-
-EXPOSE 8080
-
-CMD ["python", "/src/index.py"]
-
-
+FROM python:3.8-slim-buster
+WORKDIR /python-docker
+COPY requirements.txt requirements.txt
+RUN pip3 install -r requirements.txt
+COPY . .
+EXPOSE 80
+CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0", "--port=80"]
