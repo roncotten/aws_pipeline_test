@@ -4,16 +4,17 @@ import aws_cdk as cdk
 
 from cdk.cdk_pipeline import CdkPipeline
 
-AWS_ACCOUNT = "694795848632"
-AWS_REGION = "us-east-1"
+AWS_ACCOUNT='694795848632'
+AWS_REGION='us-east-1'
+
 
 app = cdk.App()
 
 CdkPipeline(
-  app, "cdk-pipeline",
+  app, 'doi-ecosphere-d-1',
   env=cdk.Environment(
       account=f"{AWS_ACCOUNT}",
-      region=f"{AWS_REGION}"          
+      region=f"{AWS_REGION}"
 ))
 
 app.synth()

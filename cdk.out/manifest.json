@@ -1,27 +1,27 @@
 {
   "version": "31.0.0",
   "artifacts": {
-    "cdk-pipeline.assets": {
+    "doi-ecosphere-d-1.assets": {
       "type": "cdk:asset-manifest",
       "properties": {
-        "file": "cdk-pipeline.assets.json",
+        "file": "doi-ecosphere-d-1.assets.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
       }
     },
-    "cdk-pipeline": {
+    "doi-ecosphere-d-1": {
       "type": "aws:cloudformation:stack",
       "environment": "aws://694795848632/us-east-1",
       "properties": {
-        "templateFile": "cdk-pipeline.template.json",
+        "templateFile": "doi-ecosphere-d-1.template.json",
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::694795848632:role/cdk-hnb659fds-deploy-role-694795848632-us-east-1",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::694795848632:role/cdk-hnb659fds-cfn-exec-role-694795848632-us-east-1",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-694795848632-us-east-1/cd20b53955edea2f8019304e0d6bdf9b7da57cd5d816d801d0dc1e2560bb6cfe.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-694795848632-us-east-1/c6c972b3548c6d45371fa3a680df3fb2dd5295e744900274aa389c7770ff3736.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
-          "cdk-pipeline.assets"
+          "doi-ecosphere-d-1.assets"
         ],
         "lookupRole": {
           "arn": "arn:${AWS::Partition}:iam::694795848632:role/cdk-hnb659fds-lookup-role-694795848632-us-east-1",
@@ -30,119 +30,125 @@
         }
       },
       "dependencies": [
-        "cdk-pipeline.assets"
+        "doi-ecosphere-d-1.assets"
       ],
       "metadata": {
-        "/cdk-pipeline/ecosphere/Resource": [
+        "/doi-ecosphere-d-1/doi-ecosphere-d-1-ecr/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "ecosphere30EEC081"
+            "data": "doiecosphered1ecrBD25E3FA"
           }
         ],
-        "/cdk-pipeline/Build/Role/Resource": [
+        "/doi-ecosphere-d-1/doi-ecosphere-d-1-ecs/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "doiecosphered1ecsEA1F6C71"
+          }
+        ],
+        "/doi-ecosphere-d-1/Build/Role/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "BuildRoleB7C66CB2"
           }
         ],
-        "/cdk-pipeline/Build/Role/DefaultPolicy/Resource": [
+        "/doi-ecosphere-d-1/Build/Role/DefaultPolicy/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "BuildRoleDefaultPolicyEAC4E6D6"
           }
         ],
-        "/cdk-pipeline/Build/Resource": [
+        "/doi-ecosphere-d-1/Build/Resource": [
           {
             "type": "aws:cdk:logicalId",
             "data": "Build45A36621"
           }
         ],
-        "/cdk-pipeline/codepipeline/ArtifactsBucketEncryptionKey/Resource": [
+        "/doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/ArtifactsBucketEncryptionKey/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "codepipelineArtifactsBucketEncryptionKey89389743"
+            "data": "doiecosphered1pipelineArtifactsBucketEncryptionKey72E5777B"
           }
         ],
-        "/cdk-pipeline/codepipeline/ArtifactsBucketEncryptionKeyAlias/Resource": [
+        "/doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/ArtifactsBucketEncryptionKeyAlias/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "codepipelineArtifactsBucketEncryptionKeyAlias3EDE144B"
+            "data": "doiecosphered1pipelineArtifactsBucketEncryptionKeyAliasAB19928B"
           }
         ],
-        "/cdk-pipeline/codepipeline/ArtifactsBucket/Resource": [
+        "/doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/ArtifactsBucket/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "codepipelineArtifactsBucketBBA098AC"
+            "data": "doiecosphered1pipelineArtifactsBucketF0F9BAB1"
           }
         ],
-        "/cdk-pipeline/codepipeline/ArtifactsBucket/Policy/Resource": [
+        "/doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/ArtifactsBucket/Policy/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "codepipelineArtifactsBucketPolicy41C00036"
+            "data": "doiecosphered1pipelineArtifactsBucketPolicyB78C6D69"
           }
         ],
-        "/cdk-pipeline/codepipeline/Role/Resource": [
+        "/doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/Role/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "codepipelineRole7B5E706D"
+            "data": "doiecosphered1pipelineRoleB5A5BAA2"
           }
         ],
-        "/cdk-pipeline/codepipeline/Role/DefaultPolicy/Resource": [
+        "/doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/Role/DefaultPolicy/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "codepipelineRoleDefaultPolicy31DC9EA1"
+            "data": "doiecosphered1pipelineRoleDefaultPolicy09C4A379"
           }
         ],
-        "/cdk-pipeline/codepipeline/Resource": [
+        "/doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "codepipelineB8EF071E"
+            "data": "doiecosphered1pipelineCB02A1CF"
           }
         ],
-        "/cdk-pipeline/codepipeline/source/Clone/CodePipelineActionRole/Resource": [
+        "/doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/source/Clone/CodePipelineActionRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "codepipelinesourceCloneCodePipelineActionRole511F82E5"
+            "data": "doiecosphered1pipelinesourceCloneCodePipelineActionRoleBAED33AC"
           }
         ],
-        "/cdk-pipeline/codepipeline/source/Clone/CodePipelineActionRole/DefaultPolicy/Resource": [
+        "/doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/source/Clone/CodePipelineActionRole/DefaultPolicy/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "codepipelinesourceCloneCodePipelineActionRoleDefaultPolicyF1753B61"
+            "data": "doiecosphered1pipelinesourceCloneCodePipelineActionRoleDefaultPolicy913546F8"
           }
         ],
-        "/cdk-pipeline/codepipeline/build/Build/CodePipelineActionRole/Resource": [
+        "/doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/build/Build/CodePipelineActionRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "codepipelinebuildBuildCodePipelineActionRole0BCA2C07"
+            "data": "doiecosphered1pipelinebuildBuildCodePipelineActionRole352F963B"
           }
         ],
-        "/cdk-pipeline/codepipeline/build/Build/CodePipelineActionRole/DefaultPolicy/Resource": [
+        "/doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/build/Build/CodePipelineActionRole/DefaultPolicy/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "codepipelinebuildBuildCodePipelineActionRoleDefaultPolicy80611BD1"
+            "data": "doiecosphered1pipelinebuildBuildCodePipelineActionRoleDefaultPolicyC58134CE"
           }
         ],
-        "/cdk-pipeline/CDKMetadata/Default": [
+        "/doi-ecosphere-d-1/CDKMetadata/Default": [
           {
             "type": "aws:cdk:logicalId",
             "data": "CDKMetadata"
           }
         ],
-        "/cdk-pipeline/BootstrapVersion": [
+        "/doi-ecosphere-d-1/BootstrapVersion": [
           {
             "type": "aws:cdk:logicalId",
             "data": "BootstrapVersion"
           }
         ],
-        "/cdk-pipeline/CheckBootstrapVersion": [
+        "/doi-ecosphere-d-1/CheckBootstrapVersion": [
           {
             "type": "aws:cdk:logicalId",
             "data": "CheckBootstrapVersion"
           }
         ]
       },
-      "displayName": "cdk-pipeline"
+      "displayName": "doi-ecosphere-d-1"
     },
     "Tree": {
       "type": "cdk:tree",

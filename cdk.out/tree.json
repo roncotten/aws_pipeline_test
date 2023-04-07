@@ -4,20 +4,25 @@
     "id": "App",
     "path": "",
     "children": {
-      "cdk-pipeline": {
-        "id": "cdk-pipeline",
-        "path": "cdk-pipeline",
+      "doi-ecosphere-d-1": {
+        "id": "doi-ecosphere-d-1",
+        "path": "doi-ecosphere-d-1",
         "children": {
-          "ecosphere": {
-            "id": "ecosphere",
-            "path": "cdk-pipeline/ecosphere",
+          "doi-ecosphere-d-1-ecr": {
+            "id": "doi-ecosphere-d-1-ecr",
+            "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecr",
             "children": {
               "Resource": {
                 "id": "Resource",
-                "path": "cdk-pipeline/ecosphere/Resource",
+                "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecr/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::ECR::Repository",
-                  "aws:cdk:cloudformation:props": {}
+                  "aws:cdk:cloudformation:props": {
+                    "imageScanningConfiguration": {
+                      "scanOnPush": true
+                    },
+                    "repositoryName": "doi-ecosphere-d-1"
+                  }
                 },
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.aws_ecr.CfnRepository",
@@ -30,13 +35,13 @@
               "version": "2.72.1"
             }
           },
-          "cs-d-1-vpc": {
-            "id": "cs-d-1-vpc",
-            "path": "cdk-pipeline/cs-d-1-vpc",
+          "doi-ecosphere-d-1-vpc": {
+            "id": "doi-ecosphere-d-1-vpc",
+            "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-vpc",
             "children": {
               "PublicSubnet1": {
                 "id": "PublicSubnet1",
-                "path": "cdk-pipeline/cs-d-1-vpc/PublicSubnet1",
+                "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-vpc/PublicSubnet1",
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.Resource",
                   "version": "2.72.1"
@@ -44,7 +49,7 @@
               },
               "PublicSubnet2": {
                 "id": "PublicSubnet2",
-                "path": "cdk-pipeline/cs-d-1-vpc/PublicSubnet2",
+                "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-vpc/PublicSubnet2",
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.Resource",
                   "version": "2.72.1"
@@ -52,7 +57,7 @@
               },
               "PrivateSubnet1": {
                 "id": "PrivateSubnet1",
-                "path": "cdk-pipeline/cs-d-1-vpc/PrivateSubnet1",
+                "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-vpc/PrivateSubnet1",
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.Resource",
                   "version": "2.72.1"
@@ -60,7 +65,7 @@
               },
               "PrivateSubnet2": {
                 "id": "PrivateSubnet2",
-                "path": "cdk-pipeline/cs-d-1-vpc/PrivateSubnet2",
+                "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-vpc/PrivateSubnet2",
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.Resource",
                   "version": "2.72.1"
@@ -72,25 +77,47 @@
               "version": "2.72.1"
             }
           },
-          "cs-d-1-ecs": {
-            "id": "cs-d-1-ecs",
-            "path": "cdk-pipeline/cs-d-1-ecs",
+          "doi-ecosphere-d-1-ecs": {
+            "id": "doi-ecosphere-d-1-ecs",
+            "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecs",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecs/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ECS::Cluster",
+                  "aws:cdk:cloudformation:props": {
+                    "clusterName": "doi-ecosphere-d-1",
+                    "clusterSettings": [
+                      {
+                        "name": "containerInsights",
+                        "value": "enabled"
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ecs.CfnCluster",
+                  "version": "2.72.1"
+                }
+              }
+            },
             "constructInfo": {
-              "fqn": "aws-cdk-lib.Resource",
+              "fqn": "aws-cdk-lib.aws_ecs.Cluster",
               "version": "2.72.1"
             }
           },
           "Build": {
             "id": "Build",
-            "path": "cdk-pipeline/Build",
+            "path": "doi-ecosphere-d-1/Build",
             "children": {
               "Role": {
                 "id": "Role",
-                "path": "cdk-pipeline/Build/Role",
+                "path": "doi-ecosphere-d-1/Build/Role",
                 "children": {
                   "ImportRole": {
                     "id": "ImportRole",
-                    "path": "cdk-pipeline/Build/Role/ImportRole",
+                    "path": "doi-ecosphere-d-1/Build/Role/ImportRole",
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.Resource",
                       "version": "2.72.1"
@@ -98,7 +125,7 @@
                   },
                   "Resource": {
                     "id": "Resource",
-                    "path": "cdk-pipeline/Build/Role/Resource",
+                    "path": "doi-ecosphere-d-1/Build/Role/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -123,11 +150,11 @@
                   },
                   "DefaultPolicy": {
                     "id": "DefaultPolicy",
-                    "path": "cdk-pipeline/Build/Role/DefaultPolicy",
+                    "path": "doi-ecosphere-d-1/Build/Role/DefaultPolicy",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "cdk-pipeline/Build/Role/DefaultPolicy/Resource",
+                        "path": "doi-ecosphere-d-1/Build/Role/DefaultPolicy/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                           "aws:cdk:cloudformation:props": {
@@ -201,7 +228,7 @@
                                   "Effect": "Allow",
                                   "Resource": {
                                     "Fn::GetAtt": [
-                                      "ecosphere30EEC081",
+                                      "doiecosphered1ecrBD25E3FA",
                                       "Arn"
                                     ]
                                   }
@@ -228,7 +255,7 @@
                                   "Resource": [
                                     {
                                       "Fn::GetAtt": [
-                                        "codepipelineArtifactsBucketBBA098AC",
+                                        "doiecosphered1pipelineArtifactsBucketF0F9BAB1",
                                         "Arn"
                                       ]
                                     },
@@ -238,7 +265,7 @@
                                         [
                                           {
                                             "Fn::GetAtt": [
-                                              "codepipelineArtifactsBucketBBA098AC",
+                                              "doiecosphered1pipelineArtifactsBucketF0F9BAB1",
                                               "Arn"
                                             ]
                                           },
@@ -259,7 +286,7 @@
                                   "Effect": "Allow",
                                   "Resource": {
                                     "Fn::GetAtt": [
-                                      "codepipelineArtifactsBucketEncryptionKey89389743",
+                                      "doiecosphered1pipelineArtifactsBucketEncryptionKey72E5777B",
                                       "Arn"
                                     ]
                                   }
@@ -299,7 +326,7 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "cdk-pipeline/Build/Resource",
+                "path": "doi-ecosphere-d-1/Build/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::CodeBuild::Project",
                   "aws:cdk:cloudformation:props": {
@@ -333,7 +360,7 @@
                                         ":",
                                         {
                                           "Fn::GetAtt": [
-                                            "ecosphere30EEC081",
+                                            "doiecosphered1ecrBD25E3FA",
                                             "Arn"
                                           ]
                                         }
@@ -350,7 +377,7 @@
                                         ":",
                                         {
                                           "Fn::GetAtt": [
-                                            "ecosphere30EEC081",
+                                            "doiecosphered1ecrBD25E3FA",
                                             "Arn"
                                           ]
                                         }
@@ -364,7 +391,7 @@
                                 },
                                 "/",
                                 {
-                                  "Ref": "ecosphere30EEC081"
+                                  "Ref": "doiecosphered1ecrBD25E3FA"
                                 }
                               ]
                             ]
@@ -380,18 +407,18 @@
                     },
                     "source": {
                       "type": "CODEPIPELINE",
-                      "buildSpec": "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"$(aws ecr get-login --region $AWS_REGION --no-include-email)\",\n        \"pwd\",\n        \"ls -lsR *\",\n        \"docker build -t $REPOSITORY_URI:latest .\",\n        \"docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION\"\n      ]\n    },\n    \"post_build\": {\n      \"commands\": [\n        \"docker push $REPOSITORY_URI:latest\",\n        \"docker push $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION\",\n        \"export imageTag=$CODEBUILD_RESOLVED_SOURCE_VERSION\",\n        \"printf '[{\\\"name\\\":\\\"app\\\",\\\"imageUri\\\":\\\"%s\\\"}]' $REPOSITORY_URI:$imageTag > imagedefinitions.json\"\n      ]\n    }\n  },\n  \"env\": {\n    \"exported-variables\": [\n      \"imageTag\"\n    ]\n  },\n  \"artifacts\": {\n    \"files\": \"imagedefinitions.json\",\n    \"secondary-artifacts\": {\n      \"imagedefinitions\": {\n        \"files\": \"imagedefinitions.json\",\n        \"name\": \"imagedefinitions\"\n      }\n    }\n  }\n}"
+                      "buildSpec": "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"$(aws ecr get-login --region $AWS_REGION --no-include-email)\",\n        \"pwd\",\n        \"ls -lsR *\",\n        \"cd build\",\n        \"docker build -t $REPOSITORY_URI:latest .\",\n        \"docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION\"\n      ]\n    },\n    \"post_build\": {\n      \"commands\": [\n        \"docker push $REPOSITORY_URI:latest\",\n        \"docker push $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION\",\n        \"export imageTag=$CODEBUILD_RESOLVED_SOURCE_VERSION\",\n        \"printf '[{\\\"name\\\":\\\"app\\\",\\\"imageUri\\\":\\\"%s\\\"}]' $REPOSITORY_URI:$imageTag > imagedefinitions.json\"\n      ]\n    }\n  },\n  \"env\": {\n    \"exported-variables\": [\n      \"imageTag\"\n    ]\n  },\n  \"artifacts\": {\n    \"files\": \"imagedefinitions.json\",\n    \"secondary-artifacts\": {\n      \"imagedefinitions\": {\n        \"files\": \"imagedefinitions.json\",\n        \"name\": \"imagedefinitions\"\n      }\n    }\n  }\n}"
                     },
                     "cache": {
                       "type": "NO_CACHE"
                     },
                     "encryptionKey": {
                       "Fn::GetAtt": [
-                        "codepipelineArtifactsBucketEncryptionKey89389743",
+                        "doiecosphered1pipelineArtifactsBucketEncryptionKey72E5777B",
                         "Arn"
                       ]
                     },
-                    "name": "codebuild"
+                    "name": "doi-ecosphere-d-1"
                   }
                 },
                 "constructInfo": {
@@ -405,17 +432,17 @@
               "version": "2.72.1"
             }
           },
-          "codepipeline": {
-            "id": "codepipeline",
-            "path": "cdk-pipeline/codepipeline",
+          "doi-ecosphere-d-1-pipeline": {
+            "id": "doi-ecosphere-d-1-pipeline",
+            "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline",
             "children": {
               "ArtifactsBucketEncryptionKey": {
                 "id": "ArtifactsBucketEncryptionKey",
-                "path": "cdk-pipeline/codepipeline/ArtifactsBucketEncryptionKey",
+                "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/ArtifactsBucketEncryptionKey",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "cdk-pipeline/codepipeline/ArtifactsBucketEncryptionKey/Resource",
+                    "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/ArtifactsBucketEncryptionKey/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::KMS::Key",
                       "aws:cdk:cloudformation:props": {
@@ -447,18 +474,18 @@
               },
               "ArtifactsBucketEncryptionKeyAlias": {
                 "id": "ArtifactsBucketEncryptionKeyAlias",
-                "path": "cdk-pipeline/codepipeline/ArtifactsBucketEncryptionKeyAlias",
+                "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/ArtifactsBucketEncryptionKeyAlias",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "cdk-pipeline/codepipeline/ArtifactsBucketEncryptionKeyAlias/Resource",
+                    "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/ArtifactsBucketEncryptionKeyAlias/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::KMS::Alias",
                       "aws:cdk:cloudformation:props": {
-                        "aliasName": "alias/codepipeline-cdk-pipeline-codepipeline-83661267",
+                        "aliasName": "alias/codepipeline-doi-ecosphere-d-1-doi-ecosphere-d-1-pipeline-313e4fb1",
                         "targetKeyId": {
                           "Fn::GetAtt": [
-                            "codepipelineArtifactsBucketEncryptionKey89389743",
+                            "doiecosphered1pipelineArtifactsBucketEncryptionKey72E5777B",
                             "Arn"
                           ]
                         }
@@ -477,11 +504,11 @@
               },
               "ArtifactsBucket": {
                 "id": "ArtifactsBucket",
-                "path": "cdk-pipeline/codepipeline/ArtifactsBucket",
+                "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/ArtifactsBucket",
                 "children": {
                   "Resource": {
                     "id": "Resource",
-                    "path": "cdk-pipeline/codepipeline/ArtifactsBucket/Resource",
+                    "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/ArtifactsBucket/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
                       "aws:cdk:cloudformation:props": {
@@ -492,7 +519,7 @@
                                 "sseAlgorithm": "aws:kms",
                                 "kmsMasterKeyId": {
                                   "Fn::GetAtt": [
-                                    "codepipelineArtifactsBucketEncryptionKey89389743",
+                                    "doiecosphered1pipelineArtifactsBucketEncryptionKey72E5777B",
                                     "Arn"
                                   ]
                                 }
@@ -515,16 +542,16 @@
                   },
                   "Policy": {
                     "id": "Policy",
-                    "path": "cdk-pipeline/codepipeline/ArtifactsBucket/Policy",
+                    "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/ArtifactsBucket/Policy",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "cdk-pipeline/codepipeline/ArtifactsBucket/Policy/Resource",
+                        "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/ArtifactsBucket/Policy/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::S3::BucketPolicy",
                           "aws:cdk:cloudformation:props": {
                             "bucket": {
-                              "Ref": "codepipelineArtifactsBucketBBA098AC"
+                              "Ref": "doiecosphered1pipelineArtifactsBucketF0F9BAB1"
                             },
                             "policyDocument": {
                               "Statement": [
@@ -542,7 +569,7 @@
                                   "Resource": [
                                     {
                                       "Fn::GetAtt": [
-                                        "codepipelineArtifactsBucketBBA098AC",
+                                        "doiecosphered1pipelineArtifactsBucketF0F9BAB1",
                                         "Arn"
                                       ]
                                     },
@@ -552,7 +579,7 @@
                                         [
                                           {
                                             "Fn::GetAtt": [
-                                              "codepipelineArtifactsBucketBBA098AC",
+                                              "doiecosphered1pipelineArtifactsBucketF0F9BAB1",
                                               "Arn"
                                             ]
                                           },
@@ -586,11 +613,11 @@
               },
               "Role": {
                 "id": "Role",
-                "path": "cdk-pipeline/codepipeline/Role",
+                "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/Role",
                 "children": {
                   "ImportRole": {
                     "id": "ImportRole",
-                    "path": "cdk-pipeline/codepipeline/Role/ImportRole",
+                    "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/Role/ImportRole",
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.Resource",
                       "version": "2.72.1"
@@ -598,7 +625,7 @@
                   },
                   "Resource": {
                     "id": "Resource",
-                    "path": "cdk-pipeline/codepipeline/Role/Resource",
+                    "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/Role/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -623,11 +650,11 @@
                   },
                   "DefaultPolicy": {
                     "id": "DefaultPolicy",
-                    "path": "cdk-pipeline/codepipeline/Role/DefaultPolicy",
+                    "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/Role/DefaultPolicy",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "cdk-pipeline/codepipeline/Role/DefaultPolicy/Resource",
+                        "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/Role/DefaultPolicy/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                           "aws:cdk:cloudformation:props": {
@@ -650,7 +677,7 @@
                                   "Resource": [
                                     {
                                       "Fn::GetAtt": [
-                                        "codepipelineArtifactsBucketBBA098AC",
+                                        "doiecosphered1pipelineArtifactsBucketF0F9BAB1",
                                         "Arn"
                                       ]
                                     },
@@ -660,7 +687,7 @@
                                         [
                                           {
                                             "Fn::GetAtt": [
-                                              "codepipelineArtifactsBucketBBA098AC",
+                                              "doiecosphered1pipelineArtifactsBucketF0F9BAB1",
                                               "Arn"
                                             ]
                                           },
@@ -681,7 +708,7 @@
                                   "Effect": "Allow",
                                   "Resource": {
                                     "Fn::GetAtt": [
-                                      "codepipelineArtifactsBucketEncryptionKey89389743",
+                                      "doiecosphered1pipelineArtifactsBucketEncryptionKey72E5777B",
                                       "Arn"
                                     ]
                                   }
@@ -692,13 +719,13 @@
                                   "Resource": [
                                     {
                                       "Fn::GetAtt": [
-                                        "codepipelinebuildBuildCodePipelineActionRole0BCA2C07",
+                                        "doiecosphered1pipelinebuildBuildCodePipelineActionRole352F963B",
                                         "Arn"
                                       ]
                                     },
                                     {
                                       "Fn::GetAtt": [
-                                        "codepipelinesourceCloneCodePipelineActionRole511F82E5",
+                                        "doiecosphered1pipelinesourceCloneCodePipelineActionRoleBAED33AC",
                                         "Arn"
                                       ]
                                     }
@@ -707,10 +734,10 @@
                               ],
                               "Version": "2012-10-17"
                             },
-                            "policyName": "codepipelineRoleDefaultPolicy31DC9EA1",
+                            "policyName": "doiecosphered1pipelineRoleDefaultPolicy09C4A379",
                             "roles": [
                               {
-                                "Ref": "codepipelineRole7B5E706D"
+                                "Ref": "doiecosphered1pipelineRoleB5A5BAA2"
                               }
                             ]
                           }
@@ -734,13 +761,13 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "cdk-pipeline/codepipeline/Resource",
+                "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::CodePipeline::Pipeline",
                   "aws:cdk:cloudformation:props": {
                     "roleArn": {
                       "Fn::GetAtt": [
-                        "codepipelineRole7B5E706D",
+                        "doiecosphered1pipelineRoleB5A5BAA2",
                         "Arn"
                       ]
                     },
@@ -763,14 +790,14 @@
                             },
                             "configuration": {
                               "ConnectionArn": "arn:aws:codestar-connections:us-east-1:694795848632:connection/81ecfe62-c1d4-49f4-bd33-9ee83d1568c9",
-                              "FullRepositoryId": "rcotten/aws_pipeline_test",
+                              "FullRepositoryId": "roncotten/aws_pipeline_test",
                               "BranchName": "main",
                               "OutputArtifactFormat": "CODEBUILD_CLONE_REF"
                             },
                             "runOrder": 1,
                             "roleArn": {
                               "Fn::GetAtt": [
-                                "codepipelinesourceCloneCodePipelineActionRole511F82E5",
+                                "doiecosphered1pipelinesourceCloneCodePipelineActionRoleBAED33AC",
                                 "Arn"
                               ]
                             }
@@ -806,7 +833,7 @@
                             "runOrder": 1,
                             "roleArn": {
                               "Fn::GetAtt": [
-                                "codepipelinebuildBuildCodePipelineActionRole0BCA2C07",
+                                "doiecosphered1pipelinebuildBuildCodePipelineActionRole352F963B",
                                 "Arn"
                               ]
                             }
@@ -817,19 +844,19 @@
                     "artifactStore": {
                       "type": "S3",
                       "location": {
-                        "Ref": "codepipelineArtifactsBucketBBA098AC"
+                        "Ref": "doiecosphered1pipelineArtifactsBucketF0F9BAB1"
                       },
                       "encryptionKey": {
                         "type": "KMS",
                         "id": {
                           "Fn::GetAtt": [
-                            "codepipelineArtifactsBucketEncryptionKey89389743",
+                            "doiecosphered1pipelineArtifactsBucketEncryptionKey72E5777B",
                             "Arn"
                           ]
                         }
                       }
                     },
-                    "name": "cdk-pipeline"
+                    "name": "doi-ecosphere-d-1"
                   }
                 },
                 "constructInfo": {
@@ -839,19 +866,19 @@
               },
               "source": {
                 "id": "source",
-                "path": "cdk-pipeline/codepipeline/source",
+                "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/source",
                 "children": {
                   "Clone": {
                     "id": "Clone",
-                    "path": "cdk-pipeline/codepipeline/source/Clone",
+                    "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/source/Clone",
                     "children": {
                       "CodePipelineActionRole": {
                         "id": "CodePipelineActionRole",
-                        "path": "cdk-pipeline/codepipeline/source/Clone/CodePipelineActionRole",
+                        "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/source/Clone/CodePipelineActionRole",
                         "children": {
                           "ImportCodePipelineActionRole": {
                             "id": "ImportCodePipelineActionRole",
-                            "path": "cdk-pipeline/codepipeline/source/Clone/CodePipelineActionRole/ImportCodePipelineActionRole",
+                            "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/source/Clone/CodePipelineActionRole/ImportCodePipelineActionRole",
                             "constructInfo": {
                               "fqn": "aws-cdk-lib.Resource",
                               "version": "2.72.1"
@@ -859,7 +886,7 @@
                           },
                           "Resource": {
                             "id": "Resource",
-                            "path": "cdk-pipeline/codepipeline/source/Clone/CodePipelineActionRole/Resource",
+                            "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/source/Clone/CodePipelineActionRole/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                               "aws:cdk:cloudformation:props": {
@@ -884,11 +911,11 @@
                           },
                           "DefaultPolicy": {
                             "id": "DefaultPolicy",
-                            "path": "cdk-pipeline/codepipeline/source/Clone/CodePipelineActionRole/DefaultPolicy",
+                            "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/source/Clone/CodePipelineActionRole/DefaultPolicy",
                             "children": {
                               "Resource": {
                                 "id": "Resource",
-                                "path": "cdk-pipeline/codepipeline/source/Clone/CodePipelineActionRole/DefaultPolicy/Resource",
+                                "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/source/Clone/CodePipelineActionRole/DefaultPolicy/Resource",
                                 "attributes": {
                                   "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                                   "aws:cdk:cloudformation:props": {
@@ -916,7 +943,7 @@
                                           "Resource": [
                                             {
                                               "Fn::GetAtt": [
-                                                "codepipelineArtifactsBucketBBA098AC",
+                                                "doiecosphered1pipelineArtifactsBucketF0F9BAB1",
                                                 "Arn"
                                               ]
                                             },
@@ -926,7 +953,7 @@
                                                 [
                                                   {
                                                     "Fn::GetAtt": [
-                                                      "codepipelineArtifactsBucketBBA098AC",
+                                                      "doiecosphered1pipelineArtifactsBucketF0F9BAB1",
                                                       "Arn"
                                                     ]
                                                   },
@@ -947,7 +974,7 @@
                                           "Effect": "Allow",
                                           "Resource": {
                                             "Fn::GetAtt": [
-                                              "codepipelineArtifactsBucketEncryptionKey89389743",
+                                              "doiecosphered1pipelineArtifactsBucketEncryptionKey72E5777B",
                                               "Arn"
                                             ]
                                           }
@@ -964,7 +991,7 @@
                                               [
                                                 {
                                                   "Fn::GetAtt": [
-                                                    "codepipelineArtifactsBucketBBA098AC",
+                                                    "doiecosphered1pipelineArtifactsBucketF0F9BAB1",
                                                     "Arn"
                                                   ]
                                                 },
@@ -976,10 +1003,10 @@
                                       ],
                                       "Version": "2012-10-17"
                                     },
-                                    "policyName": "codepipelinesourceCloneCodePipelineActionRoleDefaultPolicyF1753B61",
+                                    "policyName": "doiecosphered1pipelinesourceCloneCodePipelineActionRoleDefaultPolicy913546F8",
                                     "roles": [
                                       {
-                                        "Ref": "codepipelinesourceCloneCodePipelineActionRole511F82E5"
+                                        "Ref": "doiecosphered1pipelinesourceCloneCodePipelineActionRoleBAED33AC"
                                       }
                                     ]
                                   }
@@ -1015,19 +1042,19 @@
               },
               "build": {
                 "id": "build",
-                "path": "cdk-pipeline/codepipeline/build",
+                "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/build",
                 "children": {
                   "Build": {
                     "id": "Build",
-                    "path": "cdk-pipeline/codepipeline/build/Build",
+                    "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/build/Build",
                     "children": {
                       "CodePipelineActionRole": {
                         "id": "CodePipelineActionRole",
-                        "path": "cdk-pipeline/codepipeline/build/Build/CodePipelineActionRole",
+                        "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/build/Build/CodePipelineActionRole",
                         "children": {
                           "ImportCodePipelineActionRole": {
                             "id": "ImportCodePipelineActionRole",
-                            "path": "cdk-pipeline/codepipeline/build/Build/CodePipelineActionRole/ImportCodePipelineActionRole",
+                            "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/build/Build/CodePipelineActionRole/ImportCodePipelineActionRole",
                             "constructInfo": {
                               "fqn": "aws-cdk-lib.Resource",
                               "version": "2.72.1"
@@ -1035,7 +1062,7 @@
                           },
                           "Resource": {
                             "id": "Resource",
-                            "path": "cdk-pipeline/codepipeline/build/Build/CodePipelineActionRole/Resource",
+                            "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/build/Build/CodePipelineActionRole/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                               "aws:cdk:cloudformation:props": {
@@ -1060,11 +1087,11 @@
                           },
                           "DefaultPolicy": {
                             "id": "DefaultPolicy",
-                            "path": "cdk-pipeline/codepipeline/build/Build/CodePipelineActionRole/DefaultPolicy",
+                            "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/build/Build/CodePipelineActionRole/DefaultPolicy",
                             "children": {
                               "Resource": {
                                 "id": "Resource",
-                                "path": "cdk-pipeline/codepipeline/build/Build/CodePipelineActionRole/DefaultPolicy/Resource",
+                                "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/build/Build/CodePipelineActionRole/DefaultPolicy/Resource",
                                 "attributes": {
                                   "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                                   "aws:cdk:cloudformation:props": {
@@ -1087,10 +1114,10 @@
                                       ],
                                       "Version": "2012-10-17"
                                     },
-                                    "policyName": "codepipelinebuildBuildCodePipelineActionRoleDefaultPolicy80611BD1",
+                                    "policyName": "doiecosphered1pipelinebuildBuildCodePipelineActionRoleDefaultPolicyC58134CE",
                                     "roles": [
                                       {
-                                        "Ref": "codepipelinebuildBuildCodePipelineActionRole0BCA2C07"
+                                        "Ref": "doiecosphered1pipelinebuildBuildCodePipelineActionRole352F963B"
                                       }
                                     ]
                                   }
@@ -1132,11 +1159,11 @@
           },
           "CDKMetadata": {
             "id": "CDKMetadata",
-            "path": "cdk-pipeline/CDKMetadata",
+            "path": "doi-ecosphere-d-1/CDKMetadata",
             "children": {
               "Default": {
                 "id": "Default",
-                "path": "cdk-pipeline/CDKMetadata/Default",
+                "path": "doi-ecosphere-d-1/CDKMetadata/Default",
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.CfnResource",
                   "version": "2.72.1"
@@ -1150,7 +1177,7 @@
           },
           "BootstrapVersion": {
             "id": "BootstrapVersion",
-            "path": "cdk-pipeline/BootstrapVersion",
+            "path": "doi-ecosphere-d-1/BootstrapVersion",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnParameter",
               "version": "2.72.1"
@@ -1158,7 +1185,7 @@
           },
           "CheckBootstrapVersion": {
             "id": "CheckBootstrapVersion",
-            "path": "cdk-pipeline/CheckBootstrapVersion",
+            "path": "doi-ecosphere-d-1/CheckBootstrapVersion",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnRule",
               "version": "2.72.1"

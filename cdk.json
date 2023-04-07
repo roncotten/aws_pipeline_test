@@ -1,5 +1,6 @@
 {
   "app": "python3 app.py",
+  "profile": "default",
   "watch": {
     "include": [
       "**"
@@ -17,10 +18,7 @@
   "context": {
     "@aws-cdk/aws-lambda:recognizeLayerVersion": true,
     "@aws-cdk/core:checkSecretUsage": true,
-    "@aws-cdk/core:target-partitions": [
-      "aws",
-      "aws-cn"
-    ],
+    "@aws-cdk/core:target-partitions": [ "aws" ],
     "@aws-cdk-containers/ecs-service-extensions:enableDefaultLogDriver": true,
     "@aws-cdk/aws-ec2:uniqueImdsv2TemplateName": true,
     "@aws-cdk/aws-ecs:arnFormatIncludesClusterName": true,
@@ -44,6 +42,18 @@
     "@aws-cdk/aws-ec2:launchTemplateDefaultUserData": true,
     "@aws-cdk/aws-secretsmanager:useAttachedSecretResourcePolicyForSecretTargetAttachments": true,
     "@aws-cdk/aws-redshift:columnId": true,
-    "@aws-cdk/aws-stepfunctions-tasks:enableEmrServicePolicyV2": true
+    "@aws-cdk/aws-stepfunctions-tasks:enableEmrServicePolicyV2": true,
+		"COMMON": {
+      "AWS_ACCOUNT": "694795848632",
+      "AWS_REGION": "us-east-1",
+			"client": "doi",
+      "application": "ecosphere",
+      "stack": "1"
+    },
+    "ENVIRONMENTS": {
+      "dev": {
+        "label": "d"
+      }
+    }
   }
 }

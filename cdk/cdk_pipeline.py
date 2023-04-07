@@ -14,12 +14,9 @@ from aws_cdk import (
 )
 
 # global variables
-AWS_ACCOUNT = '694795848632'
-AWS_REGION = 'us-east-1'
-APPLICATION='ecosphere'
 source_repo = 'aws_pipeline_test'
 source_branch = 'main'
-source_repo_owner = 'rcotten'
+source_repo_owner = 'roncotten'
 source_arn = 'arn:aws:codestar-connections:us-east-1:694795848632:connection/81ecfe62-c1d4-49f4-bd33-9ee83d1568c9'
 ecr_repo_name = 'ecosphere'
 vpc_id='vpc-0c3094b44d23a611a'
@@ -34,19 +31,31 @@ class CdkPipeline(cdk.Stack):
         # stack resources 
         #########################################################################################################
 
-        # ecr repo
-        ecr_repo = ecr.Repository(self, ecr_repo_name)
+        # get context variables
+        common = self.node.try_get_context('COMMON')
+        aws_account = common.get('AWS_ACCOUNT')
+        aws_region = common.get('AWS_REGION')
+        client = common.get('client')
+        application = common.get('application')
+        environments = self.node.try_get_context('ENVIRONMENTS')
+        environment = environments.get('dev')
+        environment_label = environment.get('label')
+        stack = common.get('stack')
+        deployment = client + '-' + application + '-' + environment_label + '-' + stack
 
-        # ecs cluster
-        vpc = ec2.Vpc.from_lookup(self, "cs-d-1-vpc", vpc_id=vpc_id)
-        ecs_cluster = ecs.Cluster.from_cluster_attributes(self,"cs-d-1-ecs" ,cluster_name="cs-d-1",vpc=vpc, security_groups=[])
+        # create ecr repo
+        ecr_repo = ecr.Repository(self, deployment+"-ecr", repository_name=deployment, image_scan_on_push=True, removal_policy=cdk.RemovalPolicy.DESTROY)
+
+        # create ecs cluster
+        vpc = ec2.Vpc.from_lookup(self, deployment+"-vpc", vpc_id=vpc_id)
+        cluster = ecs.Cluster(self, deployment+"-ecs", cluster_name=deployment, container_insights=True, vpc=vpc)
 
 
         #########################################################################################################
         # codebuild project
         #########################################################################################################
 
-        codebuild_project = codebuild.PipelineProject(self, "Build" ,project_name="codebuild",
+        codebuild_project = codebuild.PipelineProject(self, "Build", project_name=deployment,
             environment=codebuild.BuildEnvironment(
                 privileged=True
             ),
@@ -58,6 +67,7 @@ class CdkPipeline(cdk.Stack):
                             "$(aws ecr get-login --region $AWS_REGION --no-include-email)",
                             "pwd",
                             "ls -lsR *",
+                            "cd build",
                             "docker build -t $REPOSITORY_URI:latest .",
                             "docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION"
                         ]
@@ -86,7 +96,7 @@ class CdkPipeline(cdk.Stack):
               }),
               environment_variables={
                 "AWS_REGION": codebuild.BuildEnvironmentVariable(
-                    value=f"{AWS_REGION}"
+                    value=aws_region
                 ),
                 "REPOSITORY_URI": codebuild.BuildEnvironmentVariable(
                     value=ecr_repo.repository_uri
@@ -108,7 +118,7 @@ class CdkPipeline(cdk.Stack):
           action_name="Clone",
           connection_arn=source_arn,
           repo=source_repo,
-          branch="main",
+          branch=source_branch,
           owner=source_repo_owner,
           output=source_output,
           code_build_clone_output=True
@@ -126,12 +136,12 @@ class CdkPipeline(cdk.Stack):
         # deploy action
         #deploy_action = codepipeline_actions.EcsDeployAction(
         #  action_name="Deploy",
-        #  service=kc_ecs_service
+        #  service=ecs_service
         #  input=codepipeline.Artifact("imagedefinitions")
         #)
 
         # create pipeline 
-        codepipeline.Pipeline(self, APPLICATION + "-pipeline", pipeline_name=APPLICATION + "-pipeline",
+        codepipeline.Pipeline(self, deployment+"-pipeline", pipeline_name=deployment,
             stages=[
               {
                 "stageName": "source",

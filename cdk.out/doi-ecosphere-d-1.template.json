@@ -1,14 +1,32 @@
 {
  "Resources": {
-  "ecosphere30EEC081": {
+  "doiecosphered1ecrBD25E3FA": {
    "Type": "AWS::ECR::Repository",
    "Properties": {
-    "RepositoryName": "ecosphere-d-1"
+    "ImageScanningConfiguration": {
+     "ScanOnPush": true
+    },
+    "RepositoryName": "doi-ecosphere-d-1"
    },
-   "UpdateReplacePolicy": "Retain",
-   "DeletionPolicy": "Retain",
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "cdk-pipeline/ecosphere/Resource"
+    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecr/Resource"
+   }
+  },
+  "doiecosphered1ecsEA1F6C71": {
+   "Type": "AWS::ECS::Cluster",
+   "Properties": {
+    "ClusterName": "doi-ecosphere-d-1",
+    "ClusterSettings": [
+     {
+      "Name": "containerInsights",
+      "Value": "enabled"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecs/Resource"
    }
   },
   "BuildRoleB7C66CB2": {
@@ -28,7 +46,7 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "cdk-pipeline/Build/Role/Resource"
+    "aws:cdk:path": "doi-ecosphere-d-1/Build/Role/Resource"
    }
   },
   "BuildRoleDefaultPolicyEAC4E6D6": {
@@ -104,7 +122,7 @@
        "Effect": "Allow",
        "Resource": {
         "Fn::GetAtt": [
-         "ecosphere30EEC081",
+         "doiecosphered1ecrBD25E3FA",
          "Arn"
         ]
        }
@@ -131,7 +149,7 @@
        "Resource": [
         {
          "Fn::GetAtt": [
-          "ecosphered1pipelineArtifactsBucket8EA23364",
+          "doiecosphered1pipelineArtifactsBucketF0F9BAB1",
           "Arn"
          ]
         },
@@ -141,7 +159,7 @@
           [
            {
             "Fn::GetAtt": [
-             "ecosphered1pipelineArtifactsBucket8EA23364",
+             "doiecosphered1pipelineArtifactsBucketF0F9BAB1",
              "Arn"
             ]
            },
@@ -162,7 +180,7 @@
        "Effect": "Allow",
        "Resource": {
         "Fn::GetAtt": [
-         "ecosphered1pipelineArtifactsBucketEncryptionKey99C4D2A3",
+         "doiecosphered1pipelineArtifactsBucketEncryptionKey72E5777B",
          "Arn"
         ]
        }
@@ -183,7 +201,7 @@
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "cdk-pipeline/Build/Role/DefaultPolicy/Resource"
+    "aws:cdk:path": "doi-ecosphere-d-1/Build/Role/DefaultPolicy/Resource"
    }
   },
   "Build45A36621": {
@@ -215,7 +233,7 @@
               ":",
               {
                "Fn::GetAtt": [
-                "ecosphere30EEC081",
+                "doiecosphered1ecrBD25E3FA",
                 "Arn"
                ]
               }
@@ -232,7 +250,7 @@
               ":",
               {
                "Fn::GetAtt": [
-                "ecosphere30EEC081",
+                "doiecosphered1ecrBD25E3FA",
                 "Arn"
                ]
               }
@@ -246,7 +264,7 @@
           },
           "/",
           {
-           "Ref": "ecosphere30EEC081"
+           "Ref": "doiecosphered1ecrBD25E3FA"
           }
          ]
         ]
@@ -265,7 +283,7 @@
      ]
     },
     "Source": {
-     "BuildSpec": "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"$(aws ecr get-login --region $AWS_REGION --no-include-email)\",\n        \"pwd\",\n        \"ls -lsR *\",\n        \"docker build -t $REPOSITORY_URI:latest .\",\n        \"docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION\"\n      ]\n    },\n    \"post_build\": {\n      \"commands\": [\n        \"docker push $REPOSITORY_URI:latest\",\n        \"docker push $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION\",\n        \"export imageTag=$CODEBUILD_RESOLVED_SOURCE_VERSION\",\n        \"printf '[{\\\"name\\\":\\\"app\\\",\\\"imageUri\\\":\\\"%s\\\"}]' $REPOSITORY_URI:$imageTag > imagedefinitions.json\"\n      ]\n    }\n  },\n  \"env\": {\n    \"exported-variables\": [\n      \"imageTag\"\n    ]\n  },\n  \"artifacts\": {\n    \"files\": \"imagedefinitions.json\",\n    \"secondary-artifacts\": {\n      \"imagedefinitions\": {\n        \"files\": \"imagedefinitions.json\",\n        \"name\": \"imagedefinitions\"\n      }\n    }\n  }\n}",
+     "BuildSpec": "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"$(aws ecr get-login --region $AWS_REGION --no-include-email)\",\n        \"pwd\",\n        \"ls -lsR *\",\n        \"cd build\",\n        \"docker build -t $REPOSITORY_URI:latest .\",\n        \"docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION\"\n      ]\n    },\n    \"post_build\": {\n      \"commands\": [\n        \"docker push $REPOSITORY_URI:latest\",\n        \"docker push $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION\",\n        \"export imageTag=$CODEBUILD_RESOLVED_SOURCE_VERSION\",\n        \"printf '[{\\\"name\\\":\\\"app\\\",\\\"imageUri\\\":\\\"%s\\\"}]' $REPOSITORY_URI:$imageTag > imagedefinitions.json\"\n      ]\n    }\n  },\n  \"env\": {\n    \"exported-variables\": [\n      \"imageTag\"\n    ]\n  },\n  \"artifacts\": {\n    \"files\": \"imagedefinitions.json\",\n    \"secondary-artifacts\": {\n      \"imagedefinitions\": {\n        \"files\": \"imagedefinitions.json\",\n        \"name\": \"imagedefinitions\"\n      }\n    }\n  }\n}",
      "Type": "CODEPIPELINE"
     },
     "Cache": {
@@ -273,17 +291,17 @@
     },
     "EncryptionKey": {
      "Fn::GetAtt": [
-      "ecosphered1pipelineArtifactsBucketEncryptionKey99C4D2A3",
+      "doiecosphered1pipelineArtifactsBucketEncryptionKey72E5777B",
       "Arn"
      ]
     },
-    "Name": "ecosphere-d-1"
+    "Name": "doi-ecosphere-d-1"
    },
    "Metadata": {
-    "aws:cdk:path": "cdk-pipeline/Build/Resource"
+    "aws:cdk:path": "doi-ecosphere-d-1/Build/Resource"
    }
   },
-  "ecosphered1pipelineArtifactsBucketEncryptionKey99C4D2A3": {
+  "doiecosphered1pipelineArtifactsBucketEncryptionKey72E5777B": {
    "Type": "AWS::KMS::Key",
    "Properties": {
     "KeyPolicy": {
@@ -303,16 +321,16 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "cdk-pipeline/ecosphere-d-1-pipeline/ArtifactsBucketEncryptionKey/Resource"
+    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/ArtifactsBucketEncryptionKey/Resource"
    }
   },
-  "ecosphered1pipelineArtifactsBucketEncryptionKeyAliasA436FFA8": {
+  "doiecosphered1pipelineArtifactsBucketEncryptionKeyAliasAB19928B": {
    "Type": "AWS::KMS::Alias",
    "Properties": {
-    "AliasName": "alias/codepipeline-cdk-pipeline-ecosphere-d-1-pipeline-922fc07c",
+    "AliasName": "alias/codepipeline-doi-ecosphere-d-1-doi-ecosphere-d-1-pipeline-313e4fb1",
     "TargetKeyId": {
      "Fn::GetAtt": [
-      "ecosphered1pipelineArtifactsBucketEncryptionKey99C4D2A3",
+      "doiecosphered1pipelineArtifactsBucketEncryptionKey72E5777B",
       "Arn"
      ]
     }
@@ -320,10 +338,10 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "cdk-pipeline/ecosphere-d-1-pipeline/ArtifactsBucketEncryptionKeyAlias/Resource"
+    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/ArtifactsBucketEncryptionKeyAlias/Resource"
    }
   },
-  "ecosphered1pipelineArtifactsBucket8EA23364": {
+  "doiecosphered1pipelineArtifactsBucketF0F9BAB1": {
    "Type": "AWS::S3::Bucket",
    "Properties": {
     "BucketEncryption": {
@@ -332,7 +350,7 @@
        "ServerSideEncryptionByDefault": {
         "KMSMasterKeyID": {
          "Fn::GetAtt": [
-          "ecosphered1pipelineArtifactsBucketEncryptionKey99C4D2A3",
+          "doiecosphered1pipelineArtifactsBucketEncryptionKey72E5777B",
           "Arn"
          ]
         },
@@ -351,14 +369,14 @@
    "UpdateReplacePolicy": "Retain",
    "DeletionPolicy": "Retain",
    "Metadata": {
-    "aws:cdk:path": "cdk-pipeline/ecosphere-d-1-pipeline/ArtifactsBucket/Resource"
+    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/ArtifactsBucket/Resource"
    }
   },
-  "ecosphered1pipelineArtifactsBucketPolicyE4F7B7CA": {
+  "doiecosphered1pipelineArtifactsBucketPolicyB78C6D69": {
    "Type": "AWS::S3::BucketPolicy",
    "Properties": {
     "Bucket": {
-     "Ref": "ecosphered1pipelineArtifactsBucket8EA23364"
+     "Ref": "doiecosphered1pipelineArtifactsBucketF0F9BAB1"
     },
     "PolicyDocument": {
      "Statement": [
@@ -376,7 +394,7 @@
        "Resource": [
         {
          "Fn::GetAtt": [
-          "ecosphered1pipelineArtifactsBucket8EA23364",
+          "doiecosphered1pipelineArtifactsBucketF0F9BAB1",
           "Arn"
          ]
         },
@@ -386,7 +404,7 @@
           [
            {
             "Fn::GetAtt": [
-             "ecosphered1pipelineArtifactsBucket8EA23364",
+             "doiecosphered1pipelineArtifactsBucketF0F9BAB1",
              "Arn"
             ]
            },
@@ -401,10 +419,10 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "cdk-pipeline/ecosphere-d-1-pipeline/ArtifactsBucket/Policy/Resource"
+    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/ArtifactsBucket/Policy/Resource"
    }
   },
-  "ecosphered1pipelineRole8D8F42FB": {
+  "doiecosphered1pipelineRoleB5A5BAA2": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -421,10 +439,10 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "cdk-pipeline/ecosphere-d-1-pipeline/Role/Resource"
+    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/Role/Resource"
    }
   },
-  "ecosphered1pipelineRoleDefaultPolicy1C7A41B7": {
+  "doiecosphered1pipelineRoleDefaultPolicy09C4A379": {
    "Type": "AWS::IAM::Policy",
    "Properties": {
     "PolicyDocument": {
@@ -446,7 +464,7 @@
        "Resource": [
         {
          "Fn::GetAtt": [
-          "ecosphered1pipelineArtifactsBucket8EA23364",
+          "doiecosphered1pipelineArtifactsBucketF0F9BAB1",
           "Arn"
          ]
         },
@@ -456,7 +474,7 @@
           [
            {
             "Fn::GetAtt": [
-             "ecosphered1pipelineArtifactsBucket8EA23364",
+             "doiecosphered1pipelineArtifactsBucketF0F9BAB1",
              "Arn"
             ]
            },
@@ -477,7 +495,7 @@
        "Effect": "Allow",
        "Resource": {
         "Fn::GetAtt": [
-         "ecosphered1pipelineArtifactsBucketEncryptionKey99C4D2A3",
+         "doiecosphered1pipelineArtifactsBucketEncryptionKey72E5777B",
          "Arn"
         ]
        }
@@ -488,13 +506,13 @@
        "Resource": [
         {
          "Fn::GetAtt": [
-          "ecosphered1pipelinebuildBuildCodePipelineActionRole80100346",
+          "doiecosphered1pipelinebuildBuildCodePipelineActionRole352F963B",
           "Arn"
          ]
         },
         {
          "Fn::GetAtt": [
-          "ecosphered1pipelinesourceCloneCodePipelineActionRoleB8865EE4",
+          "doiecosphered1pipelinesourceCloneCodePipelineActionRoleBAED33AC",
           "Arn"
          ]
         }
@@ -503,23 +521,23 @@
      ],
      "Version": "2012-10-17"
     },
-    "PolicyName": "ecosphered1pipelineRoleDefaultPolicy1C7A41B7",
+    "PolicyName": "doiecosphered1pipelineRoleDefaultPolicy09C4A379",
     "Roles": [
      {
-      "Ref": "ecosphered1pipelineRole8D8F42FB"
+      "Ref": "doiecosphered1pipelineRoleB5A5BAA2"
      }
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "cdk-pipeline/ecosphere-d-1-pipeline/Role/DefaultPolicy/Resource"
+    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/Role/DefaultPolicy/Resource"
    }
   },
-  "ecosphered1pipeline73F7EAA4": {
+  "doiecosphered1pipelineCB02A1CF": {
    "Type": "AWS::CodePipeline::Pipeline",
    "Properties": {
     "RoleArn": {
      "Fn::GetAtt": [
-      "ecosphered1pipelineRole8D8F42FB",
+      "doiecosphered1pipelineRoleB5A5BAA2",
       "Arn"
      ]
     },
@@ -547,7 +565,7 @@
         ],
         "RoleArn": {
          "Fn::GetAtt": [
-          "ecosphered1pipelinesourceCloneCodePipelineActionRoleB8865EE4",
+          "doiecosphered1pipelinesourceCloneCodePipelineActionRoleBAED33AC",
           "Arn"
          ]
         },
@@ -583,7 +601,7 @@
         ],
         "RoleArn": {
          "Fn::GetAtt": [
-          "ecosphered1pipelinebuildBuildCodePipelineActionRole80100346",
+          "doiecosphered1pipelinebuildBuildCodePipelineActionRole352F963B",
           "Arn"
          ]
         },
@@ -597,28 +615,28 @@
      "EncryptionKey": {
       "Id": {
        "Fn::GetAtt": [
-        "ecosphered1pipelineArtifactsBucketEncryptionKey99C4D2A3",
+        "doiecosphered1pipelineArtifactsBucketEncryptionKey72E5777B",
         "Arn"
        ]
       },
       "Type": "KMS"
      },
      "Location": {
-      "Ref": "ecosphered1pipelineArtifactsBucket8EA23364"
+      "Ref": "doiecosphered1pipelineArtifactsBucketF0F9BAB1"
      },
      "Type": "S3"
     },
-    "Name": "ecosphere-d-1"
+    "Name": "doi-ecosphere-d-1"
    },
    "DependsOn": [
-    "ecosphered1pipelineRoleDefaultPolicy1C7A41B7",
-    "ecosphered1pipelineRole8D8F42FB"
+    "doiecosphered1pipelineRoleDefaultPolicy09C4A379",
+    "doiecosphered1pipelineRoleB5A5BAA2"
    ],
    "Metadata": {
-    "aws:cdk:path": "cdk-pipeline/ecosphere-d-1-pipeline/Resource"
+    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/Resource"
    }
   },
-  "ecosphered1pipelinesourceCloneCodePipelineActionRoleB8865EE4": {
+  "doiecosphered1pipelinesourceCloneCodePipelineActionRoleBAED33AC": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -635,10 +653,10 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "cdk-pipeline/ecosphere-d-1-pipeline/source/Clone/CodePipelineActionRole/Resource"
+    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/source/Clone/CodePipelineActionRole/Resource"
    }
   },
-  "ecosphered1pipelinesourceCloneCodePipelineActionRoleDefaultPolicyDD903325": {
+  "doiecosphered1pipelinesourceCloneCodePipelineActionRoleDefaultPolicy913546F8": {
    "Type": "AWS::IAM::Policy",
    "Properties": {
     "PolicyDocument": {
@@ -665,7 +683,7 @@
        "Resource": [
         {
          "Fn::GetAtt": [
-          "ecosphered1pipelineArtifactsBucket8EA23364",
+          "doiecosphered1pipelineArtifactsBucketF0F9BAB1",
           "Arn"
          ]
         },
@@ -675,7 +693,7 @@
           [
            {
             "Fn::GetAtt": [
-             "ecosphered1pipelineArtifactsBucket8EA23364",
+             "doiecosphered1pipelineArtifactsBucketF0F9BAB1",
              "Arn"
             ]
            },
@@ -696,7 +714,7 @@
        "Effect": "Allow",
        "Resource": {
         "Fn::GetAtt": [
-         "ecosphered1pipelineArtifactsBucketEncryptionKey99C4D2A3",
+         "doiecosphered1pipelineArtifactsBucketEncryptionKey72E5777B",
          "Arn"
         ]
        }
@@ -713,7 +731,7 @@
          [
           {
            "Fn::GetAtt": [
-            "ecosphered1pipelineArtifactsBucket8EA23364",
+            "doiecosphered1pipelineArtifactsBucketF0F9BAB1",
             "Arn"
            ]
           },
@@ -725,18 +743,18 @@
      ],
      "Version": "2012-10-17"
     },
-    "PolicyName": "ecosphered1pipelinesourceCloneCodePipelineActionRoleDefaultPolicyDD903325",
+    "PolicyName": "doiecosphered1pipelinesourceCloneCodePipelineActionRoleDefaultPolicy913546F8",
     "Roles": [
      {
-      "Ref": "ecosphered1pipelinesourceCloneCodePipelineActionRoleB8865EE4"
+      "Ref": "doiecosphered1pipelinesourceCloneCodePipelineActionRoleBAED33AC"
      }
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "cdk-pipeline/ecosphere-d-1-pipeline/source/Clone/CodePipelineActionRole/DefaultPolicy/Resource"
+    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/source/Clone/CodePipelineActionRole/DefaultPolicy/Resource"
    }
   },
-  "ecosphered1pipelinebuildBuildCodePipelineActionRole80100346": {
+  "doiecosphered1pipelinebuildBuildCodePipelineActionRole352F963B": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -753,10 +771,10 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "cdk-pipeline/ecosphere-d-1-pipeline/build/Build/CodePipelineActionRole/Resource"
+    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/build/Build/CodePipelineActionRole/Resource"
    }
   },
-  "ecosphered1pipelinebuildBuildCodePipelineActionRoleDefaultPolicy7EA48148": {
+  "doiecosphered1pipelinebuildBuildCodePipelineActionRoleDefaultPolicyC58134CE": {
    "Type": "AWS::IAM::Policy",
    "Properties": {
     "PolicyDocument": {
@@ -778,24 +796,24 @@
      ],
      "Version": "2012-10-17"
     },
-    "PolicyName": "ecosphered1pipelinebuildBuildCodePipelineActionRoleDefaultPolicy7EA48148",
+    "PolicyName": "doiecosphered1pipelinebuildBuildCodePipelineActionRoleDefaultPolicyC58134CE",
     "Roles": [
      {
-      "Ref": "ecosphered1pipelinebuildBuildCodePipelineActionRole80100346"
+      "Ref": "doiecosphered1pipelinebuildBuildCodePipelineActionRole352F963B"
      }
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "cdk-pipeline/ecosphere-d-1-pipeline/build/Build/CodePipelineActionRole/DefaultPolicy/Resource"
+    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/build/Build/CodePipelineActionRole/DefaultPolicy/Resource"
    }
   },
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/02Oyw6CMBBFv8V9GSMsdKsu3RD8AANljEMLJW2JIU3/XfpIcHXPbWbOtIRzCadD+zUF70UhqQP3tC0XbHt6OeQaXIOzMmSVXtn9Pe3NM6567BaSPbiaZpQ0Ya3VgNyGyYyeUTtuFiUx7oeslSQedYmSas6O3RYnMnsmRgPugXEvxFVSa0KJ4JmpwN0WLjCez5RiP/jfvWcNGrVonr6W2bN6tR81HSu4QHkYDFGhl8nSiNCk/AFlAVgROAEAAA=="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/02OS27DMAxEz5I9zaDOotmmWWZjuAcoHJpFGcuWoQ+KQNDdY30AZzVvKGqGLX62+HEY/m1D49QouWP4dgNNsI1+ApPB0POqrThtnnD9XXYXgcliuCpvHZv0VjEC6ZHvXtSIoZOVlSzcGf1gcmmtYgQZ5i1eK87BSTuthHJPoRK11ow9LW9UjjDN2x03zv+SXJQMNpkMEewJw5eniXN9pSJ74buPEXq22hsqp1WO0D3dn16OJzxje3hYkcb4xcnM2Bd9Acg/IWlRAQAA"
    },
    "Metadata": {
-    "aws:cdk:path": "cdk-pipeline/CDKMetadata/Default"
+    "aws:cdk:path": "doi-ecosphere-d-1/CDKMetadata/Default"
    }
   }
  },
