@@ -107,7 +107,7 @@ class CdkPipeline(cdk.Stack):
           action_name="Clone",
           connection_arn=source_arn,
           repo=source_repo,
-          branch=source_branch,
+          branch="main",
           owner=source_repo_owner,
           output=source_output,
           code_build_clone_output=True
