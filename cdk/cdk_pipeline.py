@@ -63,7 +63,7 @@ class CdkPipeline(cdk.Stack):
             service_name = deployment+"-service",
             #task_definition=alb_task_definition,
             task_image_options= {
-                "image": ecs_image
+                "image": ecs_image,
                 "container_name": deployment+"-app",
                 "container_port": 80,
                 "execution_role": ecs_role,
