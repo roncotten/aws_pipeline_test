@@ -16,6 +16,7 @@ from aws_cdk import (
 # global variables
 AWS_ACCOUNT = '694795848632'
 AWS_REGION = 'us-east-1'
+APPLICATION='ecosphere'
 source_repo = 'aws_pipeline_test'
 source_branch = 'main'
 source_repo_owner = 'rcotten'
@@ -130,7 +131,7 @@ class CdkPipeline(cdk.Stack):
         #)
 
         # create pipeline 
-        codepipeline.Pipeline(self, "codepipeline", pipeline_name="cdk-pipeline",
+        codepipeline.Pipeline(self, APPLICATION + "-pipeline", pipeline_name=APPLICATION + "-pipeline",
             stages=[
               {
                 "stageName": "source",
