@@ -48,7 +48,31 @@ class CdkPipeline(cdk.Stack):
 
         # create ecs cluster
         vpc = ec2.Vpc.from_lookup(self, deployment+"-vpc", vpc_id=vpc_id)
-        cluster = ecs.Cluster(self, deployment+"-ecs", cluster_name=deployment, container_insights=True, vpc=vpc)
+        ecs_cluster = ecs.Cluster(self, deployment+"-ecs", cluster_name=deployment, container_insights=True, vpc=vpc)
+
+        # create fargate alb service
+        ecs_role = iam.Role(self, deployment+"-ecs_role",
+                                  assumed_by=iam.ServicePrincipal("ecs-tasks.amazonaws.com"),
+                                  managed_policies=[execution_policy], role_name=deployment+"-ecs_role"
+                                  )
+        '''
+        alb_fargate_service = ecs_patterns.ApplicationLoadBalancedFargateService(
+            self, 
+            deployment+"-fargate_service",
+            #task_definition=alb_task_definition,
+            task_image_options= {
+                "image": starter_image,
+                "container_name": deployment+"-app",
+                "execution_role": ecs_role 
+            },
+            assign_public_ip=True,
+            desired_count = 2,
+            service_name = deployment,
+            listener_port = 80,
+            cluster=ecs_cluster
+        )
+        fargateservice = alb_fargate_service.service
+        '''
 
 
         #########################################################################################################
@@ -76,7 +100,9 @@ class CdkPipeline(cdk.Stack):
                             "docker push $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION",
                             "export imageTag=$CODEBUILD_RESOLVED_SOURCE_VERSION",
                             "cd ..",
-                            "printf '[{\"name\":\"app\",\"imageUri\":\"%s\"}]' $REPOSITORY_URI:$imageTag > imagedefinitions.json"
+                            "pwd",
+                            "printf '[{\"name\":\"app\",\"imageUri\":\"%s\"}]' $REPOSITORY_URI:$imageTag > imagedefinitions.json",
+                            "ls -lsF"
                         ]
                     }
                 },
