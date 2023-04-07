@@ -56,13 +56,14 @@ class CdkPipeline(cdk.Stack):
                                   assumed_by=iam.ServicePrincipal("ecs-tasks.amazonaws.com"),
                                   managed_policies=[execution_policy], role_name=deployment+"-ecs_role"
                                   )
-        '''
-        alb_fargate_service = ecs_patterns.ApplicationLoadBalancedFargateService(
+        ecs_image = ecs.ContainerImage.from_registry("694795848632.dkr.ecr.us-east-1.amazonaws.com/doi-ecosphere-d-1:latest")
+        ecs_service = ecs_patterns.ApplicationLoadBalancedFargateService(
             self, 
-            deployment+"-fargate_service",
+            deployment+"-ecs_service",
+            service_name = deployment+"-service",
             #task_definition=alb_task_definition,
             task_image_options= {
-                "image": 
+                "image": ecs_image
                 "container_name": deployment+"-app",
                 "container_port": 80,
                 "execution_role": ecs_role,
@@ -71,13 +72,11 @@ class CdkPipeline(cdk.Stack):
                 #"task_role": ""
             },
             assign_public_ip=True,
-            desired_count = 2,
-            service_name = deployment,
+            desired_count = 1,
             listener_port = 80,
             cluster=ecs_cluster
         )
         fargateservice = alb_fargate_service.service
-        '''
 
 
         #########################################################################################################
@@ -164,11 +163,11 @@ class CdkPipeline(cdk.Stack):
         )
 
         # deploy action
-        #deploy_action = codepipeline_actions.EcsDeployAction(
-        #  action_name="Deploy",
-        #  service=ecs_service
-        #  input=codepipeline.Artifact("imagedefinitions")
-        #)
+        deploy_action = codepipeline_actions.EcsDeployAction(
+          action_name="Deploy",
+          service=ecs_service,
+          input=codepipeline.Artifact("imagedefinitions")
+        )
 
         # create pipeline 
         codepipeline.Pipeline(self, deployment+"-pipeline", pipeline_name=deployment,
@@ -181,10 +180,10 @@ class CdkPipeline(cdk.Stack):
                 "stageName": "build",
                 "actions": [build_action]
               }, 
-              #{
-              #  "stageName": "deploy",
-              #  "actions": [deploy_action]
-              #}
+              {
+                "stageName": "deploy",
+                "actions": [deploy_action]
+              }
             ]
         )
 
