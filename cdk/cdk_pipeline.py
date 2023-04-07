@@ -57,9 +57,10 @@ class CdkPipeline(cdk.Stack):
                                   managed_policies=[execution_policy], role_name=deployment+"-ecs_role"
                                   )
         ecs_image = ecs.ContainerImage.from_registry("694795848632.dkr.ecr.us-east-1.amazonaws.com/doi-ecosphere-d-1:latest")
-        ecs_service = ecs_patterns.ApplicationLoadBalancedFargateService(
+        alb_fargate_service = ecs_patterns.ApplicationLoadBalancedFargateService(
             self, 
             deployment+"-ecs_service",
+            cluster=ecs_cluster,
             service_name = deployment+"-service",
             #task_definition=alb_task_definition,
             task_image_options= {
@@ -71,12 +72,12 @@ class CdkPipeline(cdk.Stack):
                 #"execution_role": ""
                 #"task_role": ""
             },
-            assign_public_ip=True,
             desired_count = 1,
+            load_balancer_name=deployment,
             listener_port = 80,
-            cluster=ecs_cluster
+            assign_public_ip=True
         )
-        fargateservice = alb_fargate_service.service
+        fargate_service = alb_fargate_service.service
 
 
         #########################################################################################################
@@ -165,7 +166,7 @@ class CdkPipeline(cdk.Stack):
         # deploy action
         deploy_action = codepipeline_actions.EcsDeployAction(
           action_name="Deploy",
-          service=ecs_service,
+          service=fargate_service,
           input=codepipeline.Artifact("imagedefinitions")
         )
 
