@@ -51,6 +51,7 @@ class CdkPipeline(cdk.Stack):
         ecs_cluster = ecs.Cluster(self, deployment+"-ecs", cluster_name=deployment, container_insights=True, vpc=vpc)
 
         # create fargate alb service
+        execution_policy = iam.ManagedPolicy.from_aws_managed_policy_name(managed_policy_name = "service-role/AmazonECSTaskExecutionRolePolicy")
         ecs_role = iam.Role(self, deployment+"-ecs_role",
                                   assumed_by=iam.ServicePrincipal("ecs-tasks.amazonaws.com"),
                                   managed_policies=[execution_policy], role_name=deployment+"-ecs_role"
@@ -61,9 +62,13 @@ class CdkPipeline(cdk.Stack):
             deployment+"-fargate_service",
             #task_definition=alb_task_definition,
             task_image_options= {
-                "image": starter_image,
+                "image": 
                 "container_name": deployment+"-app",
-                "execution_role": ecs_role 
+                "container_port": 80,
+                "execution_role": ecs_role,
+                "enable_logging": True
+                #"execution_role": ""
+                #"task_role": ""
             },
             assign_public_ip=True,
             desired_count = 2,

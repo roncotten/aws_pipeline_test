@@ -17,7 +17,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::694795848632:role/cdk-hnb659fds-deploy-role-694795848632-us-east-1",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::694795848632:role/cdk-hnb659fds-cfn-exec-role-694795848632-us-east-1",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-694795848632-us-east-1/c6c972b3548c6d45371fa3a680df3fb2dd5295e744900274aa389c7770ff3736.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-694795848632-us-east-1/c1ceeb754851de458031fb9e74d75a09b0fb91216262dcf399cd86ba96cec027.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -43,6 +43,12 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "doiecosphered1ecsEA1F6C71"
+          }
+        ],
+        "/doi-ecosphere-d-1/doi-ecosphere-d-1-ecs_role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "doiecosphered1ecsrole17862415"
           }
         ],
         "/doi-ecosphere-d-1/Build/Role/Resource": [

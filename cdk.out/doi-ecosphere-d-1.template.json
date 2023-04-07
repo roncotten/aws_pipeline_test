@@ -29,6 +29,41 @@
     "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecs/Resource"
    }
   },
+  "doiecosphered1ecsrole17862415": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+       ]
+      ]
+     }
+    ],
+    "RoleName": "doi-ecosphere-d-1-ecs_role"
+   },
+   "Metadata": {
+    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecs_role/Resource"
+   }
+  },
   "BuildRoleB7C66CB2": {
    "Type": "AWS::IAM::Role",
    "Properties": {
@@ -283,7 +318,7 @@
      ]
     },
     "Source": {
-     "BuildSpec": "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"$(aws ecr get-login --region $AWS_REGION --no-include-email)\",\n        \"pwd\",\n        \"ls -lsR *\",\n        \"cd build\",\n        \"docker build -t $REPOSITORY_URI:latest .\",\n        \"docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION\"\n      ]\n    },\n    \"post_build\": {\n      \"commands\": [\n        \"docker push $REPOSITORY_URI:latest\",\n        \"docker push $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION\",\n        \"export imageTag=$CODEBUILD_RESOLVED_SOURCE_VERSION\",\n        \"printf '[{\\\"name\\\":\\\"app\\\",\\\"imageUri\\\":\\\"%s\\\"}]' $REPOSITORY_URI:$imageTag > imagedefinitions.json\"\n      ]\n    }\n  },\n  \"env\": {\n    \"exported-variables\": [\n      \"imageTag\"\n    ]\n  },\n  \"artifacts\": {\n    \"files\": \"imagedefinitions.json\",\n    \"secondary-artifacts\": {\n      \"imagedefinitions\": {\n        \"files\": \"imagedefinitions.json\",\n        \"name\": \"imagedefinitions\"\n      }\n    }\n  }\n}",
+     "BuildSpec": "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"$(aws ecr get-login --region $AWS_REGION --no-include-email)\",\n        \"cd build\",\n        \"docker build -t $REPOSITORY_URI:latest .\",\n        \"docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION\"\n      ]\n    },\n    \"post_build\": {\n      \"commands\": [\n        \"docker push $REPOSITORY_URI:latest\",\n        \"docker push $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION\",\n        \"export imageTag=$CODEBUILD_RESOLVED_SOURCE_VERSION\",\n        \"cd ..\",\n        \"pwd\",\n        \"printf '[{\\\"name\\\":\\\"app\\\",\\\"imageUri\\\":\\\"%s\\\"}]' $REPOSITORY_URI:$imageTag > imagedefinitions.json\",\n        \"ls -lsF\"\n      ]\n    }\n  },\n  \"env\": {\n    \"exported-variables\": [\n      \"imageTag\"\n    ]\n  },\n  \"artifacts\": {\n    \"files\": \"imagedefinitions.json\",\n    \"secondary-artifacts\": {\n      \"imagedefinitions\": {\n        \"files\": \"imagedefinitions.json\",\n        \"name\": \"imagedefinitions\"\n      }\n    }\n  }\n}",
      "Type": "CODEPIPELINE"
     },
     "Cache": {
@@ -810,7 +845,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/02OS27DMAxEz5I9zaDOotmmWWZjuAcoHJpFGcuWoQ+KQNDdY30AZzVvKGqGLX62+HEY/m1D49QouWP4dgNNsI1+ApPB0POqrThtnnD9XXYXgcliuCpvHZv0VjEC6ZHvXtSIoZOVlSzcGf1gcmmtYgQZ5i1eK87BSTuthHJPoRK11ow9LW9UjjDN2x03zv+SXJQMNpkMEewJw5eniXN9pSJ74buPEXq22hsqp1WO0D3dn16OJzxje3hYkcb4xcnM2Bd9Acg/IWlRAQAA"
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/02PzY7CMAyEn4W7a7TlAFeWI5eq+wCr4hphmjZVfoRQlHenTSKV03wTj0dOjccaf3bdy1bUD5WSG4Y/19EAy9N/YDIYWp61FafNGy73aXMRmCyGi/LWsVlnBSNINy57WnHaWLXRSigVZIpAuuebF9VjaGRmJRM3Rj+ZXEplzLG5zLdkihSOMIzLHVdO9auclXR2NQki2AOGX08Dp+pCWba7vn2M0LLV3lD+QeEIzds99LQ/4Anr3dOKVMZPTkbGNusH8tQ6BVEBAAA="
    },
    "Metadata": {
     "aws:cdk:path": "doi-ecosphere-d-1/CDKMetadata/Default"
