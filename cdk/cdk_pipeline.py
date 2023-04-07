@@ -9,25 +9,43 @@ from aws_cdk import (
     aws_ecs_patterns as ecs_patterns,
     aws_ecr as ecr,
     aws_iam as iam,
-    aws_ec2 as ec2 
+    aws_ec2 as ec2, 
+    aws_sns as sns
 )
-from .cdk_application import CdkApplication
 
+# global variables
+AWS_ACCOUNT = '694795848632'
+AWS_REGION = 'us-east-1'
+source_repo = 'aws_pipeline_test'
+source_branch = 'main'
+source_repo_owner = 'rcotten'
+source_arn = 'arn:aws:codestar-connections:us-east-1:694795848632:connection/81ecfe62-c1d4-49f4-bd33-9ee83d1568c9'
+ecr_repo_name = 'ecosphere'
+vpc_id='vpc-0c3094b44d23a611a'
 
-AWS_ACCOUNT = "694795848632"
-AWS_REGION = "us-east-1"
-source_arn = "arn:aws:codestar-connections:us-east-1:694795848632:connection/81ecfe62-c1d4-49f4-bd33-9ee83d1568c9"
 
 class CdkPipeline(cdk.Stack):
 
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-        # ecr repo
-        ecr_repo = ecr.Repository(self, "cdk-repo")
+        #########################################################################################################
+        # stack resources 
+        #########################################################################################################
 
+        # ecr repo
+        ecr_repo = ecr.Repository(self, ecr_repo_name)
+
+        # ecs cluster
+        vpc = ec2.Vpc.from_lookup(self, "cs-d-1-vpc", vpc_id=vpc_id)
+        ecs_cluster = ecs.Cluster.from_cluster_attributes(self,"cs-d-1-ecs" ,cluster_name="cs-d-1",vpc=vpc, security_groups=[])
+
+
+        #########################################################################################################
         # codebuild project
-        codebuild_project = codebuild.PipelineProject(self, "codebuild" ,project_name="codebuild",
+        #########################################################################################################
+
+        codebuild_project = codebuild.PipelineProject(self, "Build" ,project_name="codebuild",
             environment=codebuild.BuildEnvironment(
                 privileged=True
             ),
@@ -36,50 +54,81 @@ class CdkPipeline(cdk.Stack):
                 "phases": {
                     "build": {
                         "commands": [
-                            "pwd",
-                            "ls -lsF"
+                            "$(aws ecr get-login --region $AWS_REGION --no-include-email)",
+                            "docker build -t $REPOSITORY_URI:latest .",
+                            "docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION"
                         ]
                     },
                     "post_build": {
                         "commands": [
+                            "docker push $REPOSITORY_URI:latest",
+                            "docker push $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION",
+                            "export imageTag=$CODEBUILD_RESOLVED_SOURCE_VERSION",
+                            "printf '[{\"name\":\"app\",\"imageUri\":\"%s\"}]' $REPOSITORY_URI:$imageTag > imagedefinitions.json"
                         ]
                     }
                 },
                 "env": {
                      "exported-variables": ["imageTag"]
+                },
+                "artifacts": {
+                    "files": "imagedefinitions.json",
+                    "secondary-artifacts": {
+                        "imagedefinitions": {
+                            "files": "imagedefinitions.json",
+                            "name": "imagedefinitions"
+                        }
+                    }
                 }
-            }),
-            environment_variables={
+              }),
+              environment_variables={
+                "AWS_REGION": codebuild.BuildEnvironmentVariable(
+                    value=f"{AWS_REGION}"
+                ),
                 "REPOSITORY_URI": codebuild.BuildEnvironmentVariable(
                     value=ecr_repo.repository_uri
                 )
-            }
+              }
         )
+
+        # grant docker push to ecr_repo
+        ecr_repo.grant_pull_push(codebuild_project)
+
+
+        #########################################################################################################
+        # pipeline
+        #########################################################################################################
 
         # source action 
         source_output = codepipeline.Artifact()
         source_action = codepipeline_actions.CodeStarConnectionsSourceAction(
           action_name="Clone",
           connection_arn=source_arn,
-          owner='roncotten',
-          repo='aws_pipeline_test',
-          branch='main',
+          repo=source_repo,
+          branch=source_branch,
+          owner=source_repo_owner,
           output=source_output,
           code_build_clone_output=True
         )
 
         # build action
         build_action = codepipeline_actions.CodeBuildAction(
-            action_name="Build",
-            project=codebuild_project,
-            input=source_output,
-            outputs=[codepipeline.Artifact("imagedefinitions")],
-            execute_batch_build=False
+          action_name="Build",
+          project=codebuild_project,
+          input=source_output,
+          outputs=[codepipeline.Artifact("imagedefinitions")],
+          execute_batch_build=False
         )
 
+        # deploy action
+        #deploy_action = codepipeline_actions.EcsDeployAction(
+        #  action_name="Deploy",
+        #  service=kc_ecs_service
+        #  input=codepipeline.Artifact("imagedefinitions")
+        #)
 
         # create pipeline 
-        codepipeline.Pipeline(self, "codepipeline", pipeline_name="codepipeline",
+        codepipeline.Pipeline(self, "codepipeline", pipeline_name="cdk-pipeline",
             stages=[
               {
                 "stageName": "source",

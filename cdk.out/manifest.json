@@ -17,7 +17,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::694795848632:role/cdk-hnb659fds-deploy-role-694795848632-us-east-1",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::694795848632:role/cdk-hnb659fds-cfn-exec-role-694795848632-us-east-1",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-694795848632-us-east-1/8751423cc239af42b83ebec3d28c538b71c2273bb3f95c9548385c8b83b74724.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-694795848632-us-east-1/60eea1101a5f8e139c6148e2c70775848941395667aa5c845408bc3d04e05814.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -33,28 +33,28 @@
         "cdk-pipeline.assets"
       ],
       "metadata": {
-        "/cdk-pipeline/cdk-repo/Resource": [
+        "/cdk-pipeline/ecosphere/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "cdkrepo0CE6723A"
+            "data": "ecosphere30EEC081"
           }
         ],
-        "/cdk-pipeline/codebuild/Role/Resource": [
+        "/cdk-pipeline/Build/Role/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "codebuildRoleBCAD0C29"
+            "data": "BuildRoleB7C66CB2"
           }
         ],
-        "/cdk-pipeline/codebuild/Role/DefaultPolicy/Resource": [
+        "/cdk-pipeline/Build/Role/DefaultPolicy/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "codebuildRoleDefaultPolicy6C4DCF68"
+            "data": "BuildRoleDefaultPolicyEAC4E6D6"
           }
         ],
-        "/cdk-pipeline/codebuild/Resource": [
+        "/cdk-pipeline/Build/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "codebuild6429BDD5"
+            "data": "Build45A36621"
           }
         ],
         "/cdk-pipeline/codepipeline/ArtifactsBucketEncryptionKey/Resource": [

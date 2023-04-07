@@ -8,13 +8,13 @@
         "id": "cdk-pipeline",
         "path": "cdk-pipeline",
         "children": {
-          "cdk-repo": {
-            "id": "cdk-repo",
-            "path": "cdk-pipeline/cdk-repo",
+          "ecosphere": {
+            "id": "ecosphere",
+            "path": "cdk-pipeline/ecosphere",
             "children": {
               "Resource": {
                 "id": "Resource",
-                "path": "cdk-pipeline/cdk-repo/Resource",
+                "path": "cdk-pipeline/ecosphere/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::ECR::Repository",
                   "aws:cdk:cloudformation:props": {}
@@ -30,17 +30,67 @@
               "version": "2.72.1"
             }
           },
-          "codebuild": {
-            "id": "codebuild",
-            "path": "cdk-pipeline/codebuild",
+          "cs-d-1-vpc": {
+            "id": "cs-d-1-vpc",
+            "path": "cdk-pipeline/cs-d-1-vpc",
+            "children": {
+              "PublicSubnet1": {
+                "id": "PublicSubnet1",
+                "path": "cdk-pipeline/cs-d-1-vpc/PublicSubnet1",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.72.1"
+                }
+              },
+              "PublicSubnet2": {
+                "id": "PublicSubnet2",
+                "path": "cdk-pipeline/cs-d-1-vpc/PublicSubnet2",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.72.1"
+                }
+              },
+              "PrivateSubnet1": {
+                "id": "PrivateSubnet1",
+                "path": "cdk-pipeline/cs-d-1-vpc/PrivateSubnet1",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.72.1"
+                }
+              },
+              "PrivateSubnet2": {
+                "id": "PrivateSubnet2",
+                "path": "cdk-pipeline/cs-d-1-vpc/PrivateSubnet2",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.72.1"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.Resource",
+              "version": "2.72.1"
+            }
+          },
+          "cs-d-1-ecs": {
+            "id": "cs-d-1-ecs",
+            "path": "cdk-pipeline/cs-d-1-ecs",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.Resource",
+              "version": "2.72.1"
+            }
+          },
+          "Build": {
+            "id": "Build",
+            "path": "cdk-pipeline/Build",
             "children": {
               "Role": {
                 "id": "Role",
-                "path": "cdk-pipeline/codebuild/Role",
+                "path": "cdk-pipeline/Build/Role",
                 "children": {
                   "ImportRole": {
                     "id": "ImportRole",
-                    "path": "cdk-pipeline/codebuild/Role/ImportRole",
+                    "path": "cdk-pipeline/Build/Role/ImportRole",
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.Resource",
                       "version": "2.72.1"
@@ -48,7 +98,7 @@
                   },
                   "Resource": {
                     "id": "Resource",
-                    "path": "cdk-pipeline/codebuild/Role/Resource",
+                    "path": "cdk-pipeline/Build/Role/Resource",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                       "aws:cdk:cloudformation:props": {
@@ -73,11 +123,11 @@
                   },
                   "DefaultPolicy": {
                     "id": "DefaultPolicy",
-                    "path": "cdk-pipeline/codebuild/Role/DefaultPolicy",
+                    "path": "cdk-pipeline/Build/Role/DefaultPolicy",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "cdk-pipeline/codebuild/Role/DefaultPolicy/Resource",
+                        "path": "cdk-pipeline/Build/Role/DefaultPolicy/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                           "aws:cdk:cloudformation:props": {
@@ -97,7 +147,7 @@
                                         [
                                           "arn:aws:logs:us-east-1:694795848632:log-group:/aws/codebuild/",
                                           {
-                                            "Ref": "codebuild6429BDD5"
+                                            "Ref": "Build45A36621"
                                           },
                                           ":*"
                                         ]
@@ -109,7 +159,7 @@
                                         [
                                           "arn:aws:logs:us-east-1:694795848632:log-group:/aws/codebuild/",
                                           {
-                                            "Ref": "codebuild6429BDD5"
+                                            "Ref": "Build45A36621"
                                           }
                                         ]
                                       ]
@@ -131,12 +181,35 @@
                                       [
                                         "arn:aws:codebuild:us-east-1:694795848632:report-group/",
                                         {
-                                          "Ref": "codebuild6429BDD5"
+                                          "Ref": "Build45A36621"
                                         },
                                         "-*"
                                       ]
                                     ]
                                   }
+                                },
+                                {
+                                  "Action": [
+                                    "ecr:BatchCheckLayerAvailability",
+                                    "ecr:BatchGetImage",
+                                    "ecr:CompleteLayerUpload",
+                                    "ecr:GetDownloadUrlForLayer",
+                                    "ecr:InitiateLayerUpload",
+                                    "ecr:PutImage",
+                                    "ecr:UploadLayerPart"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::GetAtt": [
+                                      "ecosphere30EEC081",
+                                      "Arn"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Action": "ecr:GetAuthorizationToken",
+                                  "Effect": "Allow",
+                                  "Resource": "*"
                                 },
                                 {
                                   "Action": [
@@ -199,10 +272,10 @@
                               ],
                               "Version": "2012-10-17"
                             },
-                            "policyName": "codebuildRoleDefaultPolicy6C4DCF68",
+                            "policyName": "BuildRoleDefaultPolicyEAC4E6D6",
                             "roles": [
                               {
-                                "Ref": "codebuildRoleBCAD0C29"
+                                "Ref": "BuildRoleB7C66CB2"
                               }
                             ]
                           }
@@ -226,7 +299,7 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "cdk-pipeline/codebuild/Resource",
+                "path": "cdk-pipeline/Build/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::CodeBuild::Project",
                   "aws:cdk:cloudformation:props": {
@@ -240,6 +313,11 @@
                       "privilegedMode": true,
                       "computeType": "BUILD_GENERAL1_SMALL",
                       "environmentVariables": [
+                        {
+                          "name": "AWS_REGION",
+                          "type": "PLAINTEXT",
+                          "value": "us-east-1"
+                        },
                         {
                           "name": "REPOSITORY_URI",
                           "type": "PLAINTEXT",
@@ -255,7 +333,7 @@
                                         ":",
                                         {
                                           "Fn::GetAtt": [
-                                            "cdkrepo0CE6723A",
+                                            "ecosphere30EEC081",
                                             "Arn"
                                           ]
                                         }
@@ -272,7 +350,7 @@
                                         ":",
                                         {
                                           "Fn::GetAtt": [
-                                            "cdkrepo0CE6723A",
+                                            "ecosphere30EEC081",
                                             "Arn"
                                           ]
                                         }
@@ -286,7 +364,7 @@
                                 },
                                 "/",
                                 {
-                                  "Ref": "cdkrepo0CE6723A"
+                                  "Ref": "ecosphere30EEC081"
                                 }
                               ]
                             ]
@@ -296,13 +374,13 @@
                     },
                     "serviceRole": {
                       "Fn::GetAtt": [
-                        "codebuildRoleBCAD0C29",
+                        "BuildRoleB7C66CB2",
                         "Arn"
                       ]
                     },
                     "source": {
                       "type": "CODEPIPELINE",
-                      "buildSpec": "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"pwd\",\n        \"ls -lsF\"\n      ]\n    },\n    \"post_build\": {\n      \"commands\": []\n    }\n  },\n  \"env\": {\n    \"exported-variables\": [\n      \"imageTag\"\n    ]\n  },\n  \"artifacts\": {\n    \"files\": \"imagedefinitions.json\",\n    \"secondary-artifacts\": {\n      \"imagedefinitions\": {\n        \"files\": \"imagedefinitions.json\",\n        \"name\": \"imagedefinitions\"\n      }\n    }\n  }\n}"
+                      "buildSpec": "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"$(aws ecr get-login --region $AWS_REGION --no-include-email)\",\n        \"docker build -t $REPOSITORY_URI:latest .\",\n        \"docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION\"\n      ]\n    },\n    \"post_build\": {\n      \"commands\": [\n        \"docker push $REPOSITORY_URI:latest\",\n        \"docker push $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION\",\n        \"export imageTag=$CODEBUILD_RESOLVED_SOURCE_VERSION\",\n        \"printf '[{\\\"name\\\":\\\"app\\\",\\\"imageUri\\\":\\\"%s\\\"}]' $REPOSITORY_URI:$imageTag > imagedefinitions.json\"\n      ]\n    }\n  },\n  \"env\": {\n    \"exported-variables\": [\n      \"imageTag\"\n    ]\n  },\n  \"artifacts\": {\n    \"files\": \"imagedefinitions.json\",\n    \"secondary-artifacts\": {\n      \"imagedefinitions\": {\n        \"files\": \"imagedefinitions.json\",\n        \"name\": \"imagedefinitions\"\n      }\n    }\n  }\n}"
                     },
                     "cache": {
                       "type": "NO_CACHE"
@@ -685,7 +763,7 @@
                             },
                             "configuration": {
                               "ConnectionArn": "arn:aws:codestar-connections:us-east-1:694795848632:connection/81ecfe62-c1d4-49f4-bd33-9ee83d1568c9",
-                              "FullRepositoryId": "roncotten/aws_pipeline_test",
+                              "FullRepositoryId": "rcotten/aws_pipeline_test",
                               "BranchName": "main",
                               "OutputArtifactFormat": "CODEBUILD_CLONE_REF"
                             },
@@ -722,7 +800,7 @@
                             },
                             "configuration": {
                               "ProjectName": {
-                                "Ref": "codebuild6429BDD5"
+                                "Ref": "Build45A36621"
                               }
                             },
                             "runOrder": 1,
@@ -751,7 +829,7 @@
                         }
                       }
                     },
-                    "name": "codepipeline"
+                    "name": "cdk-pipeline"
                   }
                 },
                 "constructInfo": {
@@ -1001,7 +1079,7 @@
                                           "Effect": "Allow",
                                           "Resource": {
                                             "Fn::GetAtt": [
-                                              "codebuild6429BDD5",
+                                              "Build45A36621",
                                               "Arn"
                                             ]
                                           }

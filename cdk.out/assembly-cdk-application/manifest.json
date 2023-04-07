@@ -1,0 +1,77 @@
+{
+  "version": "31.0.0",
+  "artifacts": {
+    "cdkapplicationCdkApplicationStack6EC13D9C.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "cdkapplicationCdkApplicationStack6EC13D9C.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "cdkapplicationCdkApplicationStack6EC13D9C": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://694795848632/us-east-1",
+      "properties": {
+        "templateFile": "cdkapplicationCdkApplicationStack6EC13D9C.template.json",
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::694795848632:role/cdk-hnb659fds-deploy-role-694795848632-us-east-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::694795848632:role/cdk-hnb659fds-cfn-exec-role-694795848632-us-east-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-694795848632-us-east-1/fd7a0d932824124059d0354eb6b2fa93cac42b364e50835f551fe391d0ab5e99.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "cdkapplicationCdkApplicationStack6EC13D9C.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::694795848632:role/cdk-hnb659fds-lookup-role-694795848632-us-east-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        },
+        "stackName": "cdk-application-CdkApplicationStack"
+      },
+      "dependencies": [
+        "cdkapplicationCdkApplicationStack6EC13D9C.assets"
+      ],
+      "metadata": {
+        "/cdk-application/CdkApplicationStack/my-topic-1/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "mytopic1BC0A537D"
+          }
+        ],
+        "/cdk-application/CdkApplicationStack/my-topic-2/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "mytopic2577CCE85"
+          }
+        ],
+        "/cdk-application/CdkApplicationStack/my-topic-3/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "mytopic32889ADEC"
+          }
+        ],
+        "/cdk-application/CdkApplicationStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/cdk-application/CdkApplicationStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/cdk-application/CdkApplicationStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "cdk-application/CdkApplicationStack"
+    }
+  }
+}

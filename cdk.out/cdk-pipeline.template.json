@@ -1,14 +1,14 @@
 {
  "Resources": {
-  "cdkrepo0CE6723A": {
+  "ecosphere30EEC081": {
    "Type": "AWS::ECR::Repository",
    "UpdateReplacePolicy": "Retain",
    "DeletionPolicy": "Retain",
    "Metadata": {
-    "aws:cdk:path": "cdk-pipeline/cdk-repo/Resource"
+    "aws:cdk:path": "cdk-pipeline/ecosphere/Resource"
    }
   },
-  "codebuildRoleBCAD0C29": {
+  "BuildRoleB7C66CB2": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -25,10 +25,10 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "cdk-pipeline/codebuild/Role/Resource"
+    "aws:cdk:path": "cdk-pipeline/Build/Role/Resource"
    }
   },
-  "codebuildRoleDefaultPolicy6C4DCF68": {
+  "BuildRoleDefaultPolicyEAC4E6D6": {
    "Type": "AWS::IAM::Policy",
    "Properties": {
     "PolicyDocument": {
@@ -47,7 +47,7 @@
           [
            "arn:aws:logs:us-east-1:694795848632:log-group:/aws/codebuild/",
            {
-            "Ref": "codebuild6429BDD5"
+            "Ref": "Build45A36621"
            },
            ":*"
           ]
@@ -59,7 +59,7 @@
           [
            "arn:aws:logs:us-east-1:694795848632:log-group:/aws/codebuild/",
            {
-            "Ref": "codebuild6429BDD5"
+            "Ref": "Build45A36621"
            }
           ]
          ]
@@ -81,12 +81,35 @@
          [
           "arn:aws:codebuild:us-east-1:694795848632:report-group/",
           {
-           "Ref": "codebuild6429BDD5"
+           "Ref": "Build45A36621"
           },
           "-*"
          ]
         ]
        }
+      },
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:CompleteLayerUpload",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:InitiateLayerUpload",
+        "ecr:PutImage",
+        "ecr:UploadLayerPart"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "ecosphere30EEC081",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
       },
       {
        "Action": [
@@ -149,18 +172,18 @@
      ],
      "Version": "2012-10-17"
     },
-    "PolicyName": "codebuildRoleDefaultPolicy6C4DCF68",
+    "PolicyName": "BuildRoleDefaultPolicyEAC4E6D6",
     "Roles": [
      {
-      "Ref": "codebuildRoleBCAD0C29"
+      "Ref": "BuildRoleB7C66CB2"
      }
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "cdk-pipeline/codebuild/Role/DefaultPolicy/Resource"
+    "aws:cdk:path": "cdk-pipeline/Build/Role/DefaultPolicy/Resource"
    }
   },
-  "codebuild6429BDD5": {
+  "Build45A36621": {
    "Type": "AWS::CodeBuild::Project",
    "Properties": {
     "Artifacts": {
@@ -169,6 +192,11 @@
     "Environment": {
      "ComputeType": "BUILD_GENERAL1_SMALL",
      "EnvironmentVariables": [
+      {
+       "Name": "AWS_REGION",
+       "Type": "PLAINTEXT",
+       "Value": "us-east-1"
+      },
       {
        "Name": "REPOSITORY_URI",
        "Type": "PLAINTEXT",
@@ -184,7 +212,7 @@
               ":",
               {
                "Fn::GetAtt": [
-                "cdkrepo0CE6723A",
+                "ecosphere30EEC081",
                 "Arn"
                ]
               }
@@ -201,7 +229,7 @@
               ":",
               {
                "Fn::GetAtt": [
-                "cdkrepo0CE6723A",
+                "ecosphere30EEC081",
                 "Arn"
                ]
               }
@@ -215,7 +243,7 @@
           },
           "/",
           {
-           "Ref": "cdkrepo0CE6723A"
+           "Ref": "ecosphere30EEC081"
           }
          ]
         ]
@@ -229,12 +257,12 @@
     },
     "ServiceRole": {
      "Fn::GetAtt": [
-      "codebuildRoleBCAD0C29",
+      "BuildRoleB7C66CB2",
       "Arn"
      ]
     },
     "Source": {
-     "BuildSpec": "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"pwd\",\n        \"ls -lsF\"\n      ]\n    },\n    \"post_build\": {\n      \"commands\": []\n    }\n  },\n  \"env\": {\n    \"exported-variables\": [\n      \"imageTag\"\n    ]\n  },\n  \"artifacts\": {\n    \"files\": \"imagedefinitions.json\",\n    \"secondary-artifacts\": {\n      \"imagedefinitions\": {\n        \"files\": \"imagedefinitions.json\",\n        \"name\": \"imagedefinitions\"\n      }\n    }\n  }\n}",
+     "BuildSpec": "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"$(aws ecr get-login --region $AWS_REGION --no-include-email)\",\n        \"docker build -t $REPOSITORY_URI:latest .\",\n        \"docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION\"\n      ]\n    },\n    \"post_build\": {\n      \"commands\": [\n        \"docker push $REPOSITORY_URI:latest\",\n        \"docker push $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION\",\n        \"export imageTag=$CODEBUILD_RESOLVED_SOURCE_VERSION\",\n        \"printf '[{\\\"name\\\":\\\"app\\\",\\\"imageUri\\\":\\\"%s\\\"}]' $REPOSITORY_URI:$imageTag > imagedefinitions.json\"\n      ]\n    }\n  },\n  \"env\": {\n    \"exported-variables\": [\n      \"imageTag\"\n    ]\n  },\n  \"artifacts\": {\n    \"files\": \"imagedefinitions.json\",\n    \"secondary-artifacts\": {\n      \"imagedefinitions\": {\n        \"files\": \"imagedefinitions.json\",\n        \"name\": \"imagedefinitions\"\n      }\n    }\n  }\n}",
      "Type": "CODEPIPELINE"
     },
     "Cache": {
@@ -249,7 +277,7 @@
     "Name": "codebuild"
    },
    "Metadata": {
-    "aws:cdk:path": "cdk-pipeline/codebuild/Resource"
+    "aws:cdk:path": "cdk-pipeline/Build/Resource"
    }
   },
   "codepipelineArtifactsBucketEncryptionKey89389743": {
@@ -504,7 +532,7 @@
         },
         "Configuration": {
          "ConnectionArn": "arn:aws:codestar-connections:us-east-1:694795848632:connection/81ecfe62-c1d4-49f4-bd33-9ee83d1568c9",
-         "FullRepositoryId": "roncotten/aws_pipeline_test",
+         "FullRepositoryId": "rcotten/aws_pipeline_test",
          "BranchName": "main",
          "OutputArtifactFormat": "CODEBUILD_CLONE_REF"
         },
@@ -536,7 +564,7 @@
         },
         "Configuration": {
          "ProjectName": {
-          "Ref": "codebuild6429BDD5"
+          "Ref": "Build45A36621"
          }
         },
         "InputArtifacts": [
@@ -577,7 +605,7 @@
      },
      "Type": "S3"
     },
-    "Name": "codepipeline"
+    "Name": "cdk-pipeline"
    },
    "DependsOn": [
     "codepipelineRoleDefaultPolicy31DC9EA1",
@@ -739,7 +767,7 @@
        "Effect": "Allow",
        "Resource": {
         "Fn::GetAtt": [
-         "codebuild6429BDD5",
+         "Build45A36621",
          "Arn"
         ]
        }
