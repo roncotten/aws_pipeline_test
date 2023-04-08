@@ -96,13 +96,13 @@ class CdkPipeline(cdk.Stack):
                             "$(aws ecr get-login --region $AWS_REGION --no-include-email)",
                             "cd build",
                             "docker build -t $REPOSITORY_URI:latest .",
-                            "docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION"
+                            #"docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION"
                         ]
                     },
                     "post_build": {
                         "commands": [
                             "docker push $REPOSITORY_URI:latest",
-                            "docker push $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION",
+                            #"docker push $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION",
                             "export imageTag=$CODEBUILD_RESOLVED_SOURCE_VERSION",
                             "cd ..",
                             "pwd",
