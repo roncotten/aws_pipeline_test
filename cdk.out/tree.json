@@ -232,6 +232,7 @@
                             "value": "false"
                           }
                         ],
+                        "name": "doi-ecosphere-d-1",
                         "scheme": "internet-facing",
                         "securityGroups": [
                           {
