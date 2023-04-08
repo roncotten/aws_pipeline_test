@@ -1,7 +1,7 @@
 {
   "version": "31.0.0",
   "files": {
-    "3cecfd08ff1f1c30fffd87fc53ef539728d9f3395c2b547642ba0a87c3948898": {
+    "aa87d757b519fb9a0c449079bf79f1e6dea4c2bea06bbe30fc128cbc8b8f09c8": {
       "source": {
         "path": "doi-ecosphere-d-1.template.json",
         "packaging": "file"
@@ -9,7 +9,7 @@
       "destinations": {
         "694795848632-us-east-1": {
           "bucketName": "cdk-hnb659fds-assets-694795848632-us-east-1",
-          "objectKey": "3cecfd08ff1f1c30fffd87fc53ef539728d9f3395c2b547642ba0a87c3948898.json",
+          "objectKey": "aa87d757b519fb9a0c449079bf79f1e6dea4c2bea06bbe30fc128cbc8b8f09c8.json",
           "region": "us-east-1",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::694795848632:role/cdk-hnb659fds-file-publishing-role-694795848632-us-east-1"
         }

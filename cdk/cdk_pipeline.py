@@ -104,10 +104,8 @@ class CdkPipeline(cdk.Stack):
                             "docker push $REPOSITORY_URI:latest",
                             #"docker push $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION",
                             "export imageTag=$CODEBUILD_RESOLVED_SOURCE_VERSION",
-                            "cd ..",
-                            "pwd",
                             "printf '[{\"name\":\"app\",\"imageUri\":\"%s\"}]' $REPOSITORY_URI:$imageTag > imagedefinitions.json",
-                            "ls -lsF"
+                            "cat imagedefintions.json"
                         ]
                     }
                 },
