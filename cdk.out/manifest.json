@@ -17,7 +17,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::694795848632:role/cdk-hnb659fds-deploy-role-694795848632-us-east-1",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::694795848632:role/cdk-hnb659fds-cfn-exec-role-694795848632-us-east-1",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-694795848632-us-east-1/f1de5e3033a3824dae50f2e936e1cfad636987e42ffad8291324e1529bc73379.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-694795848632-us-east-1/25e5c4c18e5212cc15c7ec31ecdf86596edbf74ec584274a057013995a41e8a1.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -116,17 +116,17 @@
             "type": "aws:cdk:warning",
             "data": "Proper policies need to be attached before pulling from ECR repository, or use 'fromEcrRepository'.",
             "trace": [
-              "Annotations.addMessage (/private/var/folders/nl/8bsfs0kd4yxbdnw6yx6wzm2c0000gn/T/jsii-kernel-0P5IbZ/node_modules/aws-cdk-lib/core/lib/annotations.js:1:1071)",
-              "Annotations.addWarning (/private/var/folders/nl/8bsfs0kd4yxbdnw6yx6wzm2c0000gn/T/jsii-kernel-0P5IbZ/node_modules/aws-cdk-lib/core/lib/annotations.js:1:504)",
-              "RepositoryImage.bind (/private/var/folders/nl/8bsfs0kd4yxbdnw6yx6wzm2c0000gn/T/jsii-kernel-0P5IbZ/node_modules/aws-cdk-lib/aws-ecs/lib/images/repository.js:1:1129)",
-              "new ContainerDefinition (/private/var/folders/nl/8bsfs0kd4yxbdnw6yx6wzm2c0000gn/T/jsii-kernel-0P5IbZ/node_modules/aws-cdk-lib/aws-ecs/lib/container-definition.js:1:2908)",
-              "FargateTaskDefinition.addContainer (/private/var/folders/nl/8bsfs0kd4yxbdnw6yx6wzm2c0000gn/T/jsii-kernel-0P5IbZ/node_modules/aws-cdk-lib/aws-ecs/lib/base/task-definition.js:1:8945)",
-              "new ApplicationLoadBalancedFargateService (/private/var/folders/nl/8bsfs0kd4yxbdnw6yx6wzm2c0000gn/T/jsii-kernel-0P5IbZ/node_modules/aws-cdk-lib/aws-ecs-patterns/lib/fargate/application-load-balanced-fargate-service.js:1:1738)",
-              "Kernel._create (/private/var/folders/nl/8bsfs0kd4yxbdnw6yx6wzm2c0000gn/T/tmpvg_egl_3/lib/program.js:9964:29)",
-              "Kernel.create (/private/var/folders/nl/8bsfs0kd4yxbdnw6yx6wzm2c0000gn/T/tmpvg_egl_3/lib/program.js:9693:29)",
-              "KernelHost.processRequest (/private/var/folders/nl/8bsfs0kd4yxbdnw6yx6wzm2c0000gn/T/tmpvg_egl_3/lib/program.js:11544:36)",
-              "KernelHost.run (/private/var/folders/nl/8bsfs0kd4yxbdnw6yx6wzm2c0000gn/T/tmpvg_egl_3/lib/program.js:11504:22)",
-              "Immediate._onImmediate (/private/var/folders/nl/8bsfs0kd4yxbdnw6yx6wzm2c0000gn/T/tmpvg_egl_3/lib/program.js:11505:46)",
+              "Annotations.addMessage (/private/var/folders/nl/8bsfs0kd4yxbdnw6yx6wzm2c0000gn/T/jsii-kernel-pn6xZd/node_modules/aws-cdk-lib/core/lib/annotations.js:1:1071)",
+              "Annotations.addWarning (/private/var/folders/nl/8bsfs0kd4yxbdnw6yx6wzm2c0000gn/T/jsii-kernel-pn6xZd/node_modules/aws-cdk-lib/core/lib/annotations.js:1:504)",
+              "RepositoryImage.bind (/private/var/folders/nl/8bsfs0kd4yxbdnw6yx6wzm2c0000gn/T/jsii-kernel-pn6xZd/node_modules/aws-cdk-lib/aws-ecs/lib/images/repository.js:1:1129)",
+              "new ContainerDefinition (/private/var/folders/nl/8bsfs0kd4yxbdnw6yx6wzm2c0000gn/T/jsii-kernel-pn6xZd/node_modules/aws-cdk-lib/aws-ecs/lib/container-definition.js:1:2908)",
+              "FargateTaskDefinition.addContainer (/private/var/folders/nl/8bsfs0kd4yxbdnw6yx6wzm2c0000gn/T/jsii-kernel-pn6xZd/node_modules/aws-cdk-lib/aws-ecs/lib/base/task-definition.js:1:8945)",
+              "new ApplicationLoadBalancedFargateService (/private/var/folders/nl/8bsfs0kd4yxbdnw6yx6wzm2c0000gn/T/jsii-kernel-pn6xZd/node_modules/aws-cdk-lib/aws-ecs-patterns/lib/fargate/application-load-balanced-fargate-service.js:1:1738)",
+              "Kernel._create (/private/var/folders/nl/8bsfs0kd4yxbdnw6yx6wzm2c0000gn/T/tmp9athf9my/lib/program.js:9964:29)",
+              "Kernel.create (/private/var/folders/nl/8bsfs0kd4yxbdnw6yx6wzm2c0000gn/T/tmp9athf9my/lib/program.js:9693:29)",
+              "KernelHost.processRequest (/private/var/folders/nl/8bsfs0kd4yxbdnw6yx6wzm2c0000gn/T/tmp9athf9my/lib/program.js:11544:36)",
+              "KernelHost.run (/private/var/folders/nl/8bsfs0kd4yxbdnw6yx6wzm2c0000gn/T/tmp9athf9my/lib/program.js:11504:22)",
+              "Immediate._onImmediate (/private/var/folders/nl/8bsfs0kd4yxbdnw6yx6wzm2c0000gn/T/tmp9athf9my/lib/program.js:11505:46)",
               "process.processImmediate (node:internal/timers:476:21)"
             ]
           }

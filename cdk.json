@@ -47,12 +47,13 @@
       "AWS_ACCOUNT": "694795848632",
       "AWS_REGION": "us-east-1",
 			"client": "doi",
-      "application": "ecosphere",
-      "stack": "1"
+      "application": "ecosphere"
     },
     "ENVIRONMENTS": {
       "dev": {
-        "label": "d"
+        "init": true,
+        "label": "d",
+        "stack": "1"
       }
     }
   }

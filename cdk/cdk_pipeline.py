@@ -40,7 +40,8 @@ class CdkPipeline(cdk.Stack):
         environments = self.node.try_get_context('ENVIRONMENTS')
         environment = environments.get('dev')
         environment_label = environment.get('label')
-        stack = common.get('stack')
+        stack = environment.get('stack')
+        init = environment.get('init')
         deployment = client + '-' + application + '-' + environment_label + '-' + stack
 
         # create ecr repo
@@ -101,11 +102,13 @@ class CdkPipeline(cdk.Stack):
                     },
                     "post_build": {
                         "commands": [
+                            "cd ..",
+                            "pwd",
+                            "ls -lsFR *",
                             "docker push $REPOSITORY_URI:latest",
                             "docker push $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION",
                             "export imageTag=$CODEBUILD_RESOLVED_SOURCE_VERSION",
-                            "printf '[{\"name\":\"app\",\"imageUri\":\"%s\"}]' $REPOSITORY_URI:latest > imagedefinitions.json"
-                            #"printf '[{\"name\":\"app\",\"imageUri\":\"%s\"}]' $REPOSITORY_URI:$imageTag > imagedefinitions.json"
+                            "printf '[{\"name\":\"app\",\"imageUri\":\"%s\"}]' $REPOSITORY_URI:$imageTag > imagedefinitions.json"
                         ]
                     }
                 },
