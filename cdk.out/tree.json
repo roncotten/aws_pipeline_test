@@ -504,7 +504,7 @@
                               "Effect": "Allow",
                               "Resource": {
                                 "Fn::GetAtt": [
-                                  "doiecosphered1ecsserviceTaskDefdoiecosphered1serviceLogGroup39703CE9",
+                                  "doiecosphered1ecsserviceTaskDefappLogGroup63FB39DF",
                                   "Arn"
                                 ]
                               }
@@ -790,7 +790,7 @@
                           {
                             "essential": true,
                             "image": "694795848632.dkr.ecr.us-east-1.amazonaws.com/doi-ecosphere-d-1:latest",
-                            "name": "doi-ecosphere-d-1-service",
+                            "name": "app",
                             "portMappings": [
                               {
                                 "containerPort": 80,
@@ -801,7 +801,7 @@
                               "logDriver": "awslogs",
                               "options": {
                                 "awslogs-group": {
-                                  "Ref": "doiecosphered1ecsserviceTaskDefdoiecosphered1serviceLogGroup39703CE9"
+                                  "Ref": "doiecosphered1ecsserviceTaskDefappLogGroup63FB39DF"
                                 },
                                 "awslogs-stream-prefix": "doi-ecosphere-d-1-ecs_service",
                                 "awslogs-region": "us-east-1"
@@ -835,17 +835,17 @@
                       "version": "2.72.1"
                     }
                   },
-                  "doi-ecosphere-d-1-service": {
-                    "id": "doi-ecosphere-d-1-service",
-                    "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecs_service/TaskDef/doi-ecosphere-d-1-service",
+                  "app": {
+                    "id": "app",
+                    "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecs_service/TaskDef/app",
                     "children": {
                       "LogGroup": {
                         "id": "LogGroup",
-                        "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecs_service/TaskDef/doi-ecosphere-d-1-service/LogGroup",
+                        "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecs_service/TaskDef/app/LogGroup",
                         "children": {
                           "Resource": {
                             "id": "Resource",
-                            "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecs_service/TaskDef/doi-ecosphere-d-1-service/LogGroup/Resource",
+                            "path": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecs_service/TaskDef/app/LogGroup/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::Logs::LogGroup",
                               "aws:cdk:cloudformation:props": {}
@@ -899,7 +899,7 @@
                             "targetGroupArn": {
                               "Ref": "doiecosphered1ecsserviceLBPublicListenerECSGroupCEB23020"
                             },
-                            "containerName": "doi-ecosphere-d-1-service",
+                            "containerName": "app",
                             "containerPort": 80
                           }
                         ],
