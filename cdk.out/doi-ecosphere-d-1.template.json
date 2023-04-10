@@ -349,7 +349,7 @@
        "Effect": "Allow",
        "Resource": {
         "Fn::GetAtt": [
-         "doiecosphered1ecsserviceTaskDefwebLogGroup9CD56E38",
+         "doiecosphered1ecsserviceTaskDefdoiecosphered1serviceLogGroup39703CE9",
          "Arn"
         ]
        }
@@ -510,13 +510,13 @@
        "LogDriver": "awslogs",
        "Options": {
         "awslogs-group": {
-         "Ref": "doiecosphered1ecsserviceTaskDefwebLogGroup9CD56E38"
+         "Ref": "doiecosphered1ecsserviceTaskDefdoiecosphered1serviceLogGroup39703CE9"
         },
         "awslogs-stream-prefix": "doi-ecosphere-d-1-ecs_service",
         "awslogs-region": "us-east-1"
        }
       },
-      "Name": "web",
+      "Name": "doi-ecosphere-d-1-service",
       "PortMappings": [
        {
         "ContainerPort": 80,
@@ -549,12 +549,12 @@
     "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecs_service/TaskDef/Resource"
    }
   },
-  "doiecosphered1ecsserviceTaskDefwebLogGroup9CD56E38": {
+  "doiecosphered1ecsserviceTaskDefdoiecosphered1serviceLogGroup39703CE9": {
    "Type": "AWS::Logs::LogGroup",
    "UpdateReplacePolicy": "Retain",
    "DeletionPolicy": "Retain",
    "Metadata": {
-    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecs_service/TaskDef/web/LogGroup/Resource"
+    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecs_service/TaskDef/doi-ecosphere-d-1-service/LogGroup/Resource"
    }
   },
   "doiecosphered1ecsserviceServiceD1AAE105": {
@@ -573,7 +573,7 @@
     "LaunchType": "FARGATE",
     "LoadBalancers": [
      {
-      "ContainerName": "web",
+      "ContainerName": "doi-ecosphere-d-1-service",
       "ContainerPort": 80,
       "TargetGroupArn": {
        "Ref": "doiecosphered1ecsserviceLBPublicListenerECSGroupCEB23020"
