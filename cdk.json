@@ -44,13 +44,13 @@
     "@aws-cdk/aws-redshift:columnId": true,
     "@aws-cdk/aws-stepfunctions-tasks:enableEmrServicePolicyV2": true,
 		"COMMON": {
-      "AWS_ACCOUNT": "694795848632",
-      "AWS_REGION": "us-east-1",
 			"client": "doi",
       "application": "ecosphere"
     },
     "ENVIRONMENTS": {
       "dev": {
+        "aws_account": "694795848632",
+        "aws_region": "us-east-1",
         "init": true,
         "label": "d",
         "stack": "1"
