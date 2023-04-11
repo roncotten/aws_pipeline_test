@@ -43,16 +43,15 @@
     "@aws-cdk/aws-secretsmanager:useAttachedSecretResourcePolicyForSecretTargetAttachments": true,
     "@aws-cdk/aws-redshift:columnId": true,
     "@aws-cdk/aws-stepfunctions-tasks:enableEmrServicePolicyV2": true,
-		"COMMON": {
-			"client": "doi",
+    "COMMON": {
+      "client": "doi",
       "application": "ecosphere"
     },
-    "ENVIRONMENTS": {
+    "STACKS": {
       "dev": {
         "aws_account": "694795848632",
         "aws_region": "us-east-1",
-        "init": true,
-        "label": "d",
+        "environment": "d",
         "stack": "1"
       }
     }

@@ -27,17 +27,17 @@ class CdkPipeline(cdk.Stack):
         super().__init__(scope, construct_id, **kwargs)
 
         # get context variables
-        #init = self.node.try_get_context('init')
+        deploy = self.node.try_get_context('deploy')
         common = self.node.try_get_context('COMMON')
         client = common.get('client')
         application = common.get('application')
-        environments = self.node.try_get_context('ENVIRONMENTS')
-        environment = environments.get('dev')
-        aws_account = environment.get('aws_account')
-        aws_region = environment.get('aws_region')
-        environment_label = environment.get('label')
-        stack = environment.get('stack')
-        deployment = client + '-' + application + '-' + environment_label + '-' + stack
+        stacks = self.node.try_get_context('STACKS')
+        stack = stacks.get('dev')
+        aws_account = stack.get('aws_account')
+        aws_region = stack.get('aws_region')
+        environment = stack.get('environment')
+        stack_number = stack.get('stack')
+        deployment = client + '-' + application + '-' + environment + '-' + stack_number
 
         # create ecr repo
         ecr_repo = ecr.Repository(self, deployment+"-ecr", repository_name=deployment, image_scan_on_push=True)
@@ -105,6 +105,7 @@ class CdkPipeline(cdk.Stack):
                               )
         ecs_image = ecs.ContainerImage.from_registry("694795848632.dkr.ecr.us-east-1.amazonaws.com/doi-ecosphere-d-1:latest")
 
+        '''
         # create fargate service
         alb_fargate_service = ecs_patterns.ApplicationLoadBalancedFargateService(
           self,
@@ -128,6 +129,7 @@ class CdkPipeline(cdk.Stack):
           assign_public_ip=True
         )
         fargate_service = alb_fargate_service.service
+        '''
 
         # source action
         source_output = codepipeline.Artifact()
@@ -150,12 +152,14 @@ class CdkPipeline(cdk.Stack):
           execute_batch_build=False
         )
 
+        '''
         # deploy action
         deploy_action = codepipeline_actions.EcsDeployAction(
           action_name="Deploy",
           service=fargate_service,
           input=codepipeline.Artifact("imagedefinitions")
         )
+        '''
 
         # create pipeline
         pipeline = codepipeline.Pipeline(self, deployment+"-pipeline", pipeline_name=deployment,
@@ -168,15 +172,14 @@ class CdkPipeline(cdk.Stack):
                 "stageName": "build",
                 "actions": [build_action]
               },
-              {
-                "stageName": "deploy",
-                "actions": [deploy_action]
-              }
+              #{
+              #  "stageName": "deploy",
+              #  "actions": [deploy_action]
+              #}
             ]
           )
 
-        ''' 
-        if init == 'true':
+        if deploy == 'true':
 
           # create fargate service
           alb_fargate_service = ecs_patterns.ApplicationLoadBalancedFargateService(
@@ -187,7 +190,7 @@ class CdkPipeline(cdk.Stack):
             #task_definition=alb_task_definition,
             task_image_options= {
                 "image": ecs_image,
-                "container_name": deployment+"-app",
+                "container_name": "app",
                 "container_port": 80,
                 "execution_role": ecs_role,
                 "enable_logging": True
@@ -201,7 +204,6 @@ class CdkPipeline(cdk.Stack):
           )
           fargate_service = alb_fargate_service.service
 
-          # deploy action
           deploy_action = codepipeline_actions.EcsDeployAction(
             action_name="Deploy",
             service=fargate_service,
@@ -212,5 +214,4 @@ class CdkPipeline(cdk.Stack):
             stage_name="deploy",
             actions=[deploy_action]
           )
-        ''' 
 
