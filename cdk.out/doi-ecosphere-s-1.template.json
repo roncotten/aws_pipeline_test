@@ -1,17 +1,17 @@
 {
  "Resources": {
-  "doiecosphered1ecrBD25E3FA": {
+  "doiecospheres1ecrDE15CD84": {
    "Type": "AWS::ECR::Repository",
    "Properties": {
     "ImageScanningConfiguration": {
      "ScanOnPush": true
     },
-    "RepositoryName": "doi-ecosphere-d-1"
+    "RepositoryName": "doi-ecosphere-s-1"
    },
    "UpdateReplacePolicy": "Retain",
    "DeletionPolicy": "Retain",
    "Metadata": {
-    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecr/Resource"
+    "aws:cdk:path": "doi-ecosphere-s-1/doi-ecosphere-s-1-ecr/Resource"
    }
   },
   "BuildRoleB7C66CB2": {
@@ -31,7 +31,7 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "doi-ecosphere-d-1/Build/Role/Resource"
+    "aws:cdk:path": "doi-ecosphere-s-1/Build/Role/Resource"
    }
   },
   "BuildRoleDefaultPolicyEAC4E6D6": {
@@ -107,7 +107,7 @@
        "Effect": "Allow",
        "Resource": {
         "Fn::GetAtt": [
-         "doiecosphered1ecrBD25E3FA",
+         "doiecospheres1ecrDE15CD84",
          "Arn"
         ]
        }
@@ -134,7 +134,7 @@
        "Resource": [
         {
          "Fn::GetAtt": [
-          "doiecosphered1pipelineArtifactsBucketF0F9BAB1",
+          "doiecospheres1pipelineArtifactsBucket67EF77E6",
           "Arn"
          ]
         },
@@ -144,7 +144,7 @@
           [
            {
             "Fn::GetAtt": [
-             "doiecosphered1pipelineArtifactsBucketF0F9BAB1",
+             "doiecospheres1pipelineArtifactsBucket67EF77E6",
              "Arn"
             ]
            },
@@ -165,7 +165,7 @@
        "Effect": "Allow",
        "Resource": {
         "Fn::GetAtt": [
-         "doiecosphered1pipelineArtifactsBucketEncryptionKey72E5777B",
+         "doiecospheres1pipelineArtifactsBucketEncryptionKey32FCD2BE",
          "Arn"
         ]
        }
@@ -186,7 +186,7 @@
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "doi-ecosphere-d-1/Build/Role/DefaultPolicy/Resource"
+    "aws:cdk:path": "doi-ecosphere-s-1/Build/Role/DefaultPolicy/Resource"
    }
   },
   "Build45A36621": {
@@ -218,7 +218,7 @@
               ":",
               {
                "Fn::GetAtt": [
-                "doiecosphered1ecrBD25E3FA",
+                "doiecospheres1ecrDE15CD84",
                 "Arn"
                ]
               }
@@ -235,7 +235,7 @@
               ":",
               {
                "Fn::GetAtt": [
-                "doiecosphered1ecrBD25E3FA",
+                "doiecospheres1ecrDE15CD84",
                 "Arn"
                ]
               }
@@ -249,16 +249,11 @@
           },
           "/",
           {
-           "Ref": "doiecosphered1ecrBD25E3FA"
+           "Ref": "doiecospheres1ecrDE15CD84"
           }
          ]
         ]
        }
-      },
-      {
-       "Name": "DEPLOYMENT",
-       "Type": "PLAINTEXT",
-       "Value": "doi-ecosphere-d-1"
       }
      ],
      "Image": "aws/codebuild/standard:1.0",
@@ -273,7 +268,7 @@
      ]
     },
     "Source": {
-     "BuildSpec": "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"$(aws ecr get-login --region $AWS_REGION --no-include-email)\",\n        \"cd build\",\n        \"docker build -t $REPOSITORY_URI:latest .\",\n        \"docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION\"\n      ]\n    },\n    \"post_build\": {\n      \"commands\": [\n        \"docker push $REPOSITORY_URI:latest\",\n        \"docker push $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION\",\n        \"export imageTag=$CODEBUILD_RESOLVED_SOURCE_VERSION\",\n        \"printf '[{\\\"name\\\":\\\"app\\\",\\\"imageUri\\\":\\\"%s\\\"}]' $REPOSITORY_URI:$imageTag > imagedefinitions.json\"\n      ]\n    }\n  },\n  \"env\": {\n    \"exported-variables\": [\n      \"imageTag\"\n    ]\n  },\n  \"artifacts\": {\n    \"files\": \"imagedefinitions.json\",\n    \"secondary-artifacts\": {\n      \"imagedefinitions\": {\n        \"files\": \"imagedefinitions.json\",\n        \"name\": \"imagedefinitions\"\n      }\n    }\n  }\n}",
+     "BuildSpec": "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"$(aws ecr get-login --region $AWS_REGION --no-include-email)\",\n        \"cd build\",\n        \"docker build -t $REPOSITORY_URI:latest .\",\n        \"docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION\"\n      ]\n    },\n    \"post_build\": {\n      \"commands\": [\n        \"cd ..\",\n        \"pwd\",\n        \"ls -lsFR *\",\n        \"docker push $REPOSITORY_URI:latest\",\n        \"docker push $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION\",\n        \"export imageTag=$CODEBUILD_RESOLVED_SOURCE_VERSION\",\n        \"printf '[{\\\"name\\\":\\\"app\\\",\\\"imageUri\\\":\\\"%s\\\"}]' $REPOSITORY_URI:$imageTag > imagedefinitions.json\"\n      ]\n    }\n  },\n  \"env\": {\n    \"exported-variables\": [\n      \"imageTag\"\n    ]\n  },\n  \"artifacts\": {\n    \"files\": \"imagedefinitions.json\",\n    \"secondary-artifacts\": {\n      \"imagedefinitions\": {\n        \"files\": \"imagedefinitions.json\",\n        \"name\": \"imagedefinitions\"\n      }\n    }\n  }\n}",
      "Type": "CODEPIPELINE"
     },
     "Cache": {
@@ -281,20 +276,20 @@
     },
     "EncryptionKey": {
      "Fn::GetAtt": [
-      "doiecosphered1pipelineArtifactsBucketEncryptionKey72E5777B",
+      "doiecospheres1pipelineArtifactsBucketEncryptionKey32FCD2BE",
       "Arn"
      ]
     },
-    "Name": "doi-ecosphere-d-1"
+    "Name": "doi-ecosphere-s-1"
    },
    "Metadata": {
-    "aws:cdk:path": "doi-ecosphere-d-1/Build/Resource"
+    "aws:cdk:path": "doi-ecosphere-s-1/Build/Resource"
    }
   },
-  "doiecosphered1ecsEA1F6C71": {
+  "doiecospheres1ecsD00894A6": {
    "Type": "AWS::ECS::Cluster",
    "Properties": {
-    "ClusterName": "doi-ecosphere-d-1",
+    "ClusterName": "doi-ecosphere-s-1",
     "ClusterSettings": [
      {
       "Name": "containerInsights",
@@ -303,10 +298,10 @@
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecs/Resource"
+    "aws:cdk:path": "doi-ecosphere-s-1/doi-ecosphere-s-1-ecs/Resource"
    }
   },
-  "doiecosphered1ecsrole17862415": {
+  "doiecospheres1ecsroleBB13E67E": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -335,13 +330,13 @@
       ]
      }
     ],
-    "RoleName": "doi-ecosphere-d-1-ecs_role"
+    "RoleName": "doi-ecosphere-s-1-ecs_role"
    },
    "Metadata": {
-    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecs_role/Resource"
+    "aws:cdk:path": "doi-ecosphere-s-1/doi-ecosphere-s-1-ecs_role/Resource"
    }
   },
-  "doiecosphered1pipelineArtifactsBucketEncryptionKey72E5777B": {
+  "doiecospheres1pipelineArtifactsBucketEncryptionKey32FCD2BE": {
    "Type": "AWS::KMS::Key",
    "Properties": {
     "KeyPolicy": {
@@ -361,16 +356,16 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/ArtifactsBucketEncryptionKey/Resource"
+    "aws:cdk:path": "doi-ecosphere-s-1/doi-ecosphere-s-1-pipeline/ArtifactsBucketEncryptionKey/Resource"
    }
   },
-  "doiecosphered1pipelineArtifactsBucketEncryptionKeyAliasAB19928B": {
+  "doiecospheres1pipelineArtifactsBucketEncryptionKeyAlias288E6905": {
    "Type": "AWS::KMS::Alias",
    "Properties": {
-    "AliasName": "alias/codepipeline-doi-ecosphere-d-1-doi-ecosphere-d-1-pipeline-313e4fb1",
+    "AliasName": "alias/codepipeline-doi-ecosphere-s-1-doi-ecosphere-s-1-pipeline-f3f500b9",
     "TargetKeyId": {
      "Fn::GetAtt": [
-      "doiecosphered1pipelineArtifactsBucketEncryptionKey72E5777B",
+      "doiecospheres1pipelineArtifactsBucketEncryptionKey32FCD2BE",
       "Arn"
      ]
     }
@@ -378,10 +373,10 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/ArtifactsBucketEncryptionKeyAlias/Resource"
+    "aws:cdk:path": "doi-ecosphere-s-1/doi-ecosphere-s-1-pipeline/ArtifactsBucketEncryptionKeyAlias/Resource"
    }
   },
-  "doiecosphered1pipelineArtifactsBucketF0F9BAB1": {
+  "doiecospheres1pipelineArtifactsBucket67EF77E6": {
    "Type": "AWS::S3::Bucket",
    "Properties": {
     "BucketEncryption": {
@@ -390,7 +385,7 @@
        "ServerSideEncryptionByDefault": {
         "KMSMasterKeyID": {
          "Fn::GetAtt": [
-          "doiecosphered1pipelineArtifactsBucketEncryptionKey72E5777B",
+          "doiecospheres1pipelineArtifactsBucketEncryptionKey32FCD2BE",
           "Arn"
          ]
         },
@@ -409,14 +404,14 @@
    "UpdateReplacePolicy": "Retain",
    "DeletionPolicy": "Retain",
    "Metadata": {
-    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/ArtifactsBucket/Resource"
+    "aws:cdk:path": "doi-ecosphere-s-1/doi-ecosphere-s-1-pipeline/ArtifactsBucket/Resource"
    }
   },
-  "doiecosphered1pipelineArtifactsBucketPolicyB78C6D69": {
+  "doiecospheres1pipelineArtifactsBucketPolicyD3F35349": {
    "Type": "AWS::S3::BucketPolicy",
    "Properties": {
     "Bucket": {
-     "Ref": "doiecosphered1pipelineArtifactsBucketF0F9BAB1"
+     "Ref": "doiecospheres1pipelineArtifactsBucket67EF77E6"
     },
     "PolicyDocument": {
      "Statement": [
@@ -434,7 +429,7 @@
        "Resource": [
         {
          "Fn::GetAtt": [
-          "doiecosphered1pipelineArtifactsBucketF0F9BAB1",
+          "doiecospheres1pipelineArtifactsBucket67EF77E6",
           "Arn"
          ]
         },
@@ -444,7 +439,7 @@
           [
            {
             "Fn::GetAtt": [
-             "doiecosphered1pipelineArtifactsBucketF0F9BAB1",
+             "doiecospheres1pipelineArtifactsBucket67EF77E6",
              "Arn"
             ]
            },
@@ -459,10 +454,10 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/ArtifactsBucket/Policy/Resource"
+    "aws:cdk:path": "doi-ecosphere-s-1/doi-ecosphere-s-1-pipeline/ArtifactsBucket/Policy/Resource"
    }
   },
-  "doiecosphered1pipelineRoleB5A5BAA2": {
+  "doiecospheres1pipelineRole3FAC3B58": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -479,10 +474,10 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/Role/Resource"
+    "aws:cdk:path": "doi-ecosphere-s-1/doi-ecosphere-s-1-pipeline/Role/Resource"
    }
   },
-  "doiecosphered1pipelineRoleDefaultPolicy09C4A379": {
+  "doiecospheres1pipelineRoleDefaultPolicy5789FE04": {
    "Type": "AWS::IAM::Policy",
    "Properties": {
     "PolicyDocument": {
@@ -504,7 +499,7 @@
        "Resource": [
         {
          "Fn::GetAtt": [
-          "doiecosphered1pipelineArtifactsBucketF0F9BAB1",
+          "doiecospheres1pipelineArtifactsBucket67EF77E6",
           "Arn"
          ]
         },
@@ -514,7 +509,7 @@
           [
            {
             "Fn::GetAtt": [
-             "doiecosphered1pipelineArtifactsBucketF0F9BAB1",
+             "doiecospheres1pipelineArtifactsBucket67EF77E6",
              "Arn"
             ]
            },
@@ -535,7 +530,7 @@
        "Effect": "Allow",
        "Resource": {
         "Fn::GetAtt": [
-         "doiecosphered1pipelineArtifactsBucketEncryptionKey72E5777B",
+         "doiecospheres1pipelineArtifactsBucketEncryptionKey32FCD2BE",
          "Arn"
         ]
        }
@@ -546,13 +541,13 @@
        "Resource": [
         {
          "Fn::GetAtt": [
-          "doiecosphered1pipelinebuildBuildCodePipelineActionRole352F963B",
+          "doiecospheres1pipelinebuildBuildCodePipelineActionRoleA122425C",
           "Arn"
          ]
         },
         {
          "Fn::GetAtt": [
-          "doiecosphered1pipelinesourceCloneCodePipelineActionRoleBAED33AC",
+          "doiecospheres1pipelinesourceCloneCodePipelineActionRoleA9DEBE83",
           "Arn"
          ]
         }
@@ -561,23 +556,23 @@
      ],
      "Version": "2012-10-17"
     },
-    "PolicyName": "doiecosphered1pipelineRoleDefaultPolicy09C4A379",
+    "PolicyName": "doiecospheres1pipelineRoleDefaultPolicy5789FE04",
     "Roles": [
      {
-      "Ref": "doiecosphered1pipelineRoleB5A5BAA2"
+      "Ref": "doiecospheres1pipelineRole3FAC3B58"
      }
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/Role/DefaultPolicy/Resource"
+    "aws:cdk:path": "doi-ecosphere-s-1/doi-ecosphere-s-1-pipeline/Role/DefaultPolicy/Resource"
    }
   },
-  "doiecosphered1pipelineCB02A1CF": {
+  "doiecospheres1pipeline9C129662": {
    "Type": "AWS::CodePipeline::Pipeline",
    "Properties": {
     "RoleArn": {
      "Fn::GetAtt": [
-      "doiecosphered1pipelineRoleB5A5BAA2",
+      "doiecospheres1pipelineRole3FAC3B58",
       "Arn"
      ]
     },
@@ -605,7 +600,7 @@
         ],
         "RoleArn": {
          "Fn::GetAtt": [
-          "doiecosphered1pipelinesourceCloneCodePipelineActionRoleBAED33AC",
+          "doiecospheres1pipelinesourceCloneCodePipelineActionRoleA9DEBE83",
           "Arn"
          ]
         },
@@ -641,7 +636,7 @@
         ],
         "RoleArn": {
          "Fn::GetAtt": [
-          "doiecosphered1pipelinebuildBuildCodePipelineActionRole352F963B",
+          "doiecospheres1pipelinebuildBuildCodePipelineActionRoleA122425C",
           "Arn"
          ]
         },
@@ -655,28 +650,28 @@
      "EncryptionKey": {
       "Id": {
        "Fn::GetAtt": [
-        "doiecosphered1pipelineArtifactsBucketEncryptionKey72E5777B",
+        "doiecospheres1pipelineArtifactsBucketEncryptionKey32FCD2BE",
         "Arn"
        ]
       },
       "Type": "KMS"
      },
      "Location": {
-      "Ref": "doiecosphered1pipelineArtifactsBucketF0F9BAB1"
+      "Ref": "doiecospheres1pipelineArtifactsBucket67EF77E6"
      },
      "Type": "S3"
     },
-    "Name": "doi-ecosphere-d-1"
+    "Name": "doi-ecosphere-s-1"
    },
    "DependsOn": [
-    "doiecosphered1pipelineRoleDefaultPolicy09C4A379",
-    "doiecosphered1pipelineRoleB5A5BAA2"
+    "doiecospheres1pipelineRoleDefaultPolicy5789FE04",
+    "doiecospheres1pipelineRole3FAC3B58"
    ],
    "Metadata": {
-    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/Resource"
+    "aws:cdk:path": "doi-ecosphere-s-1/doi-ecosphere-s-1-pipeline/Resource"
    }
   },
-  "doiecosphered1pipelinesourceCloneCodePipelineActionRoleBAED33AC": {
+  "doiecospheres1pipelinesourceCloneCodePipelineActionRoleA9DEBE83": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -693,10 +688,10 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/source/Clone/CodePipelineActionRole/Resource"
+    "aws:cdk:path": "doi-ecosphere-s-1/doi-ecosphere-s-1-pipeline/source/Clone/CodePipelineActionRole/Resource"
    }
   },
-  "doiecosphered1pipelinesourceCloneCodePipelineActionRoleDefaultPolicy913546F8": {
+  "doiecospheres1pipelinesourceCloneCodePipelineActionRoleDefaultPolicyB6ED124D": {
    "Type": "AWS::IAM::Policy",
    "Properties": {
     "PolicyDocument": {
@@ -723,7 +718,7 @@
        "Resource": [
         {
          "Fn::GetAtt": [
-          "doiecosphered1pipelineArtifactsBucketF0F9BAB1",
+          "doiecospheres1pipelineArtifactsBucket67EF77E6",
           "Arn"
          ]
         },
@@ -733,7 +728,7 @@
           [
            {
             "Fn::GetAtt": [
-             "doiecosphered1pipelineArtifactsBucketF0F9BAB1",
+             "doiecospheres1pipelineArtifactsBucket67EF77E6",
              "Arn"
             ]
            },
@@ -754,7 +749,7 @@
        "Effect": "Allow",
        "Resource": {
         "Fn::GetAtt": [
-         "doiecosphered1pipelineArtifactsBucketEncryptionKey72E5777B",
+         "doiecospheres1pipelineArtifactsBucketEncryptionKey32FCD2BE",
          "Arn"
         ]
        }
@@ -771,7 +766,7 @@
          [
           {
            "Fn::GetAtt": [
-            "doiecosphered1pipelineArtifactsBucketF0F9BAB1",
+            "doiecospheres1pipelineArtifactsBucket67EF77E6",
             "Arn"
            ]
           },
@@ -783,18 +778,18 @@
      ],
      "Version": "2012-10-17"
     },
-    "PolicyName": "doiecosphered1pipelinesourceCloneCodePipelineActionRoleDefaultPolicy913546F8",
+    "PolicyName": "doiecospheres1pipelinesourceCloneCodePipelineActionRoleDefaultPolicyB6ED124D",
     "Roles": [
      {
-      "Ref": "doiecosphered1pipelinesourceCloneCodePipelineActionRoleBAED33AC"
+      "Ref": "doiecospheres1pipelinesourceCloneCodePipelineActionRoleA9DEBE83"
      }
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/source/Clone/CodePipelineActionRole/DefaultPolicy/Resource"
+    "aws:cdk:path": "doi-ecosphere-s-1/doi-ecosphere-s-1-pipeline/source/Clone/CodePipelineActionRole/DefaultPolicy/Resource"
    }
   },
-  "doiecosphered1pipelinebuildBuildCodePipelineActionRole352F963B": {
+  "doiecospheres1pipelinebuildBuildCodePipelineActionRoleA122425C": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
@@ -811,10 +806,10 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/build/Build/CodePipelineActionRole/Resource"
+    "aws:cdk:path": "doi-ecosphere-s-1/doi-ecosphere-s-1-pipeline/build/Build/CodePipelineActionRole/Resource"
    }
   },
-  "doiecosphered1pipelinebuildBuildCodePipelineActionRoleDefaultPolicyC58134CE": {
+  "doiecospheres1pipelinebuildBuildCodePipelineActionRoleDefaultPolicy74C9647E": {
    "Type": "AWS::IAM::Policy",
    "Properties": {
     "PolicyDocument": {
@@ -836,15 +831,15 @@
      ],
      "Version": "2012-10-17"
     },
-    "PolicyName": "doiecosphered1pipelinebuildBuildCodePipelineActionRoleDefaultPolicyC58134CE",
+    "PolicyName": "doiecospheres1pipelinebuildBuildCodePipelineActionRoleDefaultPolicy74C9647E",
     "Roles": [
      {
-      "Ref": "doiecosphered1pipelinebuildBuildCodePipelineActionRole352F963B"
+      "Ref": "doiecospheres1pipelinebuildBuildCodePipelineActionRoleA122425C"
      }
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/build/Build/CodePipelineActionRole/DefaultPolicy/Resource"
+    "aws:cdk:path": "doi-ecosphere-s-1/doi-ecosphere-s-1-pipeline/build/Build/CodePipelineActionRole/DefaultPolicy/Resource"
    }
   },
   "CDKMetadata": {
@@ -853,7 +848,7 @@
     "Analytics": "v2:deflate64:H4sIAAAAAAAA/02OS27DMAxEz5I9zaDOotmmWWZjuAcoHJpFGcuWoQ+KQNDdY30AZzWPBGc4LX62+HEY/m1D49QouWP4dgNNsK1+ApPB0POqrThtnnD9XfYpAumR717UiKGTlZUs3Bn9YHLpsmIEGeYtRSvO/qSdVkI5rlAEJovhqrx1bNK+Yvmx1vD9TbZWjjDNm/nGOTDJRclg05Ahgj1h+PI0ce5Vqcje5H2OEXq22hsqnStH6J7uTy/HE56xPTysSGP84mRm7Iu+AI3HIoNRAQAA"
    },
    "Metadata": {
-    "aws:cdk:path": "doi-ecosphere-d-1/CDKMetadata/Default"
+    "aws:cdk:path": "doi-ecosphere-s-1/CDKMetadata/Default"
    }
   }
  },

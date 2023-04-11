@@ -17,13 +17,15 @@ from aws_cdk import (
 TODO
 
 1. Add subnet configuration option
-2. Add public/private subnet configuration option 
-3. Add TCP port configuration option
-4. Add task configuration options
-5. Add ALB configuration options
-6. Add WAF deployment/configuration options
-7. Add CloudWatch monitoring and notifications
-
+2. Add security configuration option
+3. Add task configuration options
+4. Add ALB configuration options
+5. Add WAF deployment/configuration options
+6. Add CloudWatch monitoring and notifications
+7. Add Route53 confguration options
+8. Add certification configuration option
+9. Add http redirect option
+10. Add tags
 '''
 
 class CdkPipeline(cdk.Stack):
@@ -52,6 +54,13 @@ class CdkPipeline(cdk.Stack):
         environment = stack.get('environment')
         stack_number = stack.get('stack')
         vpc_id = stack.get('vpc_id')
+        container_port = stack.get('container_port')
+        listener_port = stack.get('listener_port')
+        task_count = stack.get('task_count')
+        task_cpu = stack.get('task_cpu')
+        task_memory = stack.get('task_memory')
+        public_ip = stack.get('assign_public_ip')
+
         source_branch = stack.get('source_branch')
         deployment = client + '-' + application + '-' + environment + '-' + stack_number
 
@@ -75,9 +84,6 @@ class CdkPipeline(cdk.Stack):
                   },
                   "post_build": {
                       "commands": [
-                          "cd ..",
-                          "pwd",
-                          "ls -lsFR *",
                           "docker push $REPOSITORY_URI:latest",
                           "docker push $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION",
                           "export imageTag=$CODEBUILD_RESOLVED_SOURCE_VERSION",
@@ -104,6 +110,9 @@ class CdkPipeline(cdk.Stack):
               ),
               "REPOSITORY_URI": codebuild.BuildEnvironmentVariable(
                   value=ecr_repo.repository_uri
+              ),
+              "DEPLOYMENT": codebuild.BuildEnvironmentVariable(
+                  value=deployment
               )
             }
         )
@@ -119,7 +128,8 @@ class CdkPipeline(cdk.Stack):
                                 assumed_by=iam.ServicePrincipal("ecs-tasks.amazonaws.com"),
                                 managed_policies=[execution_policy], role_name=deployment+"-ecs_role"
                               )
-        ecs_image = ecs.ContainerImage.from_registry("694795848632.dkr.ecr.us-east-1.amazonaws.com/doi-ecosphere-d-1:latest")
+        #ecs_image = ecs.ContainerImage.from_registry("694795848632.dkr.ecr.us-east-1.amazonaws.com/doi-ecosphere-d-1:latest")
+        ecs_image = ecs.ContainerImage.from_registry(aws_account + ".dkr.ecr." + aws_region + ".amazonaws.com/" + deployment + ":latest")
 
         # source action
         source_output = codepipeline.Artifact()
@@ -158,6 +168,14 @@ class CdkPipeline(cdk.Stack):
 
         if deploy == 'true':
 
+          # create fargate task execution policy and role
+          '''
+          task_policy = iam.ManagedPolicy.from_aws_managed_policy_name(managed_policy_name = "service-role/AmazonECSTaskExecutionRolePolicy")
+          task_role = iam.Role(self, deployment+"-ecs_role",
+                                 assumed_by=iam.ServicePrincipal("ecs-tasks.amazonaws.com"),
+                                 managed_policies=[task_execution_policy], role_name=deployment+"-task_execution_role"
+                               )
+          '''
           # create fargate service
           alb_fargate_service = ecs_patterns.ApplicationLoadBalancedFargateService(
             self,
@@ -167,16 +185,17 @@ class CdkPipeline(cdk.Stack):
             task_image_options= {
                 "image": ecs_image,
                 "container_name": "app",
-                "container_port": 80,
+                "container_port": container_port,
                 "execution_role": ecs_role,
+                #"task_role": task_role,
                 "enable_logging": True
-                #"execution_role": ""
-                #"task_role": ""
             },
-            desired_count = 1,
             load_balancer_name=deployment,
-            listener_port = 80,
-            assign_public_ip=True
+            desired_count = task_count,
+            cpu = task_cpu,
+            memory_limit_mib = task_memory,
+            listener_port = listener_port,
+            assign_public_ip = public_ip
           )
           fargate_service = alb_fargate_service.service
 

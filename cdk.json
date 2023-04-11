@@ -56,24 +56,42 @@
         "aws_region": "us-east-1",
         "environment": "d",
         "stack": "1",
+				"source_branch": "main",
 				"vpc_id": "vpc-0c3094b44d23a611a",
-				"source_branch": "main"
+				"container_port": 80,
+				"listener_port": 80,
+			  "task_count": 2,
+			  "task_cpu": 1,
+				"task_memory": 256,
+				"public_ip": true
       },
       "stage": {
         "aws_account": "694795848632",
         "aws_region": "us-east-1",
         "environment": "s",
         "stack": "1",
+				"source_branch": "main",
 				"vpc_id": "vpc-0c3094b44d23a611a",
-				"source_branch": "main"
+				"container_port": 80,
+				"listener_port": 80,
+			  "task_count": 2,
+			  "task_cpu": 1,
+				"task_memory": 256,
+				"public_ip": true
       },
       "prod": {
         "aws_account": "694795848632",
         "aws_region": "us-east-1",
         "environment": "p",
         "stack": "1",
+				"source_branch": "main",
 				"vpc_id": "vpc-0c3094b44d23a611a",
-				"source_branch": "main"
+				"container_port": 80,
+				"listener_port": 80,
+			  "task_count": 2,
+			  "task_cpu": 1,
+				"task_memory": 256,
+				"public_ip": true
       }
     }
   }
