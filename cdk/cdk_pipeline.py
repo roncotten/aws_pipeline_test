@@ -22,6 +22,7 @@ TODO
 4. Add task configuration options
 5. Add ALB configuration options
 6. Add WAF deployment/configuration options
+7. Add CloudWatch monitoring and notifications
 
 '''
 
@@ -34,7 +35,7 @@ class CdkPipeline(cdk.Stack):
         stack_context = self.node.try_get_context('environment')
         if stack_context == None:
           print('\nusage: cdk [synth|deploy] --context environment=[environment] --context deploy=[true|false]')
-          print('--context environment=[environment] required')
+          print('  --context environment=[environment] required')
           exit(1)
 
         deploy = self.node.try_get_context('deploy')
