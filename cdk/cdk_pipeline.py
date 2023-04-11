@@ -105,32 +105,6 @@ class CdkPipeline(cdk.Stack):
                               )
         ecs_image = ecs.ContainerImage.from_registry("694795848632.dkr.ecr.us-east-1.amazonaws.com/doi-ecosphere-d-1:latest")
 
-        '''
-        # create fargate service
-        alb_fargate_service = ecs_patterns.ApplicationLoadBalancedFargateService(
-          self,
-          deployment+"-ecs_service",
-          cluster=ecs_cluster,
-          service_name = deployment+"-service",
-          #task_definition=alb_task_definition,
-          task_image_options= {
-              "image": ecs_image,
-              #"container_name": deployment+"-service",
-              "container_name": "app",
-              "container_port": 80,
-              "execution_role": ecs_role,
-              "enable_logging": True
-              #"execution_role": ""
-              #"task_role": ""
-          },
-          desired_count = 1,
-          load_balancer_name=deployment,
-          listener_port = 80,
-          assign_public_ip=True
-        )
-        fargate_service = alb_fargate_service.service
-        '''
-
         # source action
         source_output = codepipeline.Artifact()
         source_action = codepipeline_actions.CodeStarConnectionsSourceAction(
@@ -151,15 +125,6 @@ class CdkPipeline(cdk.Stack):
           outputs=[codepipeline.Artifact("imagedefinitions")],
           execute_batch_build=False
         )
-
-        '''
-        # deploy action
-        deploy_action = codepipeline_actions.EcsDeployAction(
-          action_name="Deploy",
-          service=fargate_service,
-          input=codepipeline.Artifact("imagedefinitions")
-        )
-        '''
 
         # create pipeline
         pipeline = codepipeline.Pipeline(self, deployment+"-pipeline", pipeline_name=deployment,
@@ -187,7 +152,6 @@ class CdkPipeline(cdk.Stack):
             deployment+"-ecs_service",
             cluster=ecs_cluster,
             service_name = deployment+"-service",
-            #task_definition=alb_task_definition,
             task_image_options= {
                 "image": ecs_image,
                 "container_name": "app",
