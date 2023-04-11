@@ -84,6 +84,7 @@ class CdkPipeline(cdk.Stack):
                   },
                   "post_build": {
                       "commands": [
+                          "cd ..",
                           "docker push $REPOSITORY_URI:latest",
                           "docker push $REPOSITORY_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION",
                           "export imageTag=$CODEBUILD_RESOLVED_SOURCE_VERSION",
@@ -110,9 +111,6 @@ class CdkPipeline(cdk.Stack):
               ),
               "REPOSITORY_URI": codebuild.BuildEnvironmentVariable(
                   value=ecr_repo.repository_uri
-              ),
-              "DEPLOYMENT": codebuild.BuildEnvironmentVariable(
-                  value=deployment
               )
             }
         )
