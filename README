@@ -11,7 +11,7 @@ I. USAGE NOTES
         cdk deploy --context environment=[environment] --context deploy=true
         where environment is a stage environment contained in cdk.json
 
-OUTSTANDING ITEMS
+II. OUTSTANDING ITEMS
 
   1. Add subnet configuration option
   2. Add security configuration option

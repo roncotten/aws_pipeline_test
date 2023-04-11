@@ -1747,7 +1747,7 @@
                             }
                           }
                         ],
-                        "cpu": "1",
+                        "cpu": "512",
                         "executionRoleArn": {
                           "Fn::GetAtt": [
                             "doiecosphered1ecsrole17862415",
@@ -1755,7 +1755,7 @@
                           ]
                         },
                         "family": "doiecosphered1doiecosphered1ecsserviceTaskDefBAD15CC3",
-                        "memory": "256",
+                        "memory": "1024",
                         "networkMode": "awsvpc",
                         "requiresCompatibilities": [
                           "FARGATE"
