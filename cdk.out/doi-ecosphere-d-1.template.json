@@ -341,6 +341,38 @@
     "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecs_role/Resource"
    }
   },
+  "doiecosphered1ecsroleDefaultPolicy0C07C403": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "doiecosphered1ecsserviceTaskDefappLogGroup63FB39DF",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "doiecosphered1ecsroleDefaultPolicy0C07C403",
+    "Roles": [
+     {
+      "Ref": "doiecosphered1ecsrole17862415"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecs_role/DefaultPolicy/Resource"
+   }
+  },
   "doiecosphered1pipelineArtifactsBucketEncryptionKey72E5777B": {
    "Type": "AWS::KMS::Key",
    "Properties": {
@@ -552,6 +584,12 @@
         },
         {
          "Fn::GetAtt": [
+          "doiecosphered1pipelinedeployDeployCodePipelineActionRole64F1430B",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::GetAtt": [
           "doiecosphered1pipelinesourceCloneCodePipelineActionRoleBAED33AC",
           "Arn"
          ]
@@ -649,6 +687,43 @@
        }
       ],
       "Name": "build"
+     },
+     {
+      "Actions": [
+       {
+        "ActionTypeId": {
+         "Category": "Deploy",
+         "Owner": "AWS",
+         "Provider": "ECS",
+         "Version": "1"
+        },
+        "Configuration": {
+         "ClusterName": {
+          "Ref": "doiecosphered1ecsEA1F6C71"
+         },
+         "ServiceName": {
+          "Fn::GetAtt": [
+           "doiecosphered1ecsserviceServiceD1AAE105",
+           "Name"
+          ]
+         }
+        },
+        "InputArtifacts": [
+         {
+          "Name": "imagedefinitions"
+         }
+        ],
+        "Name": "Deploy",
+        "RoleArn": {
+         "Fn::GetAtt": [
+          "doiecosphered1pipelinedeployDeployCodePipelineActionRole64F1430B",
+          "Arn"
+         ]
+        },
+        "RunOrder": 1
+       }
+      ],
+      "Name": "deploy"
      }
     ],
     "ArtifactStore": {
@@ -847,13 +922,429 @@
     "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/build/Build/CodePipelineActionRole/DefaultPolicy/Resource"
    }
   },
+  "doiecosphered1pipelinedeployDeployCodePipelineActionRole64F1430B": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": "arn:aws:iam::694795848632:root"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/deploy/Deploy/CodePipelineActionRole/Resource"
+   }
+  },
+  "doiecosphered1pipelinedeployDeployCodePipelineActionRoleDefaultPolicy67FE05D9": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ecs:DescribeServices",
+        "ecs:DescribeTaskDefinition",
+        "ecs:DescribeTasks",
+        "ecs:ListTasks",
+        "ecs:RegisterTaskDefinition",
+        "ecs:UpdateService"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": "iam:PassRole",
+       "Condition": {
+        "StringEqualsIfExists": {
+         "iam:PassedToService": [
+          "ec2.amazonaws.com",
+          "ecs-tasks.amazonaws.com"
+         ]
+        }
+       },
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "s3:GetBucket*",
+        "s3:GetObject*",
+        "s3:List*"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "doiecosphered1pipelineArtifactsBucketF0F9BAB1",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "doiecosphered1pipelineArtifactsBucketF0F9BAB1",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "kms:Decrypt",
+        "kms:DescribeKey"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "doiecosphered1pipelineArtifactsBucketEncryptionKey72E5777B",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "doiecosphered1pipelinedeployDeployCodePipelineActionRoleDefaultPolicy67FE05D9",
+    "Roles": [
+     {
+      "Ref": "doiecosphered1pipelinedeployDeployCodePipelineActionRole64F1430B"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-pipeline/deploy/Deploy/CodePipelineActionRole/DefaultPolicy/Resource"
+   }
+  },
+  "doiecosphered1ecsserviceLB8E06FB83": {
+   "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+   "Properties": {
+    "LoadBalancerAttributes": [
+     {
+      "Key": "deletion_protection.enabled",
+      "Value": "false"
+     }
+    ],
+    "Name": "doi-ecosphere-d-1",
+    "Scheme": "internet-facing",
+    "SecurityGroups": [
+     {
+      "Fn::GetAtt": [
+       "doiecosphered1ecsserviceLBSecurityGroup9C154AC9",
+       "GroupId"
+      ]
+     }
+    ],
+    "Subnets": [
+     "subnet-0f6514073ebf9e267",
+     "subnet-0af19fe9afaea070a"
+    ],
+    "Type": "application"
+   },
+   "Metadata": {
+    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecs_service/LB/Resource"
+   }
+  },
+  "doiecosphered1ecsserviceLBSecurityGroup9C154AC9": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "Automatically created Security Group for ELB doiecosphered1doiecosphered1ecsserviceLB280D17CA",
+    "SecurityGroupIngress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow from anyone on port 80",
+      "FromPort": 80,
+      "IpProtocol": "tcp",
+      "ToPort": 80
+     }
+    ],
+    "VpcId": "vpc-0c3094b44d23a611a"
+   },
+   "Metadata": {
+    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecs_service/LB/SecurityGroup/Resource"
+   }
+  },
+  "doiecosphered1ecsserviceLBSecurityGrouptodoiecosphered1doiecosphered1ecsserviceServiceSecurityGroup3371BC3F8076ADA81D": {
+   "Type": "AWS::EC2::SecurityGroupEgress",
+   "Properties": {
+    "GroupId": {
+     "Fn::GetAtt": [
+      "doiecosphered1ecsserviceLBSecurityGroup9C154AC9",
+      "GroupId"
+     ]
+    },
+    "IpProtocol": "tcp",
+    "Description": "Load balancer to target",
+    "DestinationSecurityGroupId": {
+     "Fn::GetAtt": [
+      "doiecosphered1ecsserviceServiceSecurityGroupD7CBCCF7",
+      "GroupId"
+     ]
+    },
+    "FromPort": 80,
+    "ToPort": 80
+   },
+   "Metadata": {
+    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecs_service/LB/SecurityGroup/to doiecosphered1doiecosphered1ecsserviceServiceSecurityGroup3371BC3F:80"
+   }
+  },
+  "doiecosphered1ecsserviceLBPublicListenerC267C06E": {
+   "Type": "AWS::ElasticLoadBalancingV2::Listener",
+   "Properties": {
+    "DefaultActions": [
+     {
+      "TargetGroupArn": {
+       "Ref": "doiecosphered1ecsserviceLBPublicListenerECSGroupCEB23020"
+      },
+      "Type": "forward"
+     }
+    ],
+    "LoadBalancerArn": {
+     "Ref": "doiecosphered1ecsserviceLB8E06FB83"
+    },
+    "Port": 80,
+    "Protocol": "HTTP"
+   },
+   "Metadata": {
+    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecs_service/LB/PublicListener/Resource"
+   }
+  },
+  "doiecosphered1ecsserviceLBPublicListenerECSGroupCEB23020": {
+   "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+   "Properties": {
+    "Port": 80,
+    "Protocol": "HTTP",
+    "TargetGroupAttributes": [
+     {
+      "Key": "stickiness.enabled",
+      "Value": "false"
+     }
+    ],
+    "TargetType": "ip",
+    "VpcId": "vpc-0c3094b44d23a611a"
+   },
+   "Metadata": {
+    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecs_service/LB/PublicListener/ECSGroup/Resource"
+   }
+  },
+  "doiecosphered1ecsserviceTaskDefTaskRole3BACF620": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecs_service/TaskDef/TaskRole/Resource"
+   }
+  },
+  "doiecosphered1ecsserviceTaskDefF5B1EC50": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Essential": true,
+      "Image": "694795848632.dkr.ecr.us-east-1.amazonaws.com/doi-ecosphere-d-1:latest",
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "doiecosphered1ecsserviceTaskDefappLogGroup63FB39DF"
+        },
+        "awslogs-stream-prefix": "doi-ecosphere-d-1-ecs_service",
+        "awslogs-region": "us-east-1"
+       }
+      },
+      "Name": "app",
+      "PortMappings": [
+       {
+        "ContainerPort": 80,
+        "Protocol": "tcp"
+       }
+      ]
+     }
+    ],
+    "Cpu": "1",
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "doiecosphered1ecsrole17862415",
+      "Arn"
+     ]
+    },
+    "Family": "doiecosphered1doiecosphered1ecsserviceTaskDefBAD15CC3",
+    "Memory": "256",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": {
+     "Fn::GetAtt": [
+      "doiecosphered1ecsserviceTaskDefTaskRole3BACF620",
+      "Arn"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecs_service/TaskDef/Resource"
+   }
+  },
+  "doiecosphered1ecsserviceTaskDefappLogGroup63FB39DF": {
+   "Type": "AWS::Logs::LogGroup",
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecs_service/TaskDef/app/LogGroup/Resource"
+   }
+  },
+  "doiecosphered1ecsserviceServiceD1AAE105": {
+   "Type": "AWS::ECS::Service",
+   "Properties": {
+    "Cluster": {
+     "Ref": "doiecosphered1ecsEA1F6C71"
+    },
+    "DeploymentConfiguration": {
+     "MaximumPercent": 200,
+     "MinimumHealthyPercent": 50
+    },
+    "DesiredCount": 2,
+    "EnableECSManagedTags": false,
+    "HealthCheckGracePeriodSeconds": 60,
+    "LaunchType": "FARGATE",
+    "LoadBalancers": [
+     {
+      "ContainerName": "app",
+      "ContainerPort": 80,
+      "TargetGroupArn": {
+       "Ref": "doiecosphered1ecsserviceLBPublicListenerECSGroupCEB23020"
+      }
+     }
+    ],
+    "NetworkConfiguration": {
+     "AwsvpcConfiguration": {
+      "AssignPublicIp": "DISABLED",
+      "SecurityGroups": [
+       {
+        "Fn::GetAtt": [
+         "doiecosphered1ecsserviceServiceSecurityGroupD7CBCCF7",
+         "GroupId"
+        ]
+       }
+      ],
+      "Subnets": [
+       "subnet-0fc1b62b733beae5e",
+       "subnet-0a9b26efae6570194"
+      ]
+     }
+    },
+    "ServiceName": "doi-ecosphere-d-1-service",
+    "TaskDefinition": {
+     "Ref": "doiecosphered1ecsserviceTaskDefF5B1EC50"
+    }
+   },
+   "DependsOn": [
+    "doiecosphered1ecsserviceLBPublicListenerECSGroupCEB23020",
+    "doiecosphered1ecsserviceLBPublicListenerC267C06E"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecs_service/Service/Service"
+   }
+  },
+  "doiecosphered1ecsserviceServiceSecurityGroupD7CBCCF7": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecs_service/Service/SecurityGroup",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "VpcId": "vpc-0c3094b44d23a611a"
+   },
+   "Metadata": {
+    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecs_service/Service/SecurityGroup/Resource"
+   }
+  },
+  "doiecosphered1ecsserviceServiceSecurityGroupfromdoiecosphered1doiecosphered1ecsserviceLBSecurityGroupFF92BF1D80ED6C1255": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "IpProtocol": "tcp",
+    "Description": "Load balancer to target",
+    "FromPort": 80,
+    "GroupId": {
+     "Fn::GetAtt": [
+      "doiecosphered1ecsserviceServiceSecurityGroupD7CBCCF7",
+      "GroupId"
+     ]
+    },
+    "SourceSecurityGroupId": {
+     "Fn::GetAtt": [
+      "doiecosphered1ecsserviceLBSecurityGroup9C154AC9",
+      "GroupId"
+     ]
+    },
+    "ToPort": 80
+   },
+   "Metadata": {
+    "aws:cdk:path": "doi-ecosphere-d-1/doi-ecosphere-d-1-ecs_service/Service/SecurityGroup/from doiecosphered1doiecosphered1ecsserviceLBSecurityGroupFF92BF1D:80"
+   }
+  },
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/02OS27DMAxEz5I9zaDOotmmWWZjuAcoHJpFGcuWoQ+KQNDdY30AZzWPBGc4LX62+HEY/m1D49QouWP4dgNNsK1+ApPB0POqrThtnnD9XfYpAumR717UiKGTlZUs3Bn9YHLpsmIEGeYtRSvO/qSdVkI5rlAEJovhqrx1bNK+Yvmx1vD9TbZWjjDNm/nGOTDJRclg05Ahgj1h+PI0ce5Vqcje5H2OEXq22hsqnStH6J7uTy/HE56xPTysSGP84mRm7Iu+AI3HIoNRAQAA"
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/31Sy27CMBD8Fu7GVcOhvQJ9qCpSI+COjLOkS4xt+UGFIv97HTtASquednY8651du6APBb0fsS875lUzFril7cox3pBIbVrghrZL0MqiU+ZE5jt5zQLhqoKtR1HRtkQNAiWURu2Bu07Zw0CQHeItSkCq72KpBPJ0XUaBALe0nQtvHZiOP8MXZmrmYM1s8wQ7lOhQyU5wyyjpWOxvBlxfuwJzRJ6a9zA7173lq/lkqMeBNIdo6R2SzS5MBTLbJQkEYie0nXneQJq2Rzlc5xvmacqNZi4OJi2dah1Z1lldKFbNmGCSQ3XjGgSzDrmIim1SoKyPBW3/rk67+5EPdRhXKnvNGQ/O17EzuFejvM4bvqSd89hzBdwbdKeL5H/iuTZg7S/6TSY+EKHquOGFqi/lZxwCWYJV3uRn+/BOe5d/X2YDKU/uU8m7CX2kxWhvEcfGS4cHoMscvwH+srvO2wIAAA=="
    },
    "Metadata": {
     "aws:cdk:path": "doi-ecosphere-d-1/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "doiecosphered1ecsserviceLoadBalancerDNS26355852": {
+   "Value": {
+    "Fn::GetAtt": [
+     "doiecosphered1ecsserviceLB8E06FB83",
+     "DNSName"
+    ]
+   }
+  },
+  "doiecosphered1ecsserviceServiceURL0C0DA01C": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "http://",
+      {
+       "Fn::GetAtt": [
+        "doiecosphered1ecsserviceLB8E06FB83",
+        "DNSName"
+       ]
+      }
+     ]
+    ]
    }
   }
  },
