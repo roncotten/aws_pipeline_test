@@ -7,7 +7,6 @@ from cdk.cdk_pipeline import CdkPipeline
 AWS_ACCOUNT='694795848632'
 AWS_REGION='us-east-1'
 
-
 app = cdk.App()
 
 CdkPipeline(

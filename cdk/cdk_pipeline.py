@@ -13,30 +13,33 @@ from aws_cdk import (
     aws_sns as sns
 )
 
-# global variables
-source_repo = 'aws_pipeline_test'
-source_branch = 'main'
-source_repo_owner = 'roncotten'
-source_arn = 'arn:aws:codestar-connections:us-east-1:694795848632:connection/81ecfe62-c1d4-49f4-bd33-9ee83d1568c9'
-ecr_repo_name = 'ecosphere'
-vpc_id='vpc-0c3094b44d23a611a'
-
 class CdkPipeline(cdk.Stack):
 
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
         # get context variables
+        stack_context = self.node.try_get_context('environment')
+        if stack_context == None:
+          print('\nusage: cdk [synth|deploy] --context environment=[environment] --context deploy=[true|false]')
+          print('--context environment=[environment] required')
+          exit(1)
+
         deploy = self.node.try_get_context('deploy')
         common = self.node.try_get_context('COMMON')
         client = common.get('client')
         application = common.get('application')
+        source_repo = common.get('source_repo')
+        source_repo_owner = common.get('source_repo_owner')
+        source_arn = common.get('source_arn')
         stacks = self.node.try_get_context('STACKS')
-        stack = stacks.get('dev')
+        stack = stacks.get(stack_context)
         aws_account = stack.get('aws_account')
         aws_region = stack.get('aws_region')
         environment = stack.get('environment')
         stack_number = stack.get('stack')
+        vpc_id = stack.get('vpc_id')
+        source_branch = stack.get('source_branch')
         deployment = client + '-' + application + '-' + environment + '-' + stack_number
 
         # create ecr repo
@@ -137,10 +140,6 @@ class CdkPipeline(cdk.Stack):
                 "stageName": "build",
                 "actions": [build_action]
               },
-              #{
-              #  "stageName": "deploy",
-              #  "actions": [deploy_action]
-              #}
             ]
           )
 

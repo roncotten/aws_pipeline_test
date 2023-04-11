@@ -45,14 +45,35 @@
     "@aws-cdk/aws-stepfunctions-tasks:enableEmrServicePolicyV2": true,
     "COMMON": {
       "client": "doi",
-      "application": "ecosphere"
+      "application": "ecosphere",
+			"source_repo": "aws_pipeline_test",
+			"source_repo_owner": "roncotten",
+			"source_arn": "arn:aws:codestar-connections:us-east-1:694795848632:connection/81ecfe62-c1d4-49f4-bd33-9ee83d1568c9"
     },
     "STACKS": {
       "dev": {
         "aws_account": "694795848632",
         "aws_region": "us-east-1",
         "environment": "d",
-        "stack": "1"
+        "stack": "1",
+				"vpc_id": "vpc-0c3094b44d23a611a",
+				"source_branch": "main"
+      },
+      "stage": {
+        "aws_account": "694795848632",
+        "aws_region": "us-east-1",
+        "environment": "s",
+        "stack": "1",
+				"vpc_id": "vpc-0c3094b44d23a611a",
+				"source_branch": "main"
+      },
+      "prod": {
+        "aws_account": "694795848632",
+        "aws_region": "us-east-1",
+        "environment": "p",
+        "stack": "1",
+				"vpc_id": "vpc-0c3094b44d23a611a",
+				"source_branch": "main"
       }
     }
   }
