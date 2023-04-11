@@ -13,6 +13,18 @@ from aws_cdk import (
     aws_sns as sns
 )
 
+'''
+TODO
+
+1. Add subnet configuration option
+2. Add public/private subnet configuration option 
+3. Add TCP port configuration option
+4. Add task configuration options
+5. Add ALB configuration options
+6. Add WAF deployment/configuration options
+
+'''
+
 class CdkPipeline(cdk.Stack):
 
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
