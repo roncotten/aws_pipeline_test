@@ -13,21 +13,6 @@ from aws_cdk import (
     aws_sns as sns
 )
 
-'''
-TODO
-
-1. Add subnet configuration option
-2. Add security configuration option
-3. Add task configuration options
-4. Add ALB configuration options
-5. Add WAF deployment/configuration options
-6. Add CloudWatch monitoring and notifications
-7. Add Route53 confguration options
-8. Add certification configuration option
-9. Add http redirect option
-10. Add tags
-'''
-
 class CdkPipeline(cdk.Stack):
 
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
@@ -118,6 +103,7 @@ class CdkPipeline(cdk.Stack):
         # grant docker push to ecr_repo
         ecr_repo.grant_pull_push(codebuild_project)
 
+        '''
         # create ecs cluster
         vpc = ec2.Vpc.from_lookup(self, deployment+"-vpc", vpc_id=vpc_id)
         ecs_cluster = ecs.Cluster(self, deployment+"-ecs", cluster_name=deployment, container_insights=True, vpc=vpc)
@@ -126,8 +112,8 @@ class CdkPipeline(cdk.Stack):
                                 assumed_by=iam.ServicePrincipal("ecs-tasks.amazonaws.com"),
                                 managed_policies=[execution_policy], role_name=deployment+"-ecs_role"
                               )
-        #ecs_image = ecs.ContainerImage.from_registry("694795848632.dkr.ecr.us-east-1.amazonaws.com/doi-ecosphere-d-1:latest")
         ecs_image = ecs.ContainerImage.from_registry(aws_account + ".dkr.ecr." + aws_region + ".amazonaws.com/" + deployment + ":latest")
+        '''
 
         # source action
         source_output = codepipeline.Artifact()
@@ -164,16 +150,15 @@ class CdkPipeline(cdk.Stack):
             ]
           )
 
+        '''
         if deploy == 'true':
 
           # create fargate task execution policy and role
-          '''
           task_policy = iam.ManagedPolicy.from_aws_managed_policy_name(managed_policy_name = "service-role/AmazonECSTaskExecutionRolePolicy")
           task_role = iam.Role(self, deployment+"-ecs_role",
                                  assumed_by=iam.ServicePrincipal("ecs-tasks.amazonaws.com"),
                                  managed_policies=[task_execution_policy], role_name=deployment+"-task_execution_role"
                                )
-          '''
           # create fargate service
           alb_fargate_service = ecs_patterns.ApplicationLoadBalancedFargateService(
             self,
@@ -207,4 +192,5 @@ class CdkPipeline(cdk.Stack):
             stage_name="deploy",
             actions=[deploy_action]
           )
+          '''
 

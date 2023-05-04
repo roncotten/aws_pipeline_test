@@ -14,7 +14,7 @@ I. USAGE NOTES
 II. OUTSTANDING ITEMS
 
   1. Add subnet configuration option
-  2. Add security configuration option
+  2. Add security group configuration option
   3. Add task configuration options
   4. Add ALB configuration options
   5. Add WAF deployment/configuration options
