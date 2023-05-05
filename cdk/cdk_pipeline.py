@@ -150,7 +150,6 @@ class CdkPipeline(cdk.Stack):
             ]
           )
 
-        '''
         if deploy == 'true':
 
           # create fargate task execution policy and role
@@ -192,5 +191,4 @@ class CdkPipeline(cdk.Stack):
             stage_name="deploy",
             actions=[deploy_action]
           )
-          '''
 
